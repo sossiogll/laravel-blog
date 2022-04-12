@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+
+use Illuminate\View\View;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -12,8 +16,14 @@ use Illuminate\Support\Facades\Route;
 | to using a Closure or controller method. Build something great!
 |
 */
+Route::group([
+    'middleware' => 'auth',
+], function ($router) {
 
-Route::get('/', 'PostController@index')->name('home');
+    Route::get('/', 'Admin\ShowDashboard')->name('home');
+
+});
+
 Route::get('/posts/feed', 'PostFeedController@index')->name('posts.feed');
 Route::resource('posts', 'PostController')->only('show');
 Route::resource('users', 'UserController')->only('show');
