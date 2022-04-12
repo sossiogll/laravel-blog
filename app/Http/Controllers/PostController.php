@@ -13,14 +13,13 @@ class PostController extends Controller
      */
     public function index(Request $request): View
     {
-        /*return view('posts.index', [
+        return view('posts.index', [
             'posts' => Post::search($request->input('q'))
                              ->with('author', 'likes')
                              ->withCount('comments', 'thumbnail', 'likes')
                              ->latest()
                              ->paginate(20)
-        ]);*/
-        return view('auth.login');
+        ]);
     }
 
     /**
