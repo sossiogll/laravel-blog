@@ -1,8 +1,5 @@
 # Laravel 8.0 blog
 
-[![Build Status](https://travis-ci.org/guillaumebriday/laravel-blog.svg?branch=master)](https://travis-ci.org/guillaumebriday/laravel-blog)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/guillaumebriday)
-
 The purpose of this repository is to show good development practices on [Laravel](http://laravel.com/) as well as to present cases of use of the framework's features like:
 
 - [Authentication](https://laravel.com/docs/8.x/authentication)
@@ -39,15 +36,11 @@ Beside Laravel, this project uses other tools like:
 - [spatie/laravel-medialibrary](https://github.com/spatie/laravel-medialibrary)
 - Many more to discover.
 
-## Some screenshots
-
-You can find some screenshots of the application on : [https://imgur.com/a/Jbnwj](https://imgur.com/a/Jbnwj)
-
 ## Installation
 
 Development environment requirements :
-- [VirtualBox](https://www.virtualbox.org/)
-- [Vagrant](https://www.vagrantup.com/)
+- [A Linux Distribution](https://ubuntu.com/)
+- [A Web Server with PHP 7.4 (I suggest Xampp)](https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/7.4.28/)
 
 Setting up your development environment on your local machine :
 ```bash
@@ -67,9 +60,9 @@ $ artisan telescope:install
 $ artisan storage:link
 ```
 
-Now you can access the application via [http://localhost:8000](http://localhost:8000).
+Now you can start your web server and access the application.
 
-**There is no need to run `php artisan serve`. PHP is already running in the dedicated virtual machine.**
+**There is no need to run `php artisan serve` if your web server is running in your machine.**
 
 ## Before starting
 You need to run the migrations with the seeds :
@@ -139,10 +132,10 @@ Then, you can use this token either as url parameter or in Authorization header 
 
 ```bash
 # Url parameter
-GET http://laravel-blog.app/api/v1/posts?api_token=your_private_token_here
+GET http://path.to.app/api/v1/posts?api_token=your_private_token_here
 
 # Authorization Header
-curl --header "Authorization: Bearer your_private_token_here" http://laravel-blog.app/api/v1/posts
+curl --header "Authorization: Bearer your_private_token_here" http://path.to.app/api/v1/posts
 ```
 
 API are prefixed by `api` and the API version number like so `v1`.
