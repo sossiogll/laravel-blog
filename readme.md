@@ -51,12 +51,10 @@ Development environment requirements :
 
 Setting up your development environment on your local machine :
 ```bash
-$ git clone https://github.com/guillaumebriday/laravel-blog.git
+$ git clone https://github.com/sossiogll/laravel-blog.git
 $ cd laravel-blog
 $ cp .env.example .env
 $ composer install
-$ vagrant up
-$ vagrant ssh
 ```
 
 All following commands must be run inside the VM:
