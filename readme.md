@@ -52,7 +52,6 @@ $ composer install
 
 All following commands must be run inside the VM:
 ```bash
-$ cd code
 $ yarn install
 $ artisan key:generate
 $ artisan horizon:install
