@@ -28,6 +28,7 @@ class Post extends Model
         'posted_at',
         'slug',
         'thumbnail_id',
+        'category_id',
     ];
 
     /**
@@ -77,6 +78,16 @@ class Post extends Model
             return $query->where('title', 'LIKE', "%{$search}%");
         }
     }
+    
+    /**
+     * Scope a query to get post by category
+     */
+    public function scopeCategory(Builder $query, ?string $category_id)
+    {
+        if ($search) {
+            return $query->where('category_id', 'LIKE', "%{$category_id}%");
+        }
+    }
 
     /**
      * Scope a query to order posts by latest posted
@@ -111,6 +122,14 @@ class Post extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
+    }
+
+        /**
+     * Return the post category
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     /**

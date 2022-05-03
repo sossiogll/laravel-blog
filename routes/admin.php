@@ -8,3 +8,4 @@ Route::delete('/posts/{post}/thumbnail', 'PostThumbnailController@destroy')->nam
 Route::resource('users', 'UserController')->only(['index', 'edit', 'update']);
 Route::resource('comments', 'CommentController')->only(['index', 'edit', 'update', 'destroy']);
 Route::resource('media', 'MediaLibraryController')->only(['index', 'show', 'create', 'store', 'destroy']);
+Route::resource('categories', 'CategoryController')->only(['index', 'edit', 'update', 'destroy', 'create']);
