@@ -32,6 +32,21 @@
           </div>
         </div>
 
+        <div class="form-group row">
+          {!! Form::label('name', __('users.attributes.positions'), ['class' => 'col-sm-2 col-form-label']) !!}
+          <div class="col-sm-5">
+            {!! Form::text('positions', null, ['class' => 'form-control']) !!}
+          </div>
+        </div>
+
+
+        <div class="form-group row">
+            {!! Form::label('bio', __('users.attributes.bio'), ['class' => 'col-sm-2 col-form-label']) !!}
+            <div class="col-sm-5">
+              {!! Form::textarea('bio', null, ['class' => 'form-control']) !!}  
+            </div>
+        </div>
+
         <div class="form-group offset-sm-2">
           {!! Form::submit(__('forms.actions.save'), ['class' => 'btn btn-success']) !!}
         </div>

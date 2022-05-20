@@ -4,6 +4,7 @@ use App\Models\Comment;
 use App\Models\MediaLibrary;
 use App\Models\Post;
 use App\Models\Role;
+use App\Models\Category;
 use App\Models\Token;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -20,26 +21,38 @@ class DatabaseSeeder extends Seeder
         Role::firstOrCreate(['name' => Role::ROLE_EDITOR]);
         $role_admin = Role::firstOrCreate(['name' => Role::ROLE_ADMIN]);
 
+
         // MediaLibrary
         MediaLibrary::firstOrCreate([]);
 
         // Users
         $user = User::firstOrCreate(
-            ['email' => 'darthvader@deathstar.ds'],
+            ['email' => 'sossiogll@010beautiful.life'],
             [
-                'name' => 'anakin',
-                'password' => Hash::make('4nak1n'),
-                'email_verified_at' => now()
+                'name' => 'sossiogll',
+                'password' => Hash::make('sossiogll'),
+                'email_verified_at' => now(),
+                'authenticable' => true
             ]
         );
 
         $user->roles()->sync([$role_admin->id]);
 
+        //Category
+
+        $category = Category::firstOrCreate(
+            [
+                'name' => 'Test Category',
+                'custom_fields' => '{"custom_field_1":"Custom Field 1", "custom_field_2":"Custom Fields 2"}'
+            ]
+        );
+
         // Posts
         $post = Post::firstOrCreate(
             [
                 'title' => 'Hello World',
-                'author_id' => $user->id
+                'author_id' => $user->id,
+                'category_id' => $category->id
             ],
             [
                 'posted_at' => now(),

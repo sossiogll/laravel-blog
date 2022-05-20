@@ -12,23 +12,32 @@
 </div>
 
 <div class="form-row">
-    <div class="form-group col-md-6">
+
+    <div class="form-group col-md-4">
+        {!! Form::label('category_id', __('posts.attributes.category')) !!}
+        @if(isset($post))
+            {!! Form::select('category_id', $categories, $post->category_id, ['class' => 'form-control', 'onchange' => 'this.form.submit()']) !!}
+        @else
+            {!! Form::select('category_id', $categories, null, ['class' => 'form-control', 'onchange' => 'this.form.submit()']) !!}
+        @endif
+
+
+        @error('category_id')
+            <span class="invalid-feedback">{{ $message }}</span>
+        @enderror
+    </div>
+
+    <div class="form-group col-md-4">
         {!! Form::label('author_id', __('posts.attributes.author')) !!}
-        {!! Form::select('author_id', $users, null, ['class' => 'form-control' . ($errors->has('author_id') ? ' is-invalid' : ''), 'required']) !!}
+        {!! Form::select('author_id', $user, null, ['class' => 'form-control' . ($errors->has('author_id') ? ' is-invalid' : ''), 'required', 'readonly']) !!}
 
         @error('author_id')
             <span class="invalid-feedback">{{ $message }}</span>
         @enderror
     </div>
 
-    <div class="form-group col-md-6">
-        {!! Form::label('posted_at', __('posts.attributes.posted_at')) !!}
-        <input type="datetime-local" name="posted_at" class="form-control {{ ($errors->has('posted_at') ? ' is-invalid' : '') }}" required value="{{ $posted_at }}">
 
-        @error('posted_at')
-            <span class="invalid-feedback">{{ $message }}</span>
-        @enderror
-    </div>
+
 </div>
 
 <div class="form-group">
@@ -39,6 +48,27 @@
         <span class="invalid-feedback">{{ $message }}</span>
     @enderror
 </div>
+
+
+
+
+
+    @if($custom_fields != null)
+
+
+        <p><b> @lang('categories.attributes.custom_fields') </b></p>
+        @for($i=0; $i < count($custom_fields); $i++)
+
+            <div class="form-group">
+                {!! Form::label($custom_fields[$i]['description'], __($custom_fields[$i]['description'])) !!}
+                {!! Form::text($custom_fields[$i]['id'], null, ['class' => 'form-control']) !!}
+            </div>
+
+        @endfor
+
+    @endif
+
+
 
 
 <div class="form-group">

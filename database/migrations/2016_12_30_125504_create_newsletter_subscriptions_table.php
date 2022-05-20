@@ -14,7 +14,7 @@ class CreateNewsletterSubscriptionsTable extends Migration
     public function up()
     {
         Schema::create('newsletter_subscriptions', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('email')->unique();
             $table->timestamps();
         });

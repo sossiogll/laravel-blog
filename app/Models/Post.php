@@ -24,12 +24,14 @@ class Post extends Model
     protected $fillable = [
         'author_id',
         'title',
+        'category_id',
         'content',
         'posted_at',
         'slug',
-        'thumbnail_id',
-        'category_id',
+        'thumbnail_id'
     ];
+
+    public $appends = ['custom_fields'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -124,7 +126,8 @@ class Post extends Model
         return $this->belongsTo(User::class, 'author_id');
     }
 
-        /**
+
+    /**
      * Return the post category
      */
     public function category(): BelongsTo
@@ -162,5 +165,16 @@ class Post extends Model
     public function hasThumbnail(): bool
     {
         return filled($this->thumbnail_id);
+    }
+
+    public function customFields(){
+        return $this->belongsToMany(Category::class)->withPivot('custom_fields');;
+    }
+
+    public function getCustomFieldsAttribute(){
+        $customFields = array();
+        $jsonFields = $this->customFields();
+        return "ciao";
+
     }
 }

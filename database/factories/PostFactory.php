@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Category;
+
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PostFactory extends Factory
@@ -22,6 +24,7 @@ class PostFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence,
+            'category_id' => Category::factory(),
             'content' => $this->faker->paragraph,
             'posted_at' => now(),
             'author_id' => User::factory()

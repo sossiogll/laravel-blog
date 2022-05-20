@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\PostsRequest;
+use App\Http\Requests\Admin\CategoriesRequest;
 use App\Models\MediaLibrary;
 use App\Models\Post;
 use App\Models\Category;
@@ -28,9 +28,15 @@ class CategoryController extends Controller
      */
     public function edit(Category $category): View
     {
-        return view('admin.categories.edit', [
-            'category' => $category
+        $viewToShow = view('admin.categories.edit', [
+            'category' => $category,
+            'custom_fields_editable' => $category->areCustomFieldsEditable()
         ]);
+        
+        if(!$category->areCustomFieldsEditable())
+            $viewToShow->withErrors(__('categories.not_editable'));
+
+        return $viewToShow;
     }
 
     /**
@@ -38,13 +44,15 @@ class CategoryController extends Controller
      */
     public function create(Request $request): View
     {
-        return view('admin.categories.create');
+        return view('admin.categories.create', [
+            'custom_fields_editable' => true
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PostsRequest $request): RedirectResponse
+    public function store(CategoriesRequest $request): RedirectResponse
     {
         $category = Category::create($request->only(['name']));
 
@@ -54,11 +62,14 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(PostsRequest $request, Category $category): RedirectResponse
+    public function update(CategoriesRequest $request, Category $category): RedirectResponse
     {
-        $category->update($request->only(['name']));
-
-        return redirect()->route('admin.categories.edit', $post)->withSuccess(__('categories.updated'));
+        if(!strcmp($request["custom_fields"], $category->custom_fields) && $category->areCustomFieldsEditable())
+            return redirect()->route('admin.categories.edit', $category);
+        else{
+            $category->update($request->only(['name', 'custom_fields']));
+            return redirect()->route('admin.categories.edit', $category)->withSuccess(__('categories.updated'));
+        }
     }
 
     /**
@@ -66,8 +77,10 @@ class CategoryController extends Controller
      */
     public function destroy(Category  $category)
     {
-        $category->delete();
-
-        return redirect()->route('admin.categories.index')->withSuccess(__('categories.deleted'));
+        if($category->areCustomFieldsEditable()){
+            $category->delete();
+            return redirect()->route('admin.categories.index')->withSuccess(__('categories.deleted'));
+        }
     }
+
 }

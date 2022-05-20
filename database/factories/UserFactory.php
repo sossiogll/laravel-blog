@@ -36,7 +36,7 @@ class UserFactory extends Factory
     /**
      * Indicate that the user is anakin.
      */
-    public function anakin(): Factory
+    public function sossiogll(): Factory
     {
         return $this->state(function (array $attributes) {
             return [

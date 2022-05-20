@@ -2,7 +2,7 @@
     <caption>{{ trans_choice('categories.count', $categories->total()) }}</caption>
     <thead>
         <tr>
-            <th>@lang('categories.attributes.title')</th>
+            <th>@lang('categories.attributes.name')</th>
             <th>@lang('categories.attributes.created_at')</th>
             <th><i class="fa fa-file-text" aria-hidden="true"></i></th>
             <th></th>

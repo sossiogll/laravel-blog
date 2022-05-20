@@ -15,7 +15,8 @@ class CustomFiedsPostCategory extends Migration
     {
         Schema::create('custom_fields_post_category', function (Blueprint $table) {
             $table->id();
-            $table->text('custom_fields');
+            $table->text('custom_fields')->nullable(true);
+            $table->timestamps();
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('post_id');
             $table->foreign('category_id')->references('id')->on('categories')->nullable(false)->onDelete('cascade');

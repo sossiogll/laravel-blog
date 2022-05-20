@@ -20,8 +20,13 @@ class Category extends Model
     protected $fillable = [
         'name',
         'created_at',
+        'custom_fields',
         'updated_at'
     ];
+
+    protected $hidden = ['custom_fields'];
+
+    public $appends = ['fields'];
     
     /**
      * The attributes that should be mutated to dates.
@@ -42,17 +47,6 @@ class Category extends Model
         //static::addGlobalScope(new PostedScope);
     }
 
-    /**
-     * Prepare a date for array / JSON serialization.
-     
-    *protected function serializeDate(DateTimeInterface $date): string
-    *{
-    *    return $date->format('Y-m-d H:i:s');
-    *}*/
-
-    /**
-     * Get the route key for the model.
-     */
     public function getRouteKeyName(): string
     {
         return 'id';
@@ -68,6 +62,8 @@ class Category extends Model
         }
     }
 
+
+
         
     /**
      * Scope a query to order posts by latest posted
@@ -81,6 +77,34 @@ class Category extends Model
     {
         return $this->hasMany(Post::class);
     }
+
+    public function postCustomFields(): belongsToMany{
+        return $this->belongsToMany(Users::class)->withPivot('custom_fields');
+    }
+
+    public function getFieldsAttribute()
+    {
+        $fields = array();
+
+        $jsonFields = $this->custom_fields;
+        $fields_temp = json_decode($jsonFields, true);
+
+        if($fields_temp != null)
+            foreach(array_keys($fields_temp) as $key){
+
+                $field_temp = array();
+                $field_temp["id"] = $key;
+                $field_temp["description"] = $fields_temp[$key];
+                array_push($fields, $field_temp);
+            };
+        return $fields;
+    }
+
+    public function areCustomFieldsEditable(){
+        return $this->posts()->count()==0;
+    }
+
+
     
 
 }

@@ -12,7 +12,7 @@ class CreateMediaTableWithMediaLibrary extends Migration
     public function up()
     {
         Schema::create('media', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->morphs('model');
             $table->string('collection_name');
             $table->string('name');
@@ -29,7 +29,7 @@ class CreateMediaTableWithMediaLibrary extends Migration
         });
 
         Schema::table('posts', function (Blueprint $table) {
-            $table->integer('thumbnail_id')->unsigned()->nullable();
+            $table->bigInteger('thumbnail_id')->unsigned()->nullable();
             $table->foreign('thumbnail_id')->references('id')->on('media')->onDelete('set null');
         });
     }

@@ -17,6 +17,7 @@ return [
   'show' => "Show category",
   'search' => "Search ...",
   'search_results' => ":count category found|:count categories found",
+  'not_editable' => "The custom fields of this category are not editable because there is at least one post with this category. The category is not disposable too.",
 
   'attributes' => [
     'name' => 'Category name',
@@ -25,6 +26,7 @@ return [
     'thumbnail' => 'Post picture',
     'created_at' => 'Created at',
     'thumbnail' => "Thumbnail image",
+    'custom_fields' => "Custom Fields"
   ],
 
   'placeholder' => [

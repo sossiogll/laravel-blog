@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -21,8 +23,9 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'provider', 'provider_id', 'registered_at', 'api_token'
+        'name', 'email', 'password', 'provider', 'provider_id', 'registered_at', 'api_token', 'positions', 'bio', 'authenticable'
     ];
+
 
     /**
      * The attributes that should be mutated to dates.
@@ -111,6 +114,15 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Check if the user has role editor
+     */
+    public function isAuthenticable()
+    {
+        return $this->authenticable;
+    }
+
+
+    /**
      * Return the user's posts
      */
     public function posts(): HasMany
@@ -141,4 +153,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Role::class)->withTimestamps();
     }
+
+    public function isCurrentUser(){
+        return ($this->id == Auth::user()->id);
+    }
+
+
 }

@@ -1,10 +1,5 @@
-@if (Session::has('success'))
-    <x-alert type="success" :dismissible="true">
-        {{ Session::get('success') }}
-    </x-alert>
-@endif
 
-@if (Session::has('errors'))
+@if ($errors->count()>0)
     <x-alert type="danger" :dismissible="true">
         @if ($errors->count() > 1)
             {{ trans_choice('validation.errors', $errors->count()) }}
@@ -16,5 +11,11 @@
         @else
             {{ $errors->first() }}
         @endif
+    </x-alert>
+@endif
+
+@if (Session::has('success'))
+    <x-alert type="success" :dismissible="true">
+        {{ Session::get('success') }}
     </x-alert>
 @endif

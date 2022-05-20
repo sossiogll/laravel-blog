@@ -14,7 +14,7 @@ class CreateMediaLibrariesTable extends Migration
     public function up()
     {
         Schema::create('media_libraries', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->timestamps();
         });
     }

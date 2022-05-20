@@ -17,6 +17,7 @@ return [
   'show' => "Show post",
   'search' => "Search ...",
   'search_results' => ":count post found|:count posts found",
+  'no_categories' => "You need at least one category in order to associate a post with it.",
 
   'attributes' => [
     'title' => 'Title',
@@ -25,6 +26,7 @@ return [
     'thumbnail' => 'Post picture',
     'posted_at' => 'Posted at',
     'thumbnail' => "Thumbnail image",
+    'category' => 'Category',
   ],
 
   'placeholder' => [

@@ -14,7 +14,7 @@ class CreateRolesTable extends Migration
     public function up()
     {
         Schema::create('roles', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
 
             $table->string('name');
 
@@ -24,10 +24,10 @@ class CreateRolesTable extends Migration
         Schema::create('role_user', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('user_id')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
 
-            $table->integer('role_id')->unsigned();
+            $table->bigInteger('role_id')->unsigned();
             $table->foreign('role_id')->references('id')->on('roles');
 
             $table->timestamps();

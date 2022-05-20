@@ -21,7 +21,12 @@ return [
     'password_confirmation' => 'Password confirmation',
     'roles' => 'Roles',
     'registered_at' => 'Registered at',
-    'api_token' => "API key"
+    'api_token' => "API key",
+    'positions' => "Positions",
+    'bio' => "Biography",
+    'authentication' => 'Authentication',
+    'authenticable' => 'Authenticable',
+    'unauthenticable' => 'Unauthenticable'
   ],
 
   'placeholder' => [

@@ -36,7 +36,7 @@
 
     <li class="nav-item" role="presentation" data-toggle="tooltip" data-placement="right" title="@lang('dashboard.categories')">
         <a class="nav-link {{ request()->route()->named('admin.categories.*') ? 'active' : '' }}" href="{{ route('admin.categories.index') }}">
-            <i class="fa fa-users" aria-hidden="true"></i>&nbsp;
+            <i class="fa fa-bars" aria-hidden="true"></i>&nbsp;
             <span class="nav-link-text">@lang('dashboard.categories')</span>
         </a>
     </li>

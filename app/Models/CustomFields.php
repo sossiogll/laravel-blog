@@ -9,6 +9,8 @@ class CustomFields extends Model
 {
     use HasFactory;
 
+    protected $table = 'custom_fields_post_category';
+
     protected $fillable = [
         'custom_fields',
         'category_id',

@@ -18,11 +18,12 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->string("name");
             $table->timestamps();
+            $table->text("custom_fields")->nullable(true);
         });
 
         Schema::table('posts', function (Blueprint $table) {
-            $table->integer('category_id');
-            $table->foreign('category_id')->references('id')->on('categories')->nullable();
+            $table->unsignedBigInteger('category_id')->after('author_id');
+            $table->foreign('category_id')->references('id')->on('categories')->nullable(false)->onDelete('cascade');
         });
 
     }

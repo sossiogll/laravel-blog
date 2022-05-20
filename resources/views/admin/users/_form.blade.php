@@ -1,5 +1,3 @@
-{!! Form::model($user, ['method' => 'PATCH', 'route' => ['admin.users.update', $user]]) !!}
-
   <div class="form-row">
     <div class="form-group col-md-6">
       {!! Form::label('name', __('users.attributes.name')) !!}
@@ -20,44 +18,77 @@
     </div>
   </div>
 
-  <div class="form-row">
-    <div class="form-group col-md-6">
-      {!! Form::label('password', __('users.attributes.password')) !!}
-      {!! Form::password('password', ['class' => 'form-control' . ($errors->has('password') ? ' is-invalid' : ''), 'placeholder' => __('users.placeholder.password')]) !!}
-
-      @error('password')
-        <span class="invalid-feedback">{{ $message }}</span>
-      @enderror
-    </div>
-
-    <div class="form-group col-md-6">
-      {!! Form::label('password_confirmation', __('users.attributes.password_confirmation')) !!}
-      {!! Form::password('password_confirmation', ['class' => 'form-control' . ($errors->has('password_confirmation') ? ' is-invalid' : ''), 'placeholder' => __('users.placeholder.password_confirmation')]) !!}
-
-      @error('password_confirmation')
-        <span class="invalid-feedback">{{ $message }}</span>
-      @enderror
-    </div>
+  <div class="form-group">
+    {!! Form::label('name', __('users.attributes.positions')) !!}
+    {!! Form::text('positions', null, ['class' => 'form-control']) !!}
   </div>
+
 
   <div class="form-group">
-    {!! Form::label('roles', __('users.attributes.roles')) !!}
-
-    @foreach($roles as $role)
-      <div class="checkbox">
-        <label>
-          {!! Form::checkbox("roles[$role->id]", $role->id, $user->hasRole($role->name)) !!}
-          @if (Lang::has('roles.' . $role->name))
-            {!! __('roles.' . $role->name) !!}
-          @else
-            {{ ucfirst($role->name) }}
-          @endif
-        </label>
-      </div>
-    @endforeach
+      {!! Form::label('bio', __('users.attributes.bio')) !!}
+      {!! Form::textarea('bio', null, ['class' => 'form-control']) !!}
   </div>
 
-  {{ link_to_route('admin.users.index', __('forms.actions.back'), [], ['class' => 'btn btn-secondary']) }}
-  {!! Form::submit(__('forms.actions.update'), ['class' => 'btn btn-primary']) !!}
+  @if(isset($user))
 
-{!! Form::close() !!}
+    <div class="form-group">
+      <p><b>{{ __('users.security_policy')}}</b></p>
+    </div>
+
+    <div class="form-group">
+      <div class="checkbox">
+          <label>
+          {!! Form::radio("authenticable", 1, $user->authenticable, ['onchange' => 'this.form.submit()']) !!}
+            {!! __('users.attributes.authenticable') !!}
+        </label>
+      </div>
+
+      <div class="checkbox">
+          <label>
+          {!! Form::radio("authenticable", 0, !$user->authenticable, ['onchange' => 'this.form.submit()']) !!}
+            {!! __('users.attributes.unauthenticable') !!}
+        </label>
+      </div>
+    </div>
+
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        {!! Form::label('password', __('users.attributes.password')) !!}
+        {!! Form::password('password', ['class' => 'form-control' . ($errors->has('password') ? ' is-invalid' : ''), 'placeholder' => __('users.placeholder.password'), $user->authenticable ? 'required' : 'disabled']) !!}
+
+        @error('password')
+          <span class="invalid-feedback">{{ $message }}</span>
+        @enderror
+      </div>
+
+      <div class="form-group col-md-6">
+        {!! Form::label('password_confirmation', __('users.attributes.password_confirmation')) !!}
+        {!! Form::password('password_confirmation', ['class' => 'form-control' . ($errors->has('password_confirmation') ? ' is-invalid' : ''), 'placeholder' => __('users.placeholder.password_confirmation'), $user->authenticable ? 'required' : 'disabled']) !!}
+
+        @error('password_confirmation')
+          <span class="invalid-feedback">{{ $message }}</span>
+        @enderror
+      </div>
+    </div>
+
+    <div class="form-group">
+      {!! Form::label('roles', __('users.attributes.roles')) !!}
+
+      @foreach($roles as $role)
+        <div class="checkbox">
+          <label>
+            {!! Form::checkbox("roles[$role->id]", $role->id, $user->hasRole($role->name), [$user->authenticable ? 'required' : 'disabled']) !!}
+            @if (Lang::has('roles.' . $role->name))
+              {!! __('roles.' . $role->name) !!}
+            @else
+              {{ ucfirst($role->name) }}
+            @endif
+          </label>
+        </div>
+      @endforeach
+    </div>
+  @endif
+ 
+
+

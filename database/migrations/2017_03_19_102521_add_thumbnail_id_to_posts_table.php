@@ -14,7 +14,7 @@ class AddThumbnailIdToPostsTable extends Migration
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->integer('thumbnail_id')->unsigned()->nullable();
+            $table->bigInteger('thumbnail_id')->unsigned()->nullable();
             $table->foreign('thumbnail_id')->references('id')->on('media');
         });
     }
