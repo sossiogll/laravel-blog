@@ -15,10 +15,10 @@ class CustomFiedsPostCategory extends Migration
     {
         Schema::create('custom_fields_post_category', function (Blueprint $table) {
             $table->id();
-            $table->text('custom_fields')->nullable(true);
+            $table->text('custom_fields_values')->nullable(false);
             $table->timestamps();
-            $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('post_id');
+            $table->unsignedBigInteger('category_id')->nullable(false);
+            $table->unsignedBigInteger('post_id')->nullable(false);
             $table->foreign('category_id')->references('id')->on('categories')->nullable(false)->onDelete('cascade');
             $table->foreign('post_id')->references('id')->on('posts')->nullable(false)->onDelete('cascade');
         });

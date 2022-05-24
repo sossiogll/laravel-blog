@@ -75,22 +75,11 @@ class PostController extends Controller
     public function store(PostsRequest $request): RedirectResponse
     {
         $post = Post::create($request->only(['title', 'content', 'posted_at', 'author_id', 'thumbnail_id', 'category_id']));
-        $category = Category::find($request->category_id);
-        $fields = $category->fields;
-        $filled_fields = array();
         
-        for($i = 0; $i<count($fields); $i++){
-            $filled_fields[$fields[$i]["id"]] = $request[$fields[$i]["id"]];
-        }
-        
-
-        $customFields = CustomFields::create(
-            ['category_id' => $request->category_id,
-            'post_id' => $post->id,
-            'custom_fields' => json_encode($filled_fields)]
-        );
-
-        return redirect()->route('admin.posts.edit', $post)->withSuccess(__('posts.created'));
+        if(CustomFields::createOrUpdate($post, $request))
+            return redirect()->route('admin.posts.edit', $post)->withSuccess(__('posts.updated'));
+        else
+            return redirect()->route('admin.posts.edit', $post)->withErrors(__('posts.custom_fields_update_error'));
     }
 
     /**
@@ -99,9 +88,17 @@ class PostController extends Controller
     public function update(PostsRequest $request, Post $post): RedirectResponse
     {
         $post->update($request->only(['title', 'content', 'posted_at', 'author_id', 'thumbnail_id', 'category_id']));
-        //'posted_at' => now(),
+        
+        CustomFields::createOrUpdate($request, $post);
+        return redirect()->route('admin.posts.edit', $post)->withSuccess(CustomFields::where([
+            ['category_id', $post->category->id],
+            ['post_id', $post->id]
+        ])->get());
+        if(CustomFields::createOrUpdate($request, $post))
+            return redirect()->route('admin.posts.edit', $post)->withSuccess(__('posts.updated'));
+        else
+            return redirect()->route('admin.posts.edit', $post)->withErrors(__('posts.custom_fields_update_error'));
 
-        return redirect()->route('admin.posts.edit', $post)->withSuccess(__('posts.updated'));
     }
 
     /**
