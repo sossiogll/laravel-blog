@@ -63,6 +63,6 @@ class Comment extends Model
      */
     public function post(): BelongsTo
     {
-        return $this->hasMany(Post::class);
+        return $this->belongsTo(Post::class);
     }
 }

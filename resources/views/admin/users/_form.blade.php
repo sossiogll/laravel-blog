@@ -19,6 +19,15 @@
   </div>
 
   <div class="form-group">
+    {!! Form::label('thumbnail_id', __('posts.attributes.thumbnail')) !!}
+    {!! Form::select('thumbnail_id', $media, null, ['placeholder' => __('posts.placeholder.thumbnail'), 'class' => 'form-control' . ($errors->has('thumbnail_id') ? ' is-invalid' : '')]) !!}
+
+    @error('thumbnail_id')
+        <span class="invalid-feedback">{{ $message }}</span>
+    @enderror
+</div>
+
+  <div class="form-group">
     {!! Form::label('name', __('users.attributes.positions')) !!}
     {!! Form::text('positions', null, ['class' => 'form-control']) !!}
   </div>
@@ -78,7 +87,7 @@
       @foreach($roles as $role)
         <div class="checkbox">
           <label>
-            {!! Form::checkbox("roles[$role->id]", $role->id, $user->hasRole($role->name), [$user->authenticable ? 'required' : 'disabled']) !!}
+            {!! Form::checkbox("roles[$role->id]", $role->id, $user->hasRole($role->name), [$user->authenticable ? '' : 'disabled']) !!}
             @if (Lang::has('roles.' . $role->name))
               {!! __('roles.' . $role->name) !!}
             @else

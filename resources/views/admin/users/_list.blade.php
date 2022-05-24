@@ -16,7 +16,13 @@
                 <td>{{ link_to_route('admin.users.edit', $user->fullname, $user) }}</td>
                 <td>{{ $user->email }}</td>
                 <td>{{ $user->authenticable ? __('users.attributes.authenticable') : __('users.attributes.unauthenticable') }}</td>
-                <td></td>
+                <td>
+                    @foreach($user->roles as $role)
+                        {{$role->name}} 
+                    
+                    @endforeach
+
+                </td>
                 <td>{{ humanize_date($user->registered_at, 'd/m/Y H:i:s') }}</td>
                 <td>
                     <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-primary btn-sm">

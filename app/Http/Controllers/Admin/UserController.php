@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UsersRequest;
+use App\Http\Requests\Admin\NewUsersRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use App\Models\MediaLibrary;
+
 
 
 
@@ -36,13 +39,15 @@ class UserController extends Controller
             $this->authorize('update', $user);
             return view('users.edit', [
                 'user' => $user,
-                'roles' => Role::all()
+                'roles' => Role::all(),
+                'media' => MediaLibrary::first()->media()->get()->pluck('name', 'id')
             ]);
         }
         else
             return view('admin.users.edit', [
                 'user' => $user,
                 'roles' => Role::all(),
+                'media' => MediaLibrary::first()->media()->get()->pluck('name', 'id')
             ]);
     }
 
@@ -57,20 +62,18 @@ class UserController extends Controller
             ]);
         }
 
-        $user->update(array_filter($request->only(['name', 'email', 'password', 'bio', 'positions', 'authenticable'])));
+        $user->update($request->only(['name', 'email', 'password', 'bio', 'positions', 'authenticable', 'thumbnail_id']));
 
         $role_ids = array_values($request->get('roles', []));
         $user->roles()->sync($role_ids);
 
         return redirect()->route('admin.users.edit', $user)->withSuccess(__('users.updated'));
+
     }
 
-    public function store(UsersRequest $request): RedirectResponse
+    public function store(NewUsersRequest $request): RedirectResponse
     {
-        $user = User::create([
-            'name' => $request['name'],
-            'email' => $request['email'],
-        ]);
+        $user = User::create($request->only(['name', 'email', 'bio', 'positions','thumbnail_id']));
 
         $role_ids = array_values($request->get('roles', []));
         $user->roles()->sync($role_ids);
@@ -78,6 +81,7 @@ class UserController extends Controller
         return redirect()->route('admin.users.edit', [
             'user' => $user,
             'roles' => Role::all(),
+            'media' => MediaLibrary::first()->media()->get()->pluck('name', 'id')
         ] )->withSuccess(__('user.created'));
    
     }
@@ -87,7 +91,7 @@ class UserController extends Controller
      */
     public function create(Request $request): View
     {
-        return view('admin.users.create');    
+        return view('admin.users.create', ['media' => MediaLibrary::first()->media()->get()->pluck('name', 'id')]);    
     }
 
     /**
