@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Builder;
 
 
 class Category extends Model
@@ -20,13 +22,14 @@ class Category extends Model
     protected $fillable = [
         'name',
         'created_at',
-        'custom_fields',
-        'updated_at'
+        'raw_custom_fields',
+        'updated_at',
     ];
 
-    protected $hidden = ['custom_fields'];
+    protected $appended = [
+        'custom_fields'
+    ];
 
-    public $appends = ['fields'];
     
     /**
      * The attributes that should be mutated to dates.
@@ -62,31 +65,26 @@ class Category extends Model
         }
     }
 
-
-
         
     /**
      * Scope a query to order posts by latest posted
      */
     public function scopeAlphabeticalOrder(Builder $query): Builder
     {
-        return $query->orderBy('name', 'desc');
+        return $query->orderBy('name', 'asc');
     }
 
-    public function posts(): HasMany
+    public function posts(): BelongsToMany
     {
-        return $this->hasMany(Post::class);
+        return $this->belongsToMany(Post::class)->withPivot("raw_custom_fields_values");
     }
 
-    public function postCustomFields(): belongsToMany{
-        return $this->belongsToMany(Users::class)->withPivot('custom_fields');
-    }
 
-    public function getFieldsAttribute()
+    public function getCustomFieldsAttribute()
     {
         $fields = array();
 
-        $jsonFields = $this->custom_fields;
+        $jsonFields = $this->attributes['raw_custom_fields'];
         $fields_temp = json_decode($jsonFields, true);
 
         if($fields_temp != null)

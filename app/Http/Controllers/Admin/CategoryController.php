@@ -54,7 +54,7 @@ class CategoryController extends Controller
      */
     public function store(CategoriesRequest $request): RedirectResponse
     {
-        $category = Category::create($request->only(['name']));
+        $category = Category::create($request->only(['name', 'raw_custom_fields']));
 
         return redirect()->route('admin.categories.edit', $category)->withSuccess(__('categories.created'));
     }
@@ -64,10 +64,10 @@ class CategoryController extends Controller
      */
     public function update(CategoriesRequest $request, Category $category): RedirectResponse
     {
-        if(!strcmp($request["custom_fields"], $category->custom_fields) && $category->areCustomFieldsEditable())
+        if(!strcmp($request["custom_fields_raw"], $category->custom_fields) && $category->areCustomFieldsEditable())
             return redirect()->route('admin.categories.edit', $category);
         else{
-            $category->update($request->only(['name', 'custom_fields']));
+            $category->update($request->only(['name', 'raw_custom_fields']));
             return redirect()->route('admin.categories.edit', $category)->withSuccess(__('categories.updated'));
         }
     }

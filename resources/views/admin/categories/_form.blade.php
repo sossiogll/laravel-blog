@@ -14,7 +14,7 @@
 
 <div class="form-group">
     {!! Form::label('custom_fields', __('categories.attributes.custom_fields')) !!}
-    {!! Form::textarea('custom_fields', null, ['class' => 'form-control', 'disabled' => !$custom_fields_editable]) !!}
+    {!! Form::textarea('raw_custom_fields', null, ['class' => 'form-control', 'disabled' => !$custom_fields_editable]) !!}
 
     @error('content')
         <span class="invalid-feedback">{{ $message }}</span>

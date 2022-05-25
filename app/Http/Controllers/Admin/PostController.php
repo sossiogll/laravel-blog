@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PostsRequest;
+use App\Http\Requests\Admin\NewPostsRequest;
 use App\Models\MediaLibrary;
 use App\Models\Post;
-use App\Models\CustomFields;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -30,11 +30,9 @@ class PostController extends Controller
      */
     public function edit(Post $post): View
     {
-        $custom_fields = null;
-        $custom_fields_values = null;
 
-        if(!is_null($post->category_id)){
-            $custom_fields = Category::find($post->category_id)->fields;
+        if(!count(Category::all())){
+            return view('admin.categories.create')->withErrors(__('posts.no_categories'));;
         }
 
         return view('admin.posts.edit', [
@@ -42,8 +40,8 @@ class PostController extends Controller
             'user' => Auth::user()->pluck('name', 'id'),
             'media' => MediaLibrary::first()->media()->get()->pluck('name', 'id'),
             'categories' => Category::first()->get()->pluck('name', 'id'),
-            'custom_fields' => $custom_fields,
-            'custom_fields_value' => $custom_fields_values
+            'custom_fields' => $post->category->customFields,
+            'custom_fields_values' => $post->customFieldsValues
         ]);
     }
 
@@ -52,34 +50,27 @@ class PostController extends Controller
      */
     public function create(Request $request): View
     {
-        $custom_fields = null;
-        $custom_fields_values = null;
 
         if(!count(Category::all())){
             return view('admin.categories.create')->withErrors(__('posts.no_categories'));;
         }
-        
+
         return view('admin.posts.create', [
             'user' => Auth::user()->pluck('name', 'id'),
-            'media' => MediaLibrary::first()->media()->get()->pluck('name', 'id'),
-            'categories' => Category::get()->pluck('name', 'id'),
-            'default_category' => Category::all()->first()->id,
-            'custom_fields' => Category::all()->first()->fields,
-            'custom_fields_value' => $custom_fields_values
+            'categories' => Category::alphabeticalOrder()->pluck('name', 'id'),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PostsRequest $request): RedirectResponse
+    public function store(NewPostsRequest $request): RedirectResponse
     {
-        $post = Post::create($request->only(['title', 'content', 'posted_at', 'author_id', 'thumbnail_id', 'category_id']));
+        $post = Post::create($request->only(['title', 'posted_at', 'author_id', 'category_id']));
+        $post->categories()->attach($request['category_id'], ['raw_custom_fields_values' => $this->generateJsonFilledFields( $request, $post)]);
         
-        if(CustomFields::createOrUpdate($post, $request))
-            return redirect()->route('admin.posts.edit', $post)->withSuccess(__('posts.updated'));
-        else
-            return redirect()->route('admin.posts.edit', $post)->withErrors(__('posts.custom_fields_update_error'));
+        return redirect()->route('admin.posts.edit', $post)->withSuccess(__('posts.created'));
+
     }
 
     /**
@@ -89,25 +80,49 @@ class PostController extends Controller
     {
         $post->update($request->only(['title', 'content', 'posted_at', 'author_id', 'thumbnail_id', 'category_id']));
         
-        CustomFields::createOrUpdate($request, $post);
-        return redirect()->route('admin.posts.edit', $post)->withSuccess(CustomFields::where([
-            ['category_id', $post->category->id],
-            ['post_id', $post->id]
-        ])->get());
-        if(CustomFields::createOrUpdate($request, $post))
-            return redirect()->route('admin.posts.edit', $post)->withSuccess(__('posts.updated'));
+        if($this->isPostAlreadyAttachedToCategory($request, $post))
+            $post->categories()->updateExistingPivot($request['category_id'], ['raw_custom_fields_values' => $this->generateJsonFilledFields($request, $post)]);
         else
-            return redirect()->route('admin.posts.edit', $post)->withErrors(__('posts.custom_fields_update_error'));
+            $post->categories()->attach($request['category_id'], ['raw_custom_fields_values' => $this->generateJsonFilledFields($request, $post)]);
 
+        return redirect()->route('admin.posts.edit', $post)->withSuccess(__('posts.updated'));
+       
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post  $post)
+    public function destroy(Post $post)
     {
         $post->delete();
 
         return redirect()->route('admin.posts.index')->withSuccess(__('posts.deleted'));
     }
+
+    private function generateFilledFields($request, Post $post){
+
+        $filled_fields = array();
+        $category = Category::find($request->category_id);
+        $fields = $category->customFields;
+        
+        for($i = 0; $i<count($fields); $i++){
+
+            $filled_fields[$fields[$i]["id"]] = $request[$fields[$i]["id"]];
+        }
+
+        return $filled_fields;
+    }
+
+    private function generateJsonFilledFields($request, Post $post){
+
+        return json_encode($this->generateFilledFields($request, $post));
+
+    }
+
+    private function isPostAlreadyAttachedToCategory(PostsRequest $request,Post $post){
+
+        return $post->categories()->where('category_id', $request['category_id'])->count() == 1;
+
+    }
+
 }

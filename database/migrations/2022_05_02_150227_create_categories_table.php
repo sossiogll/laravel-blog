@@ -18,7 +18,7 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->string("name");
             $table->timestamps();
-            $table->text("custom_fields")->nullable(true);
+            $table->text("raw_custom_fields")->nullable(true);
         });
 
         Schema::table('posts', function (Blueprint $table) {

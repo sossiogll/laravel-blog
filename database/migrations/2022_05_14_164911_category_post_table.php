@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CustomFiedsPostCategory extends Migration
+class CategoryPostTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CustomFiedsPostCategory extends Migration
      */
     public function up()
     {
-        Schema::create('custom_fields_post_category', function (Blueprint $table) {
+        Schema::create('category_post', function (Blueprint $table) {
             $table->id();
-            $table->text('custom_fields_values')->nullable(false);
+            $table->text('raw_custom_fields_values')->nullable(false);
             $table->timestamps();
             $table->unsignedBigInteger('category_id')->nullable(false);
             $table->unsignedBigInteger('post_id')->nullable(false);

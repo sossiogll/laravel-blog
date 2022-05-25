@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
         $category = Category::firstOrCreate(
             [
                 'name' => 'Test Category',
-                'custom_fields' => '{"custom_field_1":"Custom Field 1", "custom_field_2":"Custom Fields 2"}'
+                'raw_custom_fields' => '{"custom_field_1":"Custom Field 1 Label", "custom_field_2":"Custom Fields 2 Label"}'
             ]
         );
 
@@ -63,6 +63,8 @@ class DatabaseSeeder extends Seeder
                     You can open an issue or (better) a PR if something went wrong."
             ]
         );
+
+        $post->categories()->attach($category->id, ['raw_custom_fields_values' => '{"custom_field_1":"Custom Field 1 Value", "custom_field_2":"Custom Fields 2 Value"}']);
 
         // Comments
         Comment::firstOrCreate(

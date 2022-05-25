@@ -14,11 +14,11 @@
 <div class="form-row">
 
     <div class="form-group col-md-4">
-        {!! Form::label('category_id', __('posts.attributes.category')) !!}
+        {!! Form::label('category_id', __('posts.attributes.category'))!!}
         @if(isset($post))
-            {!! Form::select('category_id', $categories, $post->category_id, ['class' => 'form-control', 'onchange' => 'this.form.submit()']) !!}
+            {!! Form::select('category_id', $categories, $post->category_id, ['class' => 'form-control', 'onchange' => 'this.form.submit()', 'required']) !!}
         @else
-            {!! Form::select('category_id', $categories, null, ['class' => 'form-control', 'onchange' => 'this.form.submit()']) !!}
+            {!! Form::select('category_id', $categories, null, ['placeholder' => __('posts.placeholder.categories'), 'class' => 'form-control', 'onchange' => 'this.form.submit()', 'required']) !!}
         @endif
 
 
@@ -36,32 +36,28 @@
         @enderror
     </div>
 
-
-
-</div>
-
-<div class="form-group">
-    {!! Form::label('thumbnail_id', __('posts.attributes.thumbnail')) !!}
-    {!! Form::select('thumbnail_id', $media, null, ['placeholder' => __('posts.placeholder.thumbnail'), 'class' => 'form-control' . ($errors->has('thumbnail_id') ? ' is-invalid' : '')]) !!}
-
-    @error('thumbnail_id')
-        <span class="invalid-feedback">{{ $message }}</span>
-    @enderror
 </div>
 
 
+@if(isset($post))
 
+    <div class="form-group">
+        {!! Form::label('thumbnail_id', __('posts.attributes.thumbnail')) !!}
+        {!! Form::select('thumbnail_id', $media, null, ['placeholder' => __('posts.placeholder.thumbnail'), 'class' => 'form-control' . ($errors->has('thumbnail_id') ? ' is-invalid' : '')]) !!}
+
+        @error('thumbnail_id')
+            <span class="invalid-feedback">{{ $message }}</span>
+        @enderror
+    </div>
 
 
     @if($custom_fields != null)
 
-
-        <p><b> @lang('categories.attributes.custom_fields') </b></p>
         @for($i=0; $i < count($custom_fields); $i++)
 
             <div class="form-group">
                 {!! Form::label($custom_fields[$i]['description'], __($custom_fields[$i]['description'])) !!}
-                {!! Form::text($custom_fields[$i]['id'], null, ['class' => 'form-control']) !!}
+                {!! Form::text($custom_fields[$i]['id'], $custom_fields_values[$custom_fields[$i]['id']], ['class' => 'form-control']) !!}
             </div>
 
         @endfor
@@ -69,13 +65,13 @@
     @endif
 
 
+    <div class="form-group">
+        {!! Form::label('content', __('posts.attributes.content')) !!}
+        {!! Form::textarea('content', null, ['class' => 'form-control trumbowyg-form' . ($errors->has('content') ? ' is-invalid' : ''), 'required']) !!}
 
+        @error('content')
+            <span class="invalid-feedback">{{ $message }}</span>
+        @enderror
+    </div>
 
-<div class="form-group">
-    {!! Form::label('content', __('posts.attributes.content')) !!}
-    {!! Form::textarea('content', null, ['class' => 'form-control trumbowyg-form' . ($errors->has('content') ? ' is-invalid' : ''), 'required']) !!}
-
-    @error('content')
-        <span class="invalid-feedback">{{ $message }}</span>
-    @enderror
-</div>
+@endif

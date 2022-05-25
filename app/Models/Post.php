@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
@@ -31,7 +33,7 @@ class Post extends Model
         'thumbnail_id'
     ];
 
-    public $appends = ['custom_fields'];
+    public $appends = ['custom_fields_values'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -130,10 +132,16 @@ class Post extends Model
     /**
      * Return the post category
      */
-    public function category(): BelongsTo
+    public function categories(): BelongsToMany
     {
-        return $this->belongsTo(Category::class, 'category_id');
+        return $this->belongsToMany(Category::class)->withPivot("raw_custom_fields_values");
     }
+
+    public function category(): belongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
 
     /**
      * Return the post's thumbnail
@@ -167,14 +175,10 @@ class Post extends Model
         return filled($this->thumbnail_id);
     }
 
-    public function customFields(){
-        return $this->belongsToMany(Category::class)->withPivot('custom_fields');;
-    }
 
-    public function getCustomFieldsAttribute(){
-        $customFields = array();
-        $jsonFields = $this->customFields();
-        return "ciao";
+    public function getCustomFieldsValuesAttribute(){
+        
+        return json_decode($this->categories()->where('category_id', $this->category->id)->get()->first()->pivot->raw_custom_fields_values, true);
 
     }
 }
