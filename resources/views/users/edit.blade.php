@@ -20,7 +20,19 @@
           </div>
         </div>
 
-        <div class="form-group row">
+
+      <div class="form-group row">
+          {!! Form::label('thumbnail_id', __('posts.attributes.thumbnail'), ['class' => 'col-sm-2 col-form-label']) !!}
+          <div class="col-sm-5">
+            {!! Form::select('thumbnail_id', $media, null, ['placeholder' => __('posts.placeholder.thumbnail'), 'class' => 'form-control' . ($errors->has('thumbnail_id') ? ' is-invalid' : '')]) !!}
+
+            @error('thumbnail_id')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+          </div>
+      </div>
+
+      <div class="form-group row">
           {!! Form::label('email', __('users.attributes.email'), ['class' => 'col-sm-2 col-form-label']) !!}
 
           <div class="col-sm-5">
@@ -30,12 +42,12 @@
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror
           </div>
-        </div>
+      </div>
 
         <div class="form-group row">
           {!! Form::label('name', __('users.attributes.positions'), ['class' => 'col-sm-2 col-form-label']) !!}
           <div class="col-sm-5">
-            {!! Form::text('positions', null, ['class' => 'form-control']) !!}
+            {!! Form::text('raw_positions_value', null, ['class' => 'form-control']) !!}
           </div>
         </div>
 

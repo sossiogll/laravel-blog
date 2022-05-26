@@ -27,21 +27,22 @@
     @enderror
 </div>
 
-  <div class="form-group">
-    {!! Form::label('name', __('users.attributes.positions')) !!}
-    {!! Form::text('positions', null, ['class' => 'form-control']) !!}
-  </div>
-
-
-  <div class="form-group">
-      {!! Form::label('bio', __('users.attributes.bio')) !!}
-      {!! Form::textarea('bio', null, ['class' => 'form-control']) !!}
-  </div>
 
   @if(isset($user))
 
     <div class="form-group">
-      <p><b>{{ __('users.security_policy')}}</b></p>
+      {!! Form::label('name', __('users.attributes.positions')) !!}
+      {!! Form::text('raw_positions_value', null, ['class' => 'form-control']) !!}
+    </div>
+
+
+    <div class="form-group">
+        {!! Form::label('bio', __('users.attributes.bio')) !!}
+        {!! Form::textarea('bio', null, ['class' => 'form-control']) !!}
+    </div>
+
+    <div class="form-group">
+      <p><b>{{ __('users.security')}}</b></p>
     </div>
 
     <div class="form-group">

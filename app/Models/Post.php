@@ -33,7 +33,10 @@ class Post extends Model
         'thumbnail_id'
     ];
 
-    public $appends = ['custom_fields_values'];
+    public $appends = [
+        'custom_fields_values',
+        'raw_custom_fields_values'    
+    ];
 
     /**
      * The attributes that should be mutated to dates.
@@ -179,6 +182,12 @@ class Post extends Model
     public function getCustomFieldsValuesAttribute(){
         
         return json_decode($this->categories()->where('category_id', $this->category->id)->get()->first()->pivot->raw_custom_fields_values, true);
+
+    }
+
+    public function getRawCustomFieldsValuesAttribute(){
+        
+        return $this->categories()->where('category_id', $this->category->id)->get()->first()->pivot->raw_custom_fields_values;
 
     }
 }

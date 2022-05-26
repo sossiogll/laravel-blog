@@ -40,6 +40,7 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
 
     // Posts
     Route::apiResource('posts', 'PostController')->only(['index', 'show']);
+    Route::apiResource('categories', 'CategoryController')->only(['index', 'show']);
     Route::apiResource('users.posts', 'UserPostController')->only('index');
 
     // Users

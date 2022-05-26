@@ -33,6 +33,7 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
+
         if($user->isCurrentUser()){
 
             $user = auth()->user();
@@ -62,7 +63,7 @@ class UserController extends Controller
             ]);
         }
 
-        $user->update($request->only(['name', 'email', 'password', 'bio', 'positions', 'authenticable', 'thumbnail_id']));
+        $user->update($request->only(['name', 'email', 'password', 'bio', 'raw_positions_value', 'authenticable', 'thumbnail_id']));
 
         $role_ids = array_values($request->get('roles', []));
         $user->roles()->sync($role_ids);
@@ -73,13 +74,14 @@ class UserController extends Controller
 
     public function store(NewUsersRequest $request): RedirectResponse
     {
-        $user = User::create($request->only(['name', 'email', 'bio', 'positions','thumbnail_id']));
+        $user = User::create($request->only(['name', 'email', 'bio', 'raw_positions_value','thumbnail_id']));
 
         $role_ids = array_values($request->get('roles', []));
         $user->roles()->sync($role_ids);
         
         return redirect()->route('admin.users.edit', [
             'user' => $user,
+            'positions' => "",
             'roles' => Role::all(),
             'media' => MediaLibrary::first()->media()->get()->pluck('name', 'id')
         ] )->withSuccess(__('user.created'));

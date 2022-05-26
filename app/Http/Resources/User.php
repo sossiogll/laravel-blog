@@ -15,6 +15,8 @@ class User extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
+            'bio' => $this->bio,
+            'positions' => $this->positions,
             'provider' => $this->provider,
             'provider_id' => $this->provider_id,
             'registered_at' => $this->registered_at->toIso8601String(),

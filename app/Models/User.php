@@ -23,7 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'provider', 'provider_id', 'registered_at', 'api_token', 'positions', 'bio', 'authenticable', 'thumbnail_id'
+        'name', 'email', 'password', 'provider', 'provider_id', 'registered_at', 'api_token', 'raw_positions_value', 'bio', 'authenticable', 'thumbnail_id'
     ];
 
 
@@ -43,6 +43,10 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $hidden = [
         'password', 'remember_token',
+    ];
+
+    protected $appended = [
+        'positions'
     ];
 
     /**
@@ -157,6 +161,13 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isCurrentUser(){
         return ($this->id == Auth::user()->id);
     }
+
+    public function getPositionsAttribute(){
+
+        return explode( ',', $this->attributes['raw_positions_value'] );
+
+    }
+
 
 
 }

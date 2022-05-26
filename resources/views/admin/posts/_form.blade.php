@@ -18,7 +18,7 @@
         @if(isset($post))
             {!! Form::select('category_id', $categories, $post->category_id, ['class' => 'form-control', 'onchange' => 'this.form.submit()', 'required']) !!}
         @else
-            {!! Form::select('category_id', $categories, null, ['placeholder' => __('posts.placeholder.categories'), 'class' => 'form-control', 'onchange' => 'this.form.submit()', 'required']) !!}
+            {!! Form::select('category_id', $categories, null, ['placeholder' => __('posts.placeholder.category'), 'class' => 'form-control', 'onchange' => 'this.form.submit()', 'required']) !!}
         @endif
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UsersRequest;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\MediaLibrary;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -37,7 +38,8 @@ class UserController extends Controller
 
         return view('users.edit', [
             'user' => $user,
-            'roles' => Role::all()
+            'roles' => Role::all(),
+            'media' => MediaLibrary::first()->media()->get()->pluck('name', 'id')
         ]);
     }
 
@@ -50,7 +52,7 @@ class UserController extends Controller
 
         $this->authorize('update', $user);
 
-        $user->update($request->validated());
+        $user->update($request->only(['name', 'email', 'bio', 'raw_positions_value', 'thumbnail_id']));
 
         return redirect()->route('users.edit')->withSuccess(__('users.updated'));
     }
