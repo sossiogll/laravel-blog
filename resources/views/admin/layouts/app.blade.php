@@ -11,7 +11,7 @@
         <meta name="api-token" content="{{ auth()->user()->api_token }}">
     @endauth
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Beautiful Life Content Manager') }}</title>
 
     <!-- Styles -->
     <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
@@ -20,7 +20,7 @@
 <body class="admin-body bg-dark">
     @include('admin/shared/navbar')
 
-    <div class="content-wrapper bg-light">
+    <div id="app" class="content-wrapper bg-light">
         <div class="container-fluid">
             <div class="row">
                 <div class="col">

@@ -16,3 +16,6 @@ public/media/
 /storage/medialibrary
 /log
 .phpunit.result.cache
+composer.lock
+yarn.lock
+package.lock
