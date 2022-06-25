@@ -26,7 +26,9 @@ return [
     'bio' => "Biography",
     'authentication' => 'Authentication',
     'authenticable' => 'Authenticable',
-    'unauthenticable' => 'Unauthenticable'
+    'unauthenticable' => 'Unauthenticable',
+    'secondary_profile_picture' => 'Secondary profile picture',
+    'profile_picture' => 'Profile picture'
   ],
 
   'placeholder' => [
@@ -34,6 +36,8 @@ return [
     'email' => 'Your email',
     'current_password' => 'Your current password',
     'password' => 'Your new password',
-    'password_confirmation' => 'Password confirmation'
+    'password_confirmation' => 'Password confirmation',
+    'secondary_profile_picture' => 'Secondary profile picture',
+    'profile_picture' => 'Profile picture'
   ]
 ];

@@ -22,6 +22,15 @@
             @enderror
         </div>
 
+        <div class="form-group">
+            {!! Form::label('description', __('media.attributes.description')) !!}
+            {!! Form::text('description', null, ['class' => 'form-control' . ($errors->has('description') ? ' is-invalid' : '')]) !!}
+
+            @error('description')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+
 
         {{ link_to_route('admin.media.index', __('forms.actions.back'), [], ['class' => 'btn btn-secondary']) }}
         {!! Form::submit(__('forms.actions.save'), ['class' => 'btn btn-primary']) !!}

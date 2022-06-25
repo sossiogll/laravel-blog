@@ -20,7 +20,6 @@ class CreateMediaTable extends Migration
             $table->string('original_filename');
             $table->string('mime_type');
             $table->nullableMorphs('mediable');
-
             $table->timestamps();
         });
     }

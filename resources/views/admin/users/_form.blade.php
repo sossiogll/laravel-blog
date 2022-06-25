@@ -17,15 +17,27 @@
       @enderror
     </div>
   </div>
+  
+  <div class="form-row">
 
-  <div class="form-group">
-    {!! Form::label('thumbnail_id', __('posts.attributes.thumbnail')) !!}
-    {!! Form::select('thumbnail_id', $media, null, ['placeholder' => __('posts.placeholder.thumbnail'), 'class' => 'form-control' . ($errors->has('thumbnail_id') ? ' is-invalid' : '')]) !!}
+    <div class="form-group col-md-6">
+      {!! Form::label('profile_picture_id', __('users.attributes.profile_picture')) !!}
+      {!! Form::select('profile_picture_id', $media, null, ['placeholder' => __('users.placeholder.profile_picture'), 'class' => 'form-control' . ($errors->has('profile_picture_id') ? ' is-invalid' : '')]) !!}
 
-    @error('thumbnail_id')
-        <span class="invalid-feedback">{{ $message }}</span>
-    @enderror
-</div>
+      @error('profile_picture_id')
+          <span class="invalid-feedback">{{ $message }}</span>
+      @enderror
+    </div>
+
+    <div class="form-group col-md-6">
+      {!! Form::label('secondary_profile_picture_id', __('users.attributes.secondary_profile_picture')) !!}
+      {!! Form::select('secondary_profile_picture_id', $media, null, ['placeholder' => __('users.placeholder.secondary_profile_picture'), 'class' => 'form-control' . ($errors->has('secondary_profile_picture_id') ? ' is-invalid' : '')]) !!}
+
+      @error('secondary_profile_picture_id')
+          <span class="invalid-feedback">{{ $message }}</span>
+      @enderror
+    </div>
+  </div>
 
 
   @if(isset($user))

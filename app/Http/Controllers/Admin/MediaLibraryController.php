@@ -45,14 +45,20 @@ class MediaLibraryController extends Controller
     {
         $image = $request->file('image');
         $name = $image->getClientOriginalName();
+        $description = "";
 
         if ($request->filled('name')) {
             $name = $request->input('name');
         }
 
+        if ($request->filled('description')) {
+            $description = $request->input('description');
+        }
+
         MediaLibrary::first()
             ->addMedia($image)
             ->usingName($name)
+            ->withCustomProperties(['description' => $description])
             ->toMediaCollection();
 
         return redirect()->route('admin.media.index')->withSuccess(__('media.created'));

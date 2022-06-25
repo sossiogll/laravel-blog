@@ -20,6 +20,8 @@ class Post extends JsonResource
             'comments_count' => $this->comments_count ?? $this->comments()->count(),
             'thumbnail_url' => $this->when($this->hasThumbnail(), url(optional($this->thumbnail)->getUrl())),
             'thumb_thumbnail_url' => $this->when($this->hasThumbnail(), url(optional($this->thumbnail)->getUrl('thumb'))),
+            'thumbnail_name' => $this->when($this->hasThumbnail(), optional($this->thumbnail)->name),
+            'thumbnail_description' => $this->when($this->hasThumbnail(), optional($this->thumbnail)->description),
             'category_id' => $this->category_id,
             'custom_fields' => $this-> customFieldsValues
         ];

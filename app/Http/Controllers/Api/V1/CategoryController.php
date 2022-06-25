@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 class CategoryController extends Controller
 {
     /**
-     * Return the users.
+     * Return the category.
      */
     public function index(Request $request): ResourceCollection
     {

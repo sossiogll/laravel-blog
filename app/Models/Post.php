@@ -140,7 +140,7 @@ class Post extends Model
         return $this->belongsToMany(Category::class)->withPivot("raw_custom_fields_values");
     }
 
-    public function category(): belongsTo
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }

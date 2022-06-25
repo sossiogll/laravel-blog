@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\belongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+
 
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -23,7 +25,18 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'provider', 'provider_id', 'registered_at', 'api_token', 'raw_positions_value', 'bio', 'authenticable', 'thumbnail_id'
+        'name',
+        'email',
+        'password',
+        'provider',
+        'provider_id',
+        'registered_at',
+        'api_token',
+        'raw_positions_value',
+        'bio',
+        'authenticable',
+        'profile_picture_id',
+        'secondary_profile_picture_id'
     ];
 
 
@@ -42,12 +55,69 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
+        'raw_positions_value'
     ];
 
     protected $appended = [
         'positions'
     ];
+
+
+    /******************** Relationship ********************/
+
+
+    /**
+     * Return the user's profile picture
+     */
+    public function profilePicture(): BelongsTo
+    {
+        return $this->belongsTo(Media::class, 'profile_picture_id');
+    }
+
+    /**
+     * Return the user's secondary profile picture
+     */
+    public function secondaryProfilePicture(): BelongsTo
+    {
+        return $this->belongsTo(Media::class, 'secondary_profile_picture_id');
+    }
+
+    /**
+     * Return the user's posts
+     */
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class, 'author_id');
+    }
+
+    /**
+     * Return the user's comments
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class, 'author_id');
+    }
+
+    /**
+     * Return the user's likes
+     */
+    public function likes(): HasMany
+    {
+        return $this->hasMany(Like::class, 'author_id');
+    }
+
+    /**
+     * Return the user's roles
+     */
+    public function roles(): belongsToMany
+    {
+        return $this->belongsToMany(Role::class)->withTimestamps();
+    }
+
+    /******************** Getting/Setting attributes ********************/
+
 
     /**
      * Get the user's fullname titleized.
@@ -56,6 +126,17 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Str::title($this->name);
     }
+
+    /**
+     * Return the user's positions
+     */
+    public function getPositionsAttribute(){
+        return explode( ',', $this->attributes['raw_positions_value'] );
+
+    }
+
+
+    /******************** Scopes ********************/
 
     /**
      * Scope a query to only include users registered last week.
@@ -84,6 +165,9 @@ class User extends Authenticatable implements MustVerifyEmail
                   ->orWhere('roles.name', Role::ROLE_EDITOR);
         });
     }
+
+    /******************** Checks ********************/
+
 
     /**
      * Check if the user can be an author
@@ -120,53 +204,34 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Check if the user has role editor
      */
-    public function isAuthenticable()
+    public function isAuthenticable(): bool
     {
         return $this->authenticable;
     }
 
-
     /**
-     * Return the user's posts
+     * Check if this is current logged in user
      */
-    public function posts(): HasMany
-    {
-        return $this->hasMany(Post::class, 'author_id');
-    }
-
-    /**
-     * Return the user's comments
-     */
-    public function comments(): HasMany
-    {
-        return $this->hasMany(Comment::class, 'author_id');
-    }
-
-    /**
-     * Return the user's likes
-     */
-    public function likes(): HasMany
-    {
-        return $this->hasMany(Like::class, 'author_id');
-    }
-
-    /**
-     * Return the user's roles
-     */
-    public function roles(): belongsToMany
-    {
-        return $this->belongsToMany(Role::class)->withTimestamps();
-    }
-
     public function isCurrentUser(){
         return ($this->id == Auth::user()->id);
     }
 
-    public function getPositionsAttribute(){
-
-        return explode( ',', $this->attributes['raw_positions_value'] );
-
+        /**
+     * return true if the post has a thumbnail
+     */
+    public function hasProfilePicture(): bool
+    {
+        return filled($this->profile_picture_id);
     }
+
+        /**
+     * return true if the post has a thumbnail
+     */
+    public function hasSecondaryProfilePicture(): bool
+    {
+        return filled($this->secondary_profile_picture_id);
+    }
+
 
 
 

@@ -63,7 +63,7 @@ class UserController extends Controller
             ]);
         }
 
-        $user->update($request->only(['name', 'email', 'password', 'bio', 'raw_positions_value', 'authenticable', 'thumbnail_id']));
+        $user->update($request->only(['name', 'email', 'password', 'bio', 'raw_positions_value', 'authenticable', 'profile_picture_id',"secondary_profile_picture_id" ]));
 
         $role_ids = array_values($request->get('roles', []));
         $user->roles()->sync($role_ids);
@@ -74,7 +74,7 @@ class UserController extends Controller
 
     public function store(NewUsersRequest $request): RedirectResponse
     {
-        $user = User::create($request->only(['name', 'email', 'bio', 'raw_positions_value','thumbnail_id']));
+        $user = User::create($request->only(['name', 'email', 'bio', 'raw_positions_value','profile_picture_id',"secondary_profile_picture_id" ]));
 
         $role_ids = array_values($request->get('roles', []));
         $user->roles()->sync($role_ids);
