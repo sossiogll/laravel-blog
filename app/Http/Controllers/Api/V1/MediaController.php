@@ -32,17 +32,24 @@ class MediaController extends Controller
 
         $image = $request->file('image');
         $name = $image->getClientOriginalName();
+        $description = "";
 
         if ($request->filled('name')) {
             $name = $request->input('name');
         }
 
+        if ($request->filled('description')) {
+            $description = $request->input('description');
+        }
+
         return new MediaResource(
             MediaLibrary::first()
-                        ->addMedia($image)
-                        ->usingName($name)
-                        ->toMediaCollection()
+                ->addMedia($image)
+                ->usingName($name)
+                ->withCustomProperties(['description' => $description])
+                ->toMediaCollection()
         );
+        
     }
 
     /**

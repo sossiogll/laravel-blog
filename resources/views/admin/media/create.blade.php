@@ -3,36 +3,23 @@
 @section('content')
     <h1>@lang('media.create')</h1>
 
-    {!! Form::open(['route' => ['admin.media.store'], 'method' =>'POST', 'files' => true]) !!}
-        <div class="form-group">
-            {!! Form::label('image', __('media.attributes.image')) !!}
-            {!! Form::file('image', ['accept' => 'image/*', 'class' => 'form-control' . ($errors->has('image') ? ' is-invalid' : ''), 'required']) !!}
+    <image-loader-form
+        action="{{route('media.store')}}"
+        image-label="@lang('media.attributes.image')"
+        name-label="@lang('media.attributes.name')"
+        description-placeholder="@lang('media.placeholder.description')"
+        description-label="@lang('media.attributes.description')"
+        save-button-label="@lang('forms.actions.save')"
+        back-button-label="@lang('forms.actions.back')"
+        back-button-link="{{route('admin.media.index')}}"
+        remove-button-label="@lang('forms.actions.remove')"
+        reset-button-label="@lang('forms.actions.reset')"
+        add-button-label="@lang('forms.actions.add')"
+        upload-init-message="@lang('forms.media.initial')"
+        upload-success-message="@lang('forms.media.success')"
+        upload-warning-message="@lang('forms.media.error')"
+    >
+    
+    </image-loader-form>
 
-            @error('image')
-                <span class="invalid-feedback">{{ $message }}</span>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            {!! Form::label('name', __('media.attributes.name')) !!}
-            {!! Form::text('name', null, ['class' => 'form-control' . ($errors->has('name') ? ' is-invalid' : '')]) !!}
-
-            @error('name')
-                <span class="invalid-feedback">{{ $message }}</span>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            {!! Form::label('description', __('media.attributes.description')) !!}
-            {!! Form::text('description', null, ['class' => 'form-control' . ($errors->has('description') ? ' is-invalid' : '')]) !!}
-
-            @error('description')
-                <span class="invalid-feedback">{{ $message }}</span>
-            @enderror
-        </div>
-
-
-        {{ link_to_route('admin.media.index', __('forms.actions.back'), [], ['class' => 'btn btn-secondary']) }}
-        {!! Form::submit(__('forms.actions.save'), ['class' => 'btn btn-primary']) !!}
-    {!! Form::close() !!}
 @endsection

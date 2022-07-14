@@ -73,4 +73,28 @@ class MediaLibraryController extends Controller
 
         return redirect()->route('admin.media.index')->withSuccess(__('media.deleted'));
     }
+
+    /**
+     * Display the specified resource edit form.
+     */
+    public function edit(Media $medium): View
+    {
+        return view('admin.media.edit', [
+            'medium' => $medium,
+        ]);
+        
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Media $medium): RedirectResponse
+    {
+
+        $medium->setCustomProperty('description', $request->input('description'));
+        $medium->name = $request->input('name');
+        $medium->save();
+        return redirect()->route('admin.media.edit', $medium)->withSuccess(__('media.updated'));
+       
+    }
 }

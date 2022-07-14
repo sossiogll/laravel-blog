@@ -9,6 +9,7 @@ return [
     'generate' => 'Generate',
     'delete' => 'Delete',
     'add' => 'Add',
+    'reset' => 'Reset'
   ],
 
   'comments' => [
@@ -26,6 +27,10 @@ return [
 
   'media' => [
     'delete' => 'Are you sure you want to delete this thumbnail?',
-  ],
+    'initial' => 'Add one or more images to start.',
+    'success' => 'Upload completed. Reset to start again.',
+    'error' => 'Errors occursed while uploading. Reset and try again.',
+  ]
+
 
 ];

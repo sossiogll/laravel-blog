@@ -1,11 +1,12 @@
 import CommentForm from './components/comments/CommentForm'
 import CommentList from './components/comments/CommentList'
 import Like from './components/Like'
+import ImageLoaderForm from './components/imageForm/ImageLoaderForm.vue'
 import Vue from 'vue'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = true
 
-window.Event = new Vue()
+window.Event = 
 
 new Vue({
   el: '#app',
@@ -13,12 +14,13 @@ new Vue({
   components: {
     CommentForm,
     CommentList,
-    Like
+    Like,
+    ImageLoaderForm
   },
 
-  mounted () {
+  mounted() {
     $('[data-confirm]').on('click', () => {
       return confirm($(this).data('confirm'))
     })
   }
-})
+});

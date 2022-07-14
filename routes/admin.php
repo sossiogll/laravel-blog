@@ -9,7 +9,7 @@ Route::resource('users', 'UserController')->only(['index', 'edit', 'update', 'cr
 Route::delete('/posts/{post}/profilePicture', 'UserProfilePictureController@destroy')->name('users_profilePicture.destroy');
 Route::delete('/posts/{post}/secondaryProfilePicture', 'UserSecondaryProfilePictureController@destroy')->name('users_secondaryProfilePicture.destroy');
 Route::resource('comments', 'CommentController')->only(['index', 'edit', 'update', 'destroy']);
-Route::resource('media', 'MediaLibraryController')->only(['index', 'show', 'create', 'store', 'destroy']);
+Route::resource('media', 'MediaLibraryController')->only(['index','edit', 'update', 'show', 'create', 'store', 'destroy']);
 Route::resource('categories', 'CategoryController');
 
 

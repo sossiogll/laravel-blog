@@ -2,7 +2,7 @@
 
 return [
   'media' => 'Media',
-  'create' => 'Add an image',
+  'create' => 'Add images',
   'created' => 'Image posted',
   'updated' => 'Image updated',
   'deleted' => 'Image deleted',
@@ -16,6 +16,11 @@ return [
     'name' => 'Name',
     'posted_at' => 'Posted at',
     'url' => 'URL',
+    'description' => 'Image description',
   ],
+
+  'placeholder' => [
+    'description' => 'Add a description to your image.'
+  ]
 
 ];

@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password')->nullable(true);
             $table->string('raw_positions_value')->nullable(true);
-            $table->string('bio')->nullable(true);
+            $table->mediumText('bio')->nullable(true); //16,777,215 characters
             $table->string('authenticable')->nullable(false)->default(false);
             $table->rememberToken();
             $table->timestamps();

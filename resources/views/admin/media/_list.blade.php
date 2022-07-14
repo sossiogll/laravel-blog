@@ -4,8 +4,9 @@
         <tr>
             <th>@lang('media.attributes.image')</th>
             <th>@lang('media.attributes.name')</th>
-            <th>@lang('media.attributes.url')</th>
+            <th>@lang('media.attributes.description')</th>
             <th>@lang('media.attributes.posted_at')</th>
+            <th>@lang('media.attributes.url')</th>
             <th></th>
         </tr>
     </thead>
@@ -18,6 +19,8 @@
                     </a>
                 </td>
                 <td>{{ $medium->name }}</td>
+                <td>{{ $medium->description }}</td>
+                <td>{{ humanize_date($medium->posted_at, 'd/m/Y H:i:s') }}</td>
                 <td>
                     <div class="input-group">
                         {{ Form::text(null, url($medium->getUrl()), ['class' => 'form-control', 'readonly' => true, 'id' => "medium-{$medium->id}"]) }}
@@ -28,7 +31,6 @@
                         </div>
                     </div>
                 </td>
-                <td>{{ humanize_date($medium->posted_at, 'd/m/Y H:i:s') }}</td>
                 <td>
                     <a href="{{ $medium->getUrl() }}" title="{{ __('media.show') }}" class="btn btn-primary btn-sm" target="_blank">
                         <i class="fa fa-eye" aria-hidden="true"></i>
@@ -36,6 +38,10 @@
 
                     <a href="{{ route('admin.media.show', $medium) }}" title="{{ __('media.download') }}" class="btn btn-primary btn-sm">
                         <i class="fa fa-download" aria-hidden="true"></i>
+                    </a>
+
+                    <a href="{{ route('admin.media.edit', $medium) }}" title="{{ __('media.edit')" class="btn btn-primary btn-sm">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
                     </a>
 
                     {!! Form::model($medium, ['method' => 'DELETE', 'route' => ['admin.media.destroy', $medium], 'class' => 'form-inline', 'data-confirm' => __('forms.media.delete')]) !!}
