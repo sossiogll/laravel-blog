@@ -103,13 +103,7 @@ export default {
       return (this.customFieldsEndpoint && this.customFieldsEndpoint.length!=0);
     },
     currentCategoryIndex(){
-      var i = 0;
-      while(i < this.categoryList.length && this.currentCategoryId != this.categoryList[i].id ){
-        i++;
-      };
-      if(i==this.categoryList.length)
-        i = NOT_FOUND;
-      return i;
+      return this.searchCategoryIndex(this.currentCategoryId);
     },
     isCurrentCategoryIndexFounded(){
       return this.currentCategoryIndex!=NOT_FOUND;
@@ -139,6 +133,15 @@ export default {
       });
 
     },
+    searchCategoryIndex(indexToFind){
+      var arrayPosition = 0;
+      while(arrayPosition < this.categoryList.length && indexToFind != this.categoryList[arrayPosition].id ){
+        arrayPosition++;
+      };
+      if(arrayPosition==this.categoryList.length)
+        arrayPosition = NOT_FOUND;
+      return arrayPosition;
+    },
     
     initSelectedCategory(){
         
@@ -164,10 +167,22 @@ export default {
         axios.get(this.customFieldsEndpoint)
         .then(function (response) {
           // handle success
-          console.log(response);
-          response.data.array.forEach(customField => {
-            console.log(customField);
-          });
+          console.log(response.data.data);
+          response.data.data.forEach(remoteCustomFields => {
+            console.log("ciao");
+            console.log(remoteCustomFields);
+            var arrayPosition = component.searchCategoryIndex(remoteCustomFields.category_id);
+            if(arrayPosition!=NOT_FOUND){
+              
+              component.categoryList[arrayPosition].custom_fields.forEach(
+                function(localCustomField){
+                  localCustomField.value = remoteCustomFields.custom_fields_values[localCustomField.id];
+                }
+              );
+
+            }
+
+          })
         })
         .catch(function (error) {
           // handle error
@@ -175,9 +190,10 @@ export default {
         })
         .then(function () {
           component.currentStatus = STATUS_IDLE;
-        });
+        })
       }
-    },
+    
+  },
 
     getSelectedCategoryIndex(){
 
