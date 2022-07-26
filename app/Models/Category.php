@@ -30,6 +30,10 @@ class Category extends Model
         'custom_fields'
     ];
 
+    protected $hidden = [
+        'raw_custom_fields'
+    ];
+
     
     /**
      * The attributes that should be mutated to dates.
@@ -76,7 +80,7 @@ class Category extends Model
 
     public function posts(): BelongsToMany
     {
-        return $this->belongsToMany(Post::class)->withPivot("raw_custom_fields_values");
+        return $this->belongsToMany(Post::class)->using(CustomFields::class);//withPivot("raw_custom_fields_values");
     }
 
 

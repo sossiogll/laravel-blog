@@ -35,8 +35,13 @@ class Post extends Model
 
     public $appends = [
         'custom_fields_values',
-        'raw_custom_fields_values'    
+        'raw_custom_fields_values',
     ];
+
+    protected $hidden = [
+        'raw_custom_fields_values',
+    ];
+
 
     /**
      * The attributes that should be mutated to dates.
@@ -69,9 +74,6 @@ class Post extends Model
      */
     public function getRouteKeyName(): string
     {
-        if (request()->expectsJson()) {
-            return 'id';
-        }
 
         return 'slug';
     }
@@ -86,15 +88,6 @@ class Post extends Model
         }
     }
     
-    /**
-     * Scope a query to get post by category
-     */
-    public function scopeCategory(Builder $query, ?string $category_id)
-    {
-        if ($search) {
-            return $query->where('category_id', 'LIKE', "%{$category_id}%");
-        }
-    }
 
     /**
      * Scope a query to order posts by latest posted
@@ -132,14 +125,17 @@ class Post extends Model
     }
 
 
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class)
+        ->withPivot("raw_custom_fields_values");
+    }
+
+
     /**
      * Return the post category
      */
-    public function categories(): BelongsToMany
-    {
-        return $this->belongsToMany(Category::class)->withPivot("raw_custom_fields_values");
-    }
-
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
@@ -180,14 +176,15 @@ class Post extends Model
 
 
     public function getCustomFieldsValuesAttribute(){
+    
         
-        return json_decode($this->categories()->where('category_id', $this->category->id)->get()->first()->pivot->raw_custom_fields_values, true);
+        return json_decode($this->raw_custom_fields_values, true);
 
     }
 
     public function getRawCustomFieldsValuesAttribute(){
         
-        return $this->categories()->where('category_id', $this->category->id)->get()->first()->pivot->raw_custom_fields_values;
+        return $this->categories()->where('category_id', $this->category_id)->get()->first()->pivot->raw_custom_fields_values;
 
     }
 }

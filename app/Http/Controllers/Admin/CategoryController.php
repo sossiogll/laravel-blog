@@ -64,8 +64,8 @@ class CategoryController extends Controller
      */
     public function update(CategoriesRequest $request, Category $category): RedirectResponse
     {
-        if(!strcmp($request["custom_fields_raw"], $category->custom_fields) && $category->areCustomFieldsEditable())
-            return redirect()->route('admin.categories.edit', $category);
+        if(!strcmp($request["custom_fields_raw"], $category->custom_fields_raw) && !$category->areCustomFieldsEditable())
+            return redirect()->route('admin.categories.edit', $category)->withError(__('categories.updated'));
         else{
             $category->update($request->only(['name', 'raw_custom_fields']));
             return redirect()->route('admin.categories.edit', $category)->withSuccess(__('categories.updated'));

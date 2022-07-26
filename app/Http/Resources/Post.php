@@ -23,7 +23,7 @@ class Post extends JsonResource
             'thumbnail_name' => $this->when($this->hasThumbnail(), optional($this->thumbnail)->name),
             'thumbnail_description' => $this->when($this->hasThumbnail(), optional($this->thumbnail)->description),
             'category_id' => $this->category_id,
-            'custom_fields' => $this-> customFieldsValues
+            'custom_fields_values' => $this->custom_fields_values
         ];
     }
 }

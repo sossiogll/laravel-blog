@@ -40,7 +40,9 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
 
     // Posts
     Route::apiResource('posts', 'PostController')->only(['index', 'show']);
-    Route::apiResource('categories', 'CategoryController')->only(['index', 'show']);
+    Route::apiResource('categories', 'CategoryController')->only(['index', 'show']); 
+    Route::get('posts/{post}/customfields', 'CustomFieldsController@index')->name('posts.customfields');
+    Route::get('posts/{post}/customfields/{category}', 'CustomFieldsController@show')->name('posts.customfields.category');
     Route::apiResource('users.posts', 'UserPostController')->only('index');
 
     // Users

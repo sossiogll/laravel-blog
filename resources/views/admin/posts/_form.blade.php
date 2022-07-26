@@ -2,6 +2,11 @@
     $posted_at = old('posted_at') ?? (isset($post) ? $post->posted_at->format('Y-m-d\TH:i') : null);
 @endphp
 
+<!--<vue-select-image
+  :dataImages="{{$media}}"
+  @onselectimage="onSelectImage">
+</vue-select-image>-->
+
 <div class="form-group">
     {!! Form::label('title', __('posts.attributes.title')) !!}
     {!! Form::text('title', null, ['class' => 'form-control' . ($errors->has('title') ? ' is-invalid' : ''), 'required']) !!}
@@ -11,35 +16,22 @@
     @enderror
 </div>
 
-<div class="form-row">
 
-    <div class="form-group col-md-4">
-        {!! Form::label('category_id', __('posts.attributes.category'))!!}
-        @if(isset($post))
-            {!! Form::select('category_id', $categories, $post->category_id, ['class' => 'form-control', 'onchange' => 'this.form.submit()', 'required']) !!}
-        @else
-            {!! Form::select('category_id', $categories, null, ['placeholder' => __('posts.placeholder.category'), 'class' => 'form-control', 'onchange' => 'this.form.submit()', 'required']) !!}
-        @endif
+    <div class="form-group">
 
-
-        @error('category_id')
-            <span class="invalid-feedback">{{ $message }}</span>
-        @enderror
+        <category-selector
+            name="category_id"
+            id="category-id"
+            categories-endpoint="{{route('categories.index')}}"
+            custom-fields-endpoint="{{$post != null ? route('posts.customfields', $post) : null}}"
+            selected="{{$post != null ? $post->category_id : ''}}"
+            category-label="@lang('posts.attributes.category')"
+            category-placeholder="@lang('posts.placeholder.category')">
+        </category-selector>
     </div>
 
-    <div class="form-group col-md-4">
-        {!! Form::label('author_id', __('posts.attributes.author')) !!}
-        {!! Form::select('author_id', $user, null, ['class' => 'form-control' . ($errors->has('author_id') ? ' is-invalid' : ''), 'required', 'readonly']) !!}
-
-        @error('author_id')
-            <span class="invalid-feedback">{{ $message }}</span>
-        @enderror
-    </div>
-
-</div>
 
 
-@if(isset($post))
 
     <div class="form-group">
         {!! Form::label('thumbnail_id', __('posts.attributes.thumbnail')) !!}
@@ -51,27 +43,14 @@
     </div>
 
 
-    @if($custom_fields != null)
-
-        @for($i=0; $i < count($custom_fields); $i++)
-
-            <div class="form-group">
-                {!! Form::label($custom_fields[$i]['description'], __($custom_fields[$i]['description'])) !!}
-                {!! Form::text($custom_fields[$i]['id'], $custom_fields_values[$custom_fields[$i]['id']], ['class' => 'form-control']) !!}
-            </div>
-
-        @endfor
-
-    @endif
 
 
     <div class="form-group">
         {!! Form::label('content', __('posts.attributes.content')) !!}
-        {!! Form::textarea('content', null, ['class' => 'form-control trumbowyg-form' . ($errors->has('content') ? ' is-invalid' : ''), 'required']) !!}
+        {!! Form::textarea('content', null, ['class' => 'form-control trumbowyg-form' . ($errors->has('content') ? ' is-invalid' : '')]) !!}
 
         @error('content')
             <span class="invalid-feedback">{{ $message }}</span>
         @enderror
     </div>
 
-@endif

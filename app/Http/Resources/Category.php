@@ -15,6 +15,7 @@ class Category extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'post_count' => $this->posts()->count(),
+            //'custom_fields' => $this->custom_fields
             'posts' => $this->posts()->latest()->paginate($request->input('limit', 20))
         ];
     }

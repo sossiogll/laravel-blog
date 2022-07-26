@@ -4,8 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-
-class Categories extends JsonResource
+class CustomFields extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -13,10 +12,8 @@ class Categories extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'post_count' => $this->posts()->count(),
-            'custom_fields' => $this->custom_fields
+            'category_id' => $this->category_id,
+            'custom_fields_values' => $this->custom_fields_values,
         ];
     }
 }

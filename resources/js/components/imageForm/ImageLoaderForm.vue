@@ -96,7 +96,6 @@
 
 <script>
 import ImageLoaderItem from './ImageLoaderItem'
-import { upload } from '../../services/postService';
 import axios from 'axios';
 
 const STATUS_INITIAL = 0;

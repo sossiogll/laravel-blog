@@ -41,8 +41,8 @@ class PostController extends Controller
             'user' => User::where('id', Auth::id())->get()->pluck('name', 'id'),
             'media' => MediaLibrary::first()->media()->get()->pluck('name', 'id'),
             'categories' => Category::first()->get()->pluck('name', 'id'),
-            'custom_fields' => $post->category->customFields,
-            'custom_fields_values' => $post->customFieldsValues
+            'custom_fields' => $post->category->custom_fields,
+            'custom_fields_values' => $post->custom_fields_values
         ]);
     }
 
@@ -57,8 +57,8 @@ class PostController extends Controller
         }
 
         return view('admin.posts.create', [
-            'user' => User::where('id', Auth::id())->get()->pluck('name', 'id'),
-            'categories' => Category::alphabeticalOrder()->pluck('name', 'id'),
+            'media' => MediaLibrary::first()->media()->get()->pluck('name', 'id'),
+            'post' => null
         ]);
     }
 
@@ -67,7 +67,9 @@ class PostController extends Controller
      */
     public function store(NewPostsRequest $request): RedirectResponse
     {
-        $post = Post::create($request->only(['title', 'posted_at', 'author_id', 'category_id']));
+        $post = Post::create($request->only(['title', 'posted_at','category_id']));
+        $post->author_id = Auth::id();
+        $post->save();
         $post->categories()->attach($request['category_id'], ['raw_custom_fields_values' => $this->generateJsonFilledFields( $request, $post)]);
         
         return redirect()->route('admin.posts.edit', $post)->withSuccess(__('posts.created'));
