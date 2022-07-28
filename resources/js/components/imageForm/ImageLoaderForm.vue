@@ -81,7 +81,7 @@
           {{saveButtonLabel}}
         </button>
 
-        <button type="button" href="#" class="btn btn-outline-info" disabled>
+        <button type="button" class="btn btn-outline-info" disabled>
           <i class="fa fa-info"></i>
           <i class="fa fa-file"></i>
           {{imagesInfo.length}}

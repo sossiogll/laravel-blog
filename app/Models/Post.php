@@ -74,7 +74,6 @@ class Post extends Model
      */
     public function getRouteKeyName(): string
     {
-
         return 'slug';
     }
 
@@ -156,6 +155,14 @@ class Post extends Model
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Return the post's carousel
+     */
+    public function carousel(): BelongsToMany
+    {
+        return $this->belongsToMany(Media::class);
     }
 
     /**

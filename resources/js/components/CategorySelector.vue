@@ -116,7 +116,7 @@ export default {
 
       let component = this;
       
-      this.currentCategory = STATUS_LOADING;
+      this.currentStatus = STATUS_LOADING;
 
       axios.get(this.categoriesEndpoint)
       .then(function (response) {
@@ -157,8 +157,6 @@ export default {
    
     loadCustomFieldsValues(){
       
-      console.log(this.customFieldsEndpoint);
-
       if(this.isCustomFieldEndpointDefinited){
 
         let component = this;
@@ -167,10 +165,7 @@ export default {
         axios.get(this.customFieldsEndpoint)
         .then(function (response) {
           // handle success
-          console.log(response.data.data);
           response.data.data.forEach(remoteCustomFields => {
-            console.log("ciao");
-            console.log(remoteCustomFields);
             var arrayPosition = component.searchCategoryIndex(remoteCustomFields.category_id);
             if(arrayPosition!=NOT_FOUND){
               
@@ -213,8 +208,6 @@ export default {
   },
   mounted() {
       this.currentStatus = STATUS_IDLE;
-              console.log(this.customFieldsEndpoint);
-
       this.loadCategories();
   },
 

@@ -2,8 +2,8 @@ import CommentForm from './components/comments/CommentForm'
 import CommentList from './components/comments/CommentList'
 import Like from './components/Like'
 import ImageLoaderForm from './components/imageForm/ImageLoaderForm.vue'
-import VueSelectImage from 'vue-select-image'
 import CategorySelector from './components/CategorySelector.vue'
+import ImagePicker from './components/ImagePicker.vue'
 import Vue from 'vue'
 
 Vue.config.productionTip = true
@@ -18,7 +18,7 @@ new Vue({
     CommentList,
     Like,
     ImageLoaderForm,
-    VueSelectImage,
+    ImagePicker,
     CategorySelector
   },
 

@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 
+
 class PostController extends Controller
 {
     /**
@@ -38,11 +39,7 @@ class PostController extends Controller
 
         return view('admin.posts.edit', [
             'post' => $post,
-            'user' => User::where('id', Auth::id())->get()->pluck('name', 'id'),
             'media' => MediaLibrary::first()->media()->get()->pluck('name', 'id'),
-            'categories' => Category::first()->get()->pluck('name', 'id'),
-            'custom_fields' => $post->category->custom_fields,
-            'custom_fields_values' => $post->custom_fields_values
         ]);
     }
 
@@ -67,12 +64,22 @@ class PostController extends Controller
      */
     public function store(NewPostsRequest $request): RedirectResponse
     {
-        $post = Post::create($request->only(['title', 'posted_at','category_id']));
-        $post->author_id = Auth::id();
-        $post->save();
-        $post->categories()->attach($request['category_id'], ['raw_custom_fields_values' => $this->generateJsonFilledFields( $request, $post)]);
+
+        $post = Post::create([
+            'title' => $request['title'],
+            'posted_at' => now(),
+            'category_id' => $request['category_id'],
+            'author_id' => Auth::id()
+        ]);
+
+        $post->categories()->attach($request['category_id'], ['raw_custom_fields_values' => $this->generateJsonFilledFields($request, $post)]);
         
+        forEach($request['carousel'] as $image_id){
+            $post->carousel()->attach($image_id);
+        }
+
         return redirect()->route('admin.posts.edit', $post)->withSuccess(__('posts.created'));
+
 
     }
 
@@ -82,6 +89,12 @@ class PostController extends Controller
     public function update(PostsRequest $request, Post $post): RedirectResponse
     {
         $post->update($request->only(['title', 'content', 'posted_at', 'author_id', 'thumbnail_id', 'category_id']));
+
+        $post->carousel()->sync([]);
+        
+        forEach($request['carousel'] as $image_id){
+            $post->carousel()->attach($image_id);
+        }
         
         if($this->isPostAlreadyAttachedToCategory($request, $post))
             $post->categories()->updateExistingPivot($request['category_id'], ['raw_custom_fields_values' => $this->generateJsonFilledFields($request, $post)]);

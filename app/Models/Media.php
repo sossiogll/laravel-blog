@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Spatie\MediaLibrary\MediaCollections\Models\Media as BaseMedia;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class Media extends BaseMedia
 {
@@ -30,6 +32,14 @@ class Media extends BaseMedia
 
     return $description;
 
+  }
+
+  /**
+  * Return the media's post
+  */
+  public function carousel(): HasMany
+  {
+    return $this->hasMany(Post::class);
   }
 
 }

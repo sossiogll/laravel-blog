@@ -9,7 +9,8 @@ return [
     'generate' => 'Generate',
     'delete' => 'Delete',
     'add' => 'Add',
-    'reset' => 'Reset'
+    'reset' => 'Reset',
+    'close' => 'Close'
   ],
 
   'comments' => [

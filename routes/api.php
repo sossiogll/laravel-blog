@@ -43,6 +43,7 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
     Route::apiResource('categories', 'CategoryController')->only(['index', 'show']); 
     Route::get('posts/{post}/customfields', 'CustomFieldsController@index')->name('posts.customfields');
     Route::get('posts/{post}/customfields/{category}', 'CustomFieldsController@show')->name('posts.customfields.category');
+    Route::get('posts/{post}/carousel', 'CarouselController@index')->name('posts.carousel');
     Route::apiResource('users.posts', 'UserPostController')->only('index');
 
     // Users

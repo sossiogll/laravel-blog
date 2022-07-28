@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePostMediaTable extends Migration
+class CreateMediaPostTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreatePostMediaTable extends Migration
      */
     public function up()
     {
-        Schema::create('post_media', function (Blueprint $table) {
+        Schema::create('media_post', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->unsignedBigInteger('category_id')->nullable(false);
+            $table->unsignedBigInteger('media_id')->nullable(false);
             $table->unsignedBigInteger('post_id')->nullable(false);
             $table->foreign('media_id')->references('id')->on('media')->nullable(false)->onDelete('cascade');
             $table->foreign('post_id')->references('id')->on('posts')->nullable(false)->onDelete('cascade');
