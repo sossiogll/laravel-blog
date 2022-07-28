@@ -69,7 +69,8 @@ class PostController extends Controller
             'title' => $request['title'],
             'posted_at' => now(),
             'category_id' => $request['category_id'],
-            'author_id' => Auth::id()
+            'author_id' => Auth::id(),
+            'content' => $request['content']
         ]);
 
         $post->categories()->attach($request['category_id'], ['raw_custom_fields_values' => $this->generateJsonFilledFields($request, $post)]);
@@ -91,7 +92,7 @@ class PostController extends Controller
         $post->update($request->only(['title', 'content', 'posted_at', 'author_id', 'thumbnail_id', 'category_id']));
 
         $post->carousel()->sync([]);
-        
+
         forEach($request['carousel'] as $image_id){
             $post->carousel()->attach($image_id);
         }

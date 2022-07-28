@@ -10,7 +10,7 @@
 
     <div class="form-group col-md-6">
       {!! Form::label('email', __('users.attributes.email')) !!}
-      {!! Form::text('email', null, ['class' => 'form-control' . ($errors->has('email') ? ' is-invalid' : ''), 'placeholder' => __('users.placeholder.email'), 'required']) !!}
+      {!! Form::text('email', null, ['class' => 'form-control' . ($errors->has('email') ? ' is-invalid' : ''), 'placeholder' => __('users.placeholder.email')]) !!}
 
       @error('email')
         <span class="invalid-feedback">{{ $message }}</span>
@@ -60,14 +60,14 @@
     <div class="form-group">
       <div class="checkbox">
           <label>
-          {!! Form::radio("authenticable", 1, $user->authenticable, ['onchange' => 'this.form.submit()']) !!}
+          {!! Form::radio("authenticable", 1, $user->authenticable, ['onchange' => 'this.form.submit()', empty($user->email) ? 'disabled' : '']) !!}
             {!! __('users.attributes.authenticable') !!}
         </label>
       </div>
 
       <div class="checkbox">
           <label>
-          {!! Form::radio("authenticable", 0, !$user->authenticable, ['onchange' => 'this.form.submit()']) !!}
+          {!! Form::radio("authenticable", 0, !$user->authenticable, ['onchange' => 'this.form.submit()', empty($user->email) ? 'disabled' : '']) !!}
             {!! __('users.attributes.unauthenticable') !!}
         </label>
       </div>

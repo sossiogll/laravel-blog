@@ -12,6 +12,7 @@ return [
   'count' => ':count user|:count users',
   'api_token' => "API key",
   'security' => "Security",
+  'create' => 'Add new user',
 
   'attributes' => [
     'name' => 'Name',

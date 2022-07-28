@@ -40,7 +40,6 @@ class PostsRequest extends FormRequest
     {
         return [
             'title' => 'required',
-            'content' => 'required',
             'category_id' => 'required',
             'posted_at' => 'required|date',
             'thumbnail_id' => 'nullable|exists:media,id',
