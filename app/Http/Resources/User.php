@@ -12,9 +12,9 @@ class User extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id' => $this->id,
+            'id' => $this->when($this->isAdmin(), $this->id),
             'name' => $this->name,
-            'email' => $this->email,
+            'email' => $this->when($this->isAdmin(), $this->email),
             'bio' => $this->bio,
             'positions' => $this->positions,
             'registered_at' => $this->registered_at->toIso8601String(),

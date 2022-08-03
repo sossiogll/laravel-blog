@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UsersRequest;
 use App\Http\Resources\User as UserResource;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +19,13 @@ class UserController extends Controller
     public function index(Request $request): ResourceCollection
     {
         return UserResource::collection(
-            User::withCount(['comments', 'posts'])->with('roles')->latest()->paginate($request->input('limit', 20))
+            User::withCount(['comments', 'posts'])
+                ->with('roles')
+                ->whereHas('roles', function ($query) {
+                    $query->where('roles.name', "!=" ,Role::ROLE_ADMIN);
+                })
+                ->latest()
+                ->paginate()
         );
     }
 

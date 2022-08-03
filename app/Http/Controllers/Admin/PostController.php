@@ -55,7 +55,7 @@ class PostController extends Controller
 
         return view('admin.posts.create', [
             'media' => MediaLibrary::first()->media()->get()->pluck('name', 'id'),
-            'post' => null
+            'post' => null,
         ]);
     }
 
@@ -75,8 +75,10 @@ class PostController extends Controller
 
         $post->categories()->attach($request['category_id'], ['raw_custom_fields_values' => $this->generateJsonFilledFields($request, $post)]);
         
-        forEach($request['carousel'] as $image_id){
-            $post->carousel()->attach($image_id);
+        if ($request->has('carousel')) {
+            forEach($request['carousel'] as $image_id){
+                $post->carousel()->attach($image_id);
+            }
         }
 
         return redirect()->route('admin.posts.edit', $post)->withSuccess(__('posts.created'));
@@ -91,11 +93,13 @@ class PostController extends Controller
     {
         $post->update($request->only(['title', 'content', 'posted_at', 'author_id', 'thumbnail_id', 'category_id']));
 
-        $post->carousel()->sync([]);
+        if ($request->has('carousel')) {
+            $post->carousel()->sync([]);
 
-        forEach($request['carousel'] as $image_id){
-            $post->carousel()->attach($image_id);
-        }
+            forEach($request['carousel'] as $image_id){
+                $post->carousel()->attach($image_id);
+            }
+         }   
         
         if($this->isPostAlreadyAttachedToCategory($request, $post))
             $post->categories()->updateExistingPivot($request['category_id'], ['raw_custom_fields_values' => $this->generateJsonFilledFields($request, $post)]);

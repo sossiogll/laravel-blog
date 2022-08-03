@@ -3,6 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\CategoryPost as PostResource;
+
 
 class Category extends JsonResource
 {
@@ -15,8 +17,15 @@ class Category extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'post_count' => $this->posts()->count(),
-            //'custom_fields' => $this->custom_fields
-            'posts' => $this->posts()->latest()->paginate($request->input('limit', 20))
+            'custom_fields' => $this->custom_fields,
+            'slug' => $this->slug,
+            'posts' => PostResource::collection(
+                $this->posts()
+                     ->latest()
+                     ->paginate(
+                        $request->input('limit', 20)
+                     )
+            ),
         ];
     }
 }

@@ -67,7 +67,7 @@
 
       <div class="checkbox">
           <label>
-          {!! Form::radio("authenticable", 0, !$user->authenticable, ['onchange' => 'this.form.submit()', empty($user->email) ? 'disabled' : '']) !!}
+          {!! Form::radio("authenticable", 0, !$user->authenticable, ['onchange' => 'this.form.submit()']) !!}
             {!! __('users.attributes.unauthenticable') !!}
         </label>
       </div>

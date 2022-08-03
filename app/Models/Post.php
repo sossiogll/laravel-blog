@@ -35,7 +35,7 @@ class Post extends Model
 
     public $appends = [
         'custom_fields_values',
-        'raw_custom_fields_values',
+        'raw_custom_fields_values'
     ];
 
     protected $hidden = [
@@ -194,4 +194,5 @@ class Post extends Model
         return $this->categories()->where('category_id', $this->category_id)->get()->first()->pivot->raw_custom_fields_values;
 
     }
+
 }

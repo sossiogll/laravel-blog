@@ -24,6 +24,7 @@ class Category extends Model
         'created_at',
         'raw_custom_fields',
         'updated_at',
+        'slug'
     ];
 
     protected $appended = [
@@ -54,9 +55,12 @@ class Category extends Model
         //static::addGlobalScope(new PostedScope);
     }
 
+    /**
+     * Get the route key for the model.
+     */
     public function getRouteKeyName(): string
     {
-        return 'id';
+        return 'slug';
     }
 
     /**
@@ -80,7 +84,8 @@ class Category extends Model
 
     public function posts(): BelongsToMany
     {
-        return $this->belongsToMany(Post::class)->using(CustomFields::class);//withPivot("raw_custom_fields_values");
+        return $this->belongsToMany(Post::class)->withPivot("raw_custom_fields_values");
+        //using(CustomFields::class);//
     }
 
 
