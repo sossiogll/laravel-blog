@@ -28,6 +28,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category): View
     {
+
         $viewToShow = view('admin.categories.edit', [
             'category' => $category,
             'custom_fields_editable' => $category->areCustomFieldsEditable()

@@ -8,10 +8,12 @@ use Illuminate\Support\Str;
 class CategoryObserver
 {
     /**
-     * Listen to the Post saving event.
+     * Listen to the Category saving event.
      */
-    public function saving(Category $category): void
+    public function saving(Category $category)//: void
     {
-        $category->slug = Str::slug($category->title, '-');
+        
+        $category->slug = Str::slug($category->name, '-');
+
     }
 }

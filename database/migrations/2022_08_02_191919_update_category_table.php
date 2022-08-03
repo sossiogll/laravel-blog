@@ -15,7 +15,7 @@ class UpdateCategoryTable extends Migration
     {
         Schema::table('categories', function (Blueprint $table) {
             $table->json('raw_custom_fields')->nullable()->change();
-            $table->string('slug')->nullable(false)->unique();;
+            $table->string('slug')->nullable(false)->unique();
         });
     }
 

@@ -21,6 +21,7 @@ class CategoryPost extends JsonResource
             'thumbnail_url' => $this->when($this->hasThumbnail(), url(optional($this->thumbnail)->getUrl(''))),
             'thumbnail_name' => $this->when($this->hasThumbnail(), optional($this->thumbnail)->name),
             'thumbnail_description' => $this->when($this->hasThumbnail(), optional($this->thumbnail)->description),
+            'custom_fields_values' => $this->custom_fields_values
         ];
     }
 }
