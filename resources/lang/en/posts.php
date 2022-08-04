@@ -28,6 +28,7 @@ return [
     'posted_at' => 'Posted at',
     'thumbnail' => "Thumbnail image",
     'category' => 'Category',
+    'summary_content' => 'Summary content'
   ],
 
   'placeholder' => [

@@ -14,7 +14,7 @@ class UpdatePostTableWithSummaryContent extends Migration
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->string('summary_content', 255)->default("");
+            $table->string('summary_content', 255)->nullable(true);
         });
     }
 
