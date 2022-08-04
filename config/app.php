@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'BL'),
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost:8000'),
+    'url' => env('APP_URL', 'http://localhost'),
+
+    'mix_url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -67,7 +69,7 @@ return [
     |
     */
 
-    'timezone' => 'Europe/Paris',
+    'timezone' => 'Europe/Rome',
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +95,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'fr',
+    'fallback_locale' => 'en',
 
     /*
     |--------------------------------------------------------------------------
