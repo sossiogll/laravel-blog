@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Resources;
-
+use App\Http\Resources\Media as MediaResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 
@@ -24,7 +24,8 @@ class Post extends JsonResource
             'thumbnail_name' => $this->when($this->hasThumbnail(), optional($this->thumbnail)->name),
             'thumbnail_description' => $this->when($this->hasThumbnail(), optional($this->thumbnail)->description),
             'category_slug' => $this->category->slug,
-            'custom_fields_values' => $this->custom_fields_values
+            'custom_fields_values' => $this->custom_fields_values,
+            'carousel' => MediaResource::collection($this->carousel)
         ];
     }
 }
