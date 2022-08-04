@@ -16,16 +16,19 @@ class UserController extends Controller
     /**
      * Return the users.
      */
-    public function index(Request $request): ResourceCollection
+    public function index(Request $request)//: ResourceCollection
     {
         return UserResource::collection(
-            User::withCount(['comments', 'posts'])
-                ->with('roles')
-                ->whereHas('roles', function ($query) {
-                    $query->where('roles.name', "!=" ,Role::ROLE_ADMIN);
-                })
-                ->latest()
-                ->paginate()
+           
+        User::
+        whereNotIn('id' ,
+            User::
+            select('id')
+            ->whereHas('roles', function ($query) {
+                $query->where('roles.name', Role::ROLE_ADMIN);
+            })
+        )->get()
+
         );
     }
 

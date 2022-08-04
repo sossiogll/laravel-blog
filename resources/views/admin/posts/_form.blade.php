@@ -49,4 +49,12 @@
             <span class="invalid-feedback">{{ $message }}</span>
         @enderror
     </div>
+    
+    <div class="form-group">
+        {!! Form::label('summary_content', __('posts.attributes.summary_content')) !!}
+        {!! Form::textarea('summary_content', null, ['class' => 'form-control' . ($errors->has('summary_content') ? ' is-invalid' : '')]) !!}
 
+        @error('summary_content')
+            <span class="invalid-feedback">{{ $message }}</span>
+        @enderror
+    </div>

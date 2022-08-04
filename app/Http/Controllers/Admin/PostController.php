@@ -70,7 +70,8 @@ class PostController extends Controller
             'posted_at' => now(),
             'category_id' => $request['category_id'],
             'author_id' => Auth::id(),
-            'content' => $request['content']
+            'content' => $request['content'],
+            'summary_content' => $request['summary_content'],
         ]);
 
         $post->categories()->attach($request['category_id'], ['raw_custom_fields_values' => $this->generateJsonFilledFields($request, $post)]);
@@ -91,7 +92,7 @@ class PostController extends Controller
      */
     public function update(PostsRequest $request, Post $post): RedirectResponse
     {
-        $post->update($request->only(['title', 'content', 'posted_at', 'author_id', 'thumbnail_id', 'category_id']));
+        $post->update($request->only(['title', 'content', 'posted_at', 'author_id', 'thumbnail_id', 'category_id', 'summary_content']));
 
         if ($request->has('carousel')) {
             $post->carousel()->sync([]);

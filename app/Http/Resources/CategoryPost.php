@@ -13,9 +13,10 @@ class CategoryPost extends JsonResource
     public function toArray($request): array
     {
         return [
+            'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
-            'content_resume' => mb_strimwidth($this->content, 0, 90, "..."),
+            'summary_content' => $this->summary_content,
             'posted_at' => $this->posted_at->toIso8601String(),
             'comments_count' => $this->comments_count ?? $this->comments()->count(),
             'thumbnail_url' => $this->when($this->hasThumbnail(), url(optional($this->thumbnail)->getUrl(''))),

@@ -77,7 +77,7 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         {!! Form::label('password', __('users.attributes.password')) !!}
-        {!! Form::password('password', ['class' => 'form-control' . ($errors->has('password') ? ' is-invalid' : ''), 'placeholder' => __('users.placeholder.password'), $user->authenticable ? 'required' : 'disabled']) !!}
+        {!! Form::password('password', ['class' => 'form-control' . ($errors->has('password') ? ' is-invalid' : ''), 'placeholder' => __('users.placeholder.password'), !$user->authenticable ? 'disabled' : '']) !!}
 
         @error('password')
           <span class="invalid-feedback">{{ $message }}</span>
@@ -86,7 +86,7 @@
 
       <div class="form-group col-md-6">
         {!! Form::label('password_confirmation', __('users.attributes.password_confirmation')) !!}
-        {!! Form::password('password_confirmation', ['class' => 'form-control' . ($errors->has('password_confirmation') ? ' is-invalid' : ''), 'placeholder' => __('users.placeholder.password_confirmation'), $user->authenticable ? 'required' : 'disabled']) !!}
+        {!! Form::password('password_confirmation', ['class' => 'form-control' . ($errors->has('password_confirmation') ? ' is-invalid' : ''), 'placeholder' => __('users.placeholder.password_confirmation'), !$user->authenticable ? 'disabled' : '']) !!}
 
         @error('password_confirmation')
           <span class="invalid-feedback">{{ $message }}</span>
