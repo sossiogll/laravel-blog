@@ -14,11 +14,10 @@ class Category extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id' => $this->id,
+            'slug' => $this->slug,
             'name' => $this->name,
             'post_count' => $this->posts()->count(),
             'custom_fields' => $this->custom_fields,
-            'slug' => $this->slug,
             'posts' => PostResource::collection(
                 $this->posts()
                      ->latest()

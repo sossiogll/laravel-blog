@@ -19,7 +19,7 @@ class MediaController extends Controller
     public function index(Request $request): ResourceCollection
     {
         return MediaResource::collection(
-            MediaLibrary::first()->media()->get()
+            MediaLibrary::first()->media()->latest()->get()
         );
     }
 

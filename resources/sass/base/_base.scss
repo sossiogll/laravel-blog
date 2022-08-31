@@ -7,7 +7,7 @@ html {
     font-size: 40px;
 }
 
-body > #app > .container, {
+body > #app > .container {
     margin-top: 100px;
     margin-bottom: 250px;
     padding-top: 15px;
@@ -15,7 +15,7 @@ body > #app > .container, {
 }
 
 @include media-breakpoint-down(xs) {
-    body > #app > .container, {
+    body > #app > .container {
         margin-bottom: 320px;
     }
 }
