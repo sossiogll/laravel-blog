@@ -13,6 +13,7 @@ class Categories extends JsonResource
     public function toArray($request): array
     {
         return [
+            'id' => $this->id,
             'slug' => $this->slug,
             'name' => $this->name,
             'post_count' => $this->posts()->count(),
