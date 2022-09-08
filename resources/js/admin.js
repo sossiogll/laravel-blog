@@ -1,4 +1,5 @@
 import 'trumbowyg'
+import 'bootstrap4-toggle'
 
 $('.trumbowyg-form').trumbowyg({
   svgPath: '/js/ui/icons.svg'

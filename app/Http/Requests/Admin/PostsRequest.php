@@ -44,6 +44,7 @@ class PostsRequest extends FormRequest
             'posted_at' => 'required|date',
             'thumbnail_id' => 'nullable|exists:media,id',
             'summary_content' => 'max:255',
+            'language' => 'required',
             'slug' => 'unique:posts,slug,' . (optional($this->post)->id ?: 'NULL'),
         ];
     }

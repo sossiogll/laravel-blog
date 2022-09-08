@@ -42,6 +42,7 @@ class NewPostsRequest extends FormRequest
             'title' => 'required',
             'category_id' => 'required',
             'posted_at' => 'required|date',
+            'language' => 'required',
             'slug' => 'unique:posts,slug,' . (optional($this->post)->id ?: 'NULL'),
         ];
     }

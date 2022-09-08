@@ -40,7 +40,7 @@
                         <i class="fa fa-download" aria-hidden="true"></i>
                     </a>
 
-                    <a href="{{ route('admin.media.edit', $medium) }}" title="{{ __('media.edit')" class="btn btn-primary btn-sm">
+                    <a href="{{ route('admin.media.edit', $medium) }}" title="{{ __('media.edit') }}" class="btn btn-primary btn-sm">
                         <i class="fa fa-pencil" aria-hidden="true"></i>
                     </a>
 
@@ -52,3 +52,8 @@
         @endforeach
     </tbody>
 </table>
+
+<div class="d-flex justify-content-center">
+    {{ $media->links() }}
+</div>
+

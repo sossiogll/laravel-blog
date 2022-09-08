@@ -41,6 +41,13 @@
         </a>
     </li>
 
+    <li class="nav-item" role="presentation" data-toggle="tooltip" data-placement="right" title="@lang('dashboard.settings')">
+        <a class="nav-link {{ request()->route()->named('admin.settings.*') ? 'active' : '' }}" href="{{ route('admin.settings.edit') }}">
+            <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;
+            <span class="nav-link-text">@lang('dashboard.settings')</span>
+        </a>
+    </li>
+
 </ul>
 
 <ul class="navbar-nav sidenav-toggler">

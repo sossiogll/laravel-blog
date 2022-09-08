@@ -11,5 +11,5 @@ Route::delete('/posts/{post}/secondaryProfilePicture', 'UserSecondaryProfilePict
 Route::resource('comments', 'CommentController')->only(['index', 'edit', 'update', 'destroy']);
 Route::resource('media', 'MediaLibraryController')->only(['index','edit', 'update', 'show', 'create', 'store', 'destroy']);
 Route::resource('categories', 'CategoryController');
-
-
+Route::get('settings', 'SettingsController@edit')->name('settings.edit');
+Route::put('settings/update', 'SettingsController@update')->name('settings.update');;

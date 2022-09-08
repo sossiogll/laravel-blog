@@ -18,7 +18,7 @@ class MediaLibraryController extends Controller
     public function index(Request $request): View
     {
         return view('admin.media.index', [
-            'media' => MediaLibrary::first()->media()->latest()->get()
+            'media' => MediaLibrary::first()->media()->latest()->paginate(50)
         ]);
     }
 

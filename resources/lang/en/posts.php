@@ -19,6 +19,8 @@ return [
   'search_results' => ":count post found|:count posts found",
   'no_categories' => "You need at least one category in order to associate a post with it.",
   'carousel' => "Select images for the carousel.",
+  'language' => "Language",
+
 
   'attributes' => [
     'title' => 'Title',

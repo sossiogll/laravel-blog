@@ -31,7 +31,8 @@ class Post extends Model
         'summary_content',
         'posted_at',
         'slug',
-        'thumbnail_id'
+        'thumbnail_id',
+        'language'
     ];
 
     public $appends = [
