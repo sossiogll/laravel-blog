@@ -28,7 +28,7 @@ class Category extends JsonResource
                 'id' => $this->id,
                 'slug' => $this->slug,
                 'name' => $this->name,
-                'post_count' => $this->posts()->count(),
+                'post_count' => $this->posts()->where('language', $language)->count(),
                 'custom_fields' => $this->custom_fields,
                 'posts' => PostResource::collection(
                     $this->posts()
