@@ -16,7 +16,7 @@ class PostController extends Controller
     /**
      * Return the posts.
      */
-    public function index(Request $request)//: ResourceCollection
+    public function index(Request $request): ResourceCollection
     {
 
         $settings = Settings::first();
