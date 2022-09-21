@@ -1,0 +1,59 @@
+RewriteEngine On
+RewriteBase /
+
+# Protect the htaccess file
+<Files .htaccess>
+Order Allow,Deny
+Deny from all
+</Files>
+
+# Protect the env file
+<Files .env>
+Order Allow,Deny
+Deny from all
+</Files>
+
+# Protect the env file
+<Files .env.testing>
+Order Allow,Deny
+Deny from all
+</Files>
+
+# Protect the env file
+<Files .env.travis>
+Order Allow,Deny
+Deny from all
+</Files>
+
+# Protect the readme file
+<Files readme.md>
+Order Allow,Deny
+Deny from all
+</Files>
+
+# Protect the package-lock.json file
+<Files package-lock.json>
+Order Allow,Deny
+Deny from all
+</Files>
+
+# Protect the package.json file
+<Files package.json>
+Order Allow,Deny
+Deny from all
+</Files>
+
+# Protect the LICENSE file
+<Files LICENSE>
+Order Allow,Deny
+Deny from all
+</Files>
+
+# Protect the Vagrantfile file
+<Files Vagrantfile>
+Order Allow,Deny
+Deny from all
+</Files>
+
+# Disable directory browsing
+Options All -Indexes
