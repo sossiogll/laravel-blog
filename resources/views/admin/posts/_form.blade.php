@@ -44,13 +44,13 @@
     <div class="form-group">
         <label for="language">@lang('posts.language')</label>
         <select class="form-control" id="language" name="language">
-            <option {!! $post->language == "it" ? 'selected="selected"' : '' !!} value="it">
+            <option {!! $post != null && $post->language == "it" ? 'selected="selected"' : '' !!} value="it">
                 Italiano
             </option>
-            <option {!! $post->language == "en" ? 'selected="selected"' : '' !!} value="en">
+            <option {!! $post != null && $post->language == "en" ? 'selected="selected"' : '' !!} value="en">
                 English
             </option>
-            <option {!! $post->language == "fr" ? 'selected="selected"' : '' !!} value="fr">
+            <option {!! $post != null && $post->language == "fr" ? 'selected="selected"' : '' !!} value="fr">
                 Français
             </option>
         </select>
