@@ -1,0 +1,51 @@
+# A remote build machine for work that needs the network (Composer, npm).
+# Push a branch named run/<something> with a .github/run.sh: the job runs it with
+# PHP and Node, then commits .github/run.log (output and exit code) to the same
+# branch. Whatever run.sh commits itself is pushed too. Never merged into next or
+# master: the commits it produces are cherry-picked.
+name: run
+
+on:
+  push:
+    branches: ['run/**']
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+          extensions: mbstring, intl, pdo_sqlite, pdo_mysql, zip, gd, bcmath, exif
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Run .github/run.sh
+        run: |
+          git config user.name "Sossio Giallaurito"
+          git config user.email "sossiogll@gmail.com"
+          set +e
+          NO_COLOR=1 COMPOSER_NO_INTERACTION=1 bash .github/run.sh 2>&1 | sed -E 's/\x1b\[[0-9;]*[A-Za-z]//g' > .github/run.log
+          status=${PIPESTATUS[0]}
+          echo "exit=${status}" >> .github/run.log
+          # The log is also an annotation: readable where the Actions logs are not.
+          tail -c 3500 .github/run.log | python3 -c 'import sys,urllib.parse; t=sys.stdin.read(); print("::notice title=run.log::" + t.replace("%","%25").replace("\r","%0D").replace("\n","%0A"))'
+          exit 0
+
+      - name: Commit the log and push
+        run: |
+          git add -f .github/run.log
+          git commit -q -m "run: log of $(git rev-parse --short HEAD)" || true
+          if ! out=$(git push origin "HEAD:${GITHUB_REF_NAME}" 2>&1); then
+            echo "::error title=push::$(echo "$out" | tail -c 1500 | sed ':a;N;$!ba;s/\n/%0A/g')"
+            exit 1
+          fi

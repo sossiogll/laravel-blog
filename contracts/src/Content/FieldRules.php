@@ -46,7 +46,9 @@ final class FieldRules
     }
 
     /**
-     * The required fields among $fields that have no value in $values.
+     * The required fields among $fields that have no value in $values. Media and
+     * Reference fields are left out: their values live in the core's media library
+     * and reference table, not among the values.
      *
      * @param list<Field> $fields
      * @param array<string, mixed> $values
@@ -57,6 +59,9 @@ final class FieldRules
         $v = [];
         foreach ($fields as $field) {
             $value = $values[$field->key] ?? null;
+            if ($field->type === FieldType::Media || $field->type === FieldType::Reference) {
+                continue;
+            }
             if ($field->required && ($value === null || $value === '' || $value === [])) {
                 $v[] = "required field \"{$field->key}\" is missing";
             }
