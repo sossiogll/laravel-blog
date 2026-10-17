@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Content;
 
 use App\Models\Entry;
+use Closure;
+use Illuminate\Database\UniqueConstraintViolationException;
+use RuntimeException;
 
 /**
  * Picks the first free slug for a type and language: "title", then "title-2"...
@@ -13,6 +16,8 @@ use App\Models\Entry;
  */
 class SlugAllocator
 {
+    private const ATTEMPTS = 5;
+
     public function free(string $type, string $language, string $base): string
     {
         // Trashed entries keep their slug: the index still counts them.
@@ -29,5 +34,29 @@ class SlugAllocator
         }
 
         return $slug;
+    }
+
+    /**
+     * Stores with a free slug, choosing again when another writer claimed it first.
+     *
+     * @template T
+     * @param Closure(string): T $store writes with the slug it is given and returns what to hand back
+     * @param Closure(): bool|null $lostElsewhere asked when the store hit a unique index: true = the index was not
+     *                                            the slug's, so choosing again would not help and null is returned
+     * @return T|null
+     */
+    public function claim(string $type, string $language, string $base, Closure $store, ?Closure $lostElsewhere = null): mixed
+    {
+        for ($attempt = 0; $attempt < self::ATTEMPTS; $attempt++) {
+            try {
+                return $store($this->free($type, $language, $base));
+            } catch (UniqueConstraintViolationException) {
+                if ($lostElsewhere !== null && $lostElsewhere()) {
+                    return null;
+                }
+            }
+        }
+
+        throw new RuntimeException("No free slug for \"{$base}\" after " . self::ATTEMPTS . ' attempts');
     }
 }

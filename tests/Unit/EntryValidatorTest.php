@@ -74,4 +74,14 @@ final class EntryValidatorTest extends TestCase
     {
         $this->assertContains('required field "isbn" is missing', EntryValidator::handWritten(Book::definition(), 'Dune', [], []));
     }
+
+    public function test_the_columns_of_an_entry_keep_to_the_limits_of_the_core(): void
+    {
+        $this->assertSame([], EntryValidator::columns('Dune', 'pt-BR'));
+
+        $violations = implode("\n", EntryValidator::columns(str_repeat('x', 501), 'English'));
+
+        $this->assertStringContainsString('the title is longer than 500 characters', $violations);
+        $this->assertStringContainsString('language "English" is not a language tag', $violations);
+    }
 }
