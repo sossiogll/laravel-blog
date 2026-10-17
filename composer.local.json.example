@@ -1,0 +1,19 @@
+{
+    "repositories": [
+        {
+            "type": "path",
+            "url": "/gllhub-packages/*",
+            "options": {
+                "symlink": true,
+                "versions": {
+                    "gllhub/portfolio": "0.1.x-dev",
+                    "gllhub/medium": "0.1.x-dev"
+                }
+            }
+        }
+    ],
+    "require": {
+        "gllhub/portfolio": "*@dev",
+        "gllhub/medium": "*@dev"
+    }
+}
