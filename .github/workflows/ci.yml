@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  push:
+    branches: [next]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  core:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      # .env.example targets the Docker stack; the CI has neither Redis nor MariaDB.
+      CACHE_STORE: array
+      QUEUE_CONNECTION: sync
+      SESSION_DRIVER: array
+      DB_CONNECTION: sqlite
+      DB_DATABASE: ':memory:'
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+          extensions: mbstring, intl, pdo_sqlite, zip, gd, bcmath, exif
+
+      - name: Install
+        run: |
+          cp .env.example .env
+          .github/scripts/annotate-failure.sh "Composer install failed" composer install --no-interaction --prefer-dist
+
+      - name: Core tests
+        run: |
+          php artisan key:generate
+          .github/scripts/annotate-failure.sh "Core tests failed" php artisan test
+
+  contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: contracts
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+
+      - name: Install
+        run: ../.github/scripts/annotate-failure.sh "Composer install failed" composer install --no-interaction --prefer-dist
+
+      - name: Contract tests
+        run: ../.github/scripts/annotate-failure.sh "Contract tests failed" vendor/bin/phpunit
+
+  docker:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      HOST_UID: 1001
+      HOST_GID: 118
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Lint the entrypoint
+        run: shellcheck docker/app/entrypoint.sh .github/scripts/annotate-failure.sh
+
+      - name: Start the stack
+        run: |
+          mkdir ../gllhub-packages
+          .github/scripts/annotate-failure.sh "Stack did not start" \
+            bash -c 'docker compose up --build --wait --wait-timeout 900 || { docker compose ps -a; docker compose logs --tail 40; exit 1; }'
+
+      - name: Admin panel answers
+        run: |
+          .github/scripts/annotate-failure.sh "Admin panel not reachable" \
+            bash -c 'curl -fsSL -o /dev/null http://localhost:8000/admin/login && docker compose exec -T app php -m | grep -E "^(redis|pdo_mysql|intl|gd|pcntl|zip|bcmath|exif)$"'
+
+      - name: Stop the stack
+        if: always()
+        run: docker compose down -v
