@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Content;
 
 use App\Content\SlugAllocator;
+use App\Content\ReferenceStore;
 use App\Models\Entry;
 use App\Models\EntryReference;
 use App\Models\SyncStatus;
@@ -354,6 +355,28 @@ final class EntryUpsertTest extends HubTestCase
         $this->sync($instance);
 
         $this->assertSame(['c'], EntryReference::pluck('slug')->all());
+    }
+
+    public function test_a_reference_the_person_curates_survives_a_sync_that_replaces_the_sources(): void
+    {
+        $instance = $this->makeInstance();
+        $this->script->entries['catalog'] = [Entries::book('1', 'First'), Entries::book('2', 'Second')];
+        $this->sync($instance);
+        [$first, $second] = [Entry::where('external_id', '1')->sole(), Entry::where('external_id', '2')->sole()];
+        $this->app->make(ReferenceStore::class)->link($first->id, 'sequel', [$second->id]);
+
+        $this->script->entries['catalog'] = [
+            Entries::book('1', 'First, again', ['references' => [
+                new ExternalRef('related', type: 'book', slug: 'a'),
+                new ExternalRef('sequel', type: 'book', slug: 'second'),
+            ]]),
+            Entries::book('2', 'Second'),
+        ];
+        $this->sync($instance);
+
+        $this->assertSame(['related' => null], EntryReference::where('field', 'related')->pluck('target_entry_id', 'field')->all());
+        $this->assertSame([$second->id], EntryReference::where('field', 'sequel')->pluck('target_entry_id')->all());
+        $this->assertSame(['sequel' => [$second->id]], $this->app->make(ReferenceStore::class)->targets($first->id));
     }
 
     public function test_the_synchronizer_moves_data_and_leaves_the_status_to_the_job(): void
