@@ -1,0 +1,45 @@
+# A remote build machine for work that needs the network (Composer, npm).
+# Push a branch named run/<something> with a .github/run.sh: the job runs it with
+# PHP and Node, then commits .github/run.log (output and exit code) to the same
+# branch. Whatever run.sh commits itself is pushed too. Never merged into next or
+# master: the commits it produces are cherry-picked.
+name: run
+
+on:
+  push:
+    branches: ['run/**']
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+          extensions: mbstring, intl, pdo_sqlite, pdo_mysql, zip, gd, bcmath, exif
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run .github/run.sh
+        run: |
+          git config user.name "Sossio Giallaurito"
+          git config user.email "sossiogll@gmail.com"
+          set +e
+          bash .github/run.sh > .github/run.log 2>&1
+          echo "exit=$?" >> .github/run.log
+          exit 0
+
+      - name: Commit the log and push
+        run: |
+          git add .github/run.log
+          git commit -q -m "run: log of $(git rev-parse --short HEAD)" || true
+          git push origin HEAD:${GITHUB_REF_NAME}
