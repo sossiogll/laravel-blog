@@ -75,7 +75,7 @@ jobs:
         run: |
           mkdir ../gllhub-packages
           .github/scripts/annotate-failure.sh "Stack did not start" \
-            bash -c 'docker compose up --build --wait --wait-timeout 900 || { docker compose logs --tail 25; docker compose ps -a; exit 1; }'
+            bash -c 'docker compose up --build --wait --wait-timeout 900 >/tmp/up.log 2>&1 || { docker compose logs --tail 15; docker compose ps -a; tail -n 12 /tmp/up.log; exit 1; }'
 
       - name: Admin panel answers
         run: |
@@ -124,7 +124,7 @@ jobs:
                  -e 's|^DB_PASSWORD=.*|DB_PASSWORD=ci-password|' \
                  -e 's|^DB_ROOT_PASSWORD=.*|DB_ROOT_PASSWORD=ci-root-password|' .env
           .github/scripts/annotate-failure.sh "Production stack did not start" \
-            bash -c 'docker compose up -d --wait --wait-timeout 300 || { docker compose logs --tail 40; docker compose ps -a; exit 1; }'
+            bash -c 'docker compose up -d --wait --wait-timeout 300 >/tmp/up.log 2>&1 || { docker compose logs --tail 15; docker compose ps -a; tail -n 12 /tmp/up.log; exit 1; }'
 
       - name: The application answers
         run: |
