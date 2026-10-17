@@ -1,483 +1,209 @@
-### ButtonComponentColorMap
-<?php
-
-namespace Filament\Support\View\Components\ColorMaps;
-
-use Filament\Support\Colors\Color;
-use LogicException;
-
-class ButtonComponentColorMap
-{
-    /**
-     * @var array<int, string>
-     */
-    protected array $palette;
-
-    protected float $minContrastRatio = Color::WCAG_AA_TEXT;
-
-    /**
-     * @var list<array{bg: int, hover: int, alternateHover: int|null}>
-     */
-    protected array $lightBackgrounds = [];
-
-    /**
-     * @var list<array{bg: int, hover: int, alternateHover: int|null}>
-     */
-    protected array $darkBackgrounds = [];
-
-    /**
-     * @param  array<int, string>  $palette
-     */
-    final public function __construct(array $palette)
-    {
-        ksort($palette);
-
-        $this->palette = $palette;
-    }
-
-    /**
-     * @param  array<int, string>  $palette
-     */
-    public static function make(array $palette): static
-    {
-        return new static($palette);
-    }
-
-    public function minContrastRatio(float $ratio): static
-    {
-        $this->minContrastRatio = $ratio;
-
-        return $this;
-    }
-
-    /**
-     * Add a candidate `(bg, hover, alternateHover?)` triplet for light mode. Each call appends
-     * a candidate; the resolver evaluates them in the order added.
-     *
-     * `$alternateHover` is consulted whenever the main `$hover` isn't a good match — either
-     * because it doesn't produce light text alongside a vibrant `$bg`, or because its
-     * lightness disagrees with `$bg`'s in the fallback case.
-     *
-     * The last candidate added serves as the guaranteed fallback for palettes where no
-     * candidate produces light text on its `$bg` — pale colors like yellow.
-     */
-    public function lightBackground(int $bg, int $hover, ?int $alternateHover = null): static
-    {
-        $this->lightBackgrounds[] = ['bg' => $bg, 'hover' => $hover, 'alternateHover' => $alternateHover];
-
-        return $this;
-    }
-
-    /**
-     * Add a candidate `(bg, hover, alternateHover?)` triplet for dark mode. Each call appends
-     * a candidate; the resolver evaluates them in the order added using the same two-pass
-     * algorithm as `lightBackground()`.
-     */
-    public function darkBackground(int $bg, int $hover, ?int $alternateHover = null): static
-    {
-        $this->darkBackgrounds[] = ['bg' => $bg, 'hover' => $hover, 'alternateHover' => $alternateHover];
-
-        return $this;
-    }
-
-    /**
-     * @return array<string, int>
-     */
-    public function get(): array
-    {
-        if (empty($this->lightBackgrounds)) {
-            throw new LogicException('At least one `lightBackground()` candidate must be configured before calling `get()`.');
-        }
-
-        if (empty($this->darkBackgrounds)) {
-            throw new LogicException('At least one `darkBackground()` candidate must be configured before calling `get()`.');
-        }
-
-        $textForBg = $this->resolveTextForEachBackground();
-
-        $textLightness = $this->probeTextLightness($textForBg);
-
-        [$bg, $hoverBg] = $this->pickBackgroundShades($textLightness, $this->lightBackgrounds);
-        [$darkBg, $darkHoverBg] = $this->pickBackgroundShades($textLightness, $this->darkBackgrounds);
-
-        return [
-            'bg' => $bg,
-            'hover:bg' => $hoverBg,
-            'dark:bg' => $darkBg,
-            'dark:hover:bg' => $darkHoverBg,
-            'text' => $textForBg[$bg] ?? 0,
-            'hover:text' => $textForBg[$hoverBg] ?? 0,
-            'dark:text' => $textForBg[$darkBg] ?? 0,
-            'dark:hover:text' => $textForBg[$darkHoverBg] ?? 0,
-        ];
-    }
-
-    /**
-     * For each background shade in the palette, find the best text shade. Walks dark→light
-     * looking for a dark text first (>= 800), then tries shade 50 as a light fallback. Returns
-     * 0 (white) when nothing else qualifies.
-     *
-     * @return array<int, int>
-     */
-### ComponentColorMap
-<?php
-
-namespace Filament\Support\View\Components\ColorMaps;
-
-use Filament\Support\Colors\Color;
-
-class ComponentColorMap
-{
-    /**
-     * @var array<int, string>
-     */
-    protected array $palette;
-
-    /**
-     * @var array<string, int>
-     */
-    protected array $resolved = [];
-
-    /**
-     * @param  array<int, string>  $palette
-     */
-    final public function __construct(array $palette)
-    {
-        $this->palette = $palette;
-    }
-
-    /**
-     * @param  array<int, string>  $palette
-     */
-    public static function make(array $palette): static
-    {
-        return new static($palette);
-    }
-
-    /**
-     * Find the lightest (or darkest, if `$shouldStartFromDarkest`) shade in the palette that contrasts
-     * against `$surface` by at least `$minRatio`, optionally bounded by `$minShade`/`$maxShade`,
-     * and assign it to the named slot. Falls back to `$fallback` if no shade qualifies.
-     */
-    public function slot(
-        string $name,
-        string $surface,
-        float $minRatio = Color::WCAG_AA_TEXT,
-        ?int $maxShade = null,
-        ?int $minShade = null,
-        bool $shouldStartFromDarkest = false,
-        int $fallback = 900,
-    ): static {
-        $this->resolved[$name] = Color::findShade(
-            palette: $this->palette,
-            surface: $surface,
-            minRatio: $minRatio,
-            maxShade: $maxShade,
-            minShade: $minShade,
-            shouldStartFromDarkest: $shouldStartFromDarkest,
-        ) ?? $fallback;
-
-        return $this;
-    }
-
-    /**
-     * @return array<string, int>
-     */
-    public function get(): array
-    {
-        return $this->resolved;
-    }
-}
-### list makeTable rest
-                    }
-
-                    $action->record($record);
-
-                    $actionGroup = $action->getGroup();
-
-                    while ($actionGroup) {
-                        $actionGroup->record($record);
-
-                        $actionGroup = $actionGroup->getGroup();
-                    }
-
-                    if ($action->isHidden()) {
-                        continue;
-                    }
-
-                    if ($action->getUrl()) {
-                        continue;
-                    }
-
-                    return $action->getName();
-                }
-
-                return null;
-            });
-
-        if (! $table->hasCustomRecordUrl()) {
-            $table->recordUrl(function (Model $record, Table $table): ?string {
-                foreach (['view', 'edit'] as $action) {
-                    $action = $table->getAction($action);
-
-                    if (! $action) {
-                        continue;
-                    }
-
-                    $action = clone $action;
-
-                    $action->record($record);
-
-                    $actionGroup = $action->getGroup();
-
-                    while ($actionGroup) {
-                        $actionGroup->record($record);
-
-                        $actionGroup = $actionGroup->getGroup();
-                    }
-
-                    if ($action->isHidden()) {
-                        continue;
-                    }
-
-                    $url = $action->getUrl();
-
-                    if (! $url) {
-                        continue;
-                    }
-
-                    return $url;
-                }
-
-                $resource = static::getResource();
-
-                foreach (['view', 'edit'] as $action) {
-                    if (! $resource::hasPage($action)) {
-                        continue;
-                    }
-
-                    if (! $resource::{'can' . ucfirst($action)}($record)) {
-                        continue;
-                    }
-
-                    return $this->getResourceUrl($action, ['record' => $record]);
-                }
-
-                return null;
-            });
-        }
-
-        static::getResource()::configureTable($table);
-
-        return $table;
-### tab
-vendor/filament/schemas/src/Components/Tabs/Tab.php
-vendor/filament/filament/src/Enums/ThemeMode.php
-vendor/filament/support/src/Icons/Heroicon.php
-### list tabs
-grep: vendor/filament/filament/src/Resources/Pages/ListRecords/Concerns/HasTabs.php: No such file or directory
-### make user
-89:            $this->error('Filament has not been installed yet: php artisan filament:install --panels');
-### Panel navgroups
-46-    /**
-47-     * @param  array<string | int, NavigationGroup | string> | class-string<UnitEnum>  $groups
-48-     */
-49:    public function navigationGroups(array | string $groups): static
-50-    {
-51-        if (isset($this->navigationManager)) {
-52-            $this->navigationManager->navigationGroups($groups);
-53-
-54-            return $this;
-55-        }
-56-
-57-        if (is_string($groups)) {
-58-            throw_unless(enum_exists($groups), new LogicException("Enum class [{$groups}] does not exist for navigation groups."));
-59-
-60-            $groups = array_reduce(
-61-                $groups::cases(),
-62-                function (array $carry, UnitEnum $case): array {
-63-                    $carry[$case->name] = NavigationGroup::fromEnum($case);
-64-
-65-                    return $carry;
-66-                },
-67-                initial: [],
-68-            );
-69-        }
-### Resource HasNavigation getNavigationItems
-            ->navigationItems(static::getNavigationItems());
-    }
-
-    /**
-     * @return array<NavigationItem>
-     */
-    public static function getNavigationItems(): array
-    {
-        if (! static::hasPage('index')) {
-            return [];
-        }
-
-        $activeRoutePattern = static::getNavigationItemActiveRoutePattern();
-
-        return [
-            NavigationItem::make(static::getNavigationLabel())
-                ->key(static::class)
-                ->group(static::getNavigationGroup())
-                ->parentItem(static::getNavigationParentItem())
-                ->icon(static::getNavigationIcon())
-                ->activeIcon(static::getActiveNavigationIcon())
-                ->isActiveWhen(fn (): bool => original_request()->routeIs($activeRoutePattern))
-                ->badge(static::getNavigationBadge(), color: static::getNavigationBadgeColor())
-                ->badgeTooltip(static::getNavigationBadgeTooltip())
-                ->sort(static::getNavigationSort())
-                ->url(static::getNavigationUrl()),
-        ];
-    }
-
-    /**
-     * @return string | array<string>
-     */
-    public static function getNavigationItemActiveRoutePattern(): string | array
-    {
-        return static::getRouteBaseName() . '.*';
-    }
-
-    public static function getSubNavigationPosition(): SubNavigationPosition
-    {
-        if (filled(static::$subNavigationPosition)) {
-            return static::$subNavigationPosition;
-        }
-
-        if (filled($cluster = static::getCluster())) {
-            return $cluster::getSubNavigationPosition();
-        }
-### table filters url
-### trashedfilter
-<?php
-
-namespace Filament\Tables\Filters;
-
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-
-class TrashedFilter extends TernaryFilter
-{
-    public static function getDefaultName(): ?string
-    {
-        return 'trashed';
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->label(__('filament-tables::table.filters.trashed.label'));
-
-        $this->placeholder(__('filament-tables::table.filters.trashed.without_trashed'));
-
-        $this->trueLabel(__('filament-tables::table.filters.trashed.with_trashed'));
-
-        $this->falseLabel(__('filament-tables::table.filters.trashed.only_trashed'));
-
-        $this->queries(
-            true: fn ($query) => $query->withTrashed(),
-            false: fn ($query) => $query->onlyTrashed(),
-            blank: fn ($query) => $query->withoutTrashed(),
-        );
-
-        $this->baseQuery(fn (Builder $query) => $query->withoutGlobalScopes([
-            SoftDeletingScope::class,
-        ]));
-
-        $this->excludeWhenResolvingRecord();
-
-        $this->indicateUsing(function (array $state): array {
-            if ($state['value'] ?? null) {
-                return [Indicator::make($this->getTrueLabel())];
-            }
-
-            if (blank($state['value'] ?? null)) {
-                return [];
-            }
-
-            return [Indicator::make($this->getFalseLabel())];
-        });
-    }
-}
-### Resource getUrl
-BelongsToCluster.php
-BelongsToParent.php
-BelongsToTenant.php
-CanGenerateUrls.php
-HasAuthorization.php
-HasBreadcrumbs.php
-HasConfiguration.php
-HasGlobalSearch.php
-HasLabels.php
-HasNavigation.php
-HasPages.php
-HasRoutes.php
-### repeater simple
-804:    public function addable(bool | Closure $condition = true): static
-818:    public function reorderable(bool | Closure $condition = true): static
-855:    public function reorderableWithDragAndDrop(bool | Closure $condition = true): static
-862:    public function reorderableWithButtons(bool | Closure $condition = true): static
-1143:    public function itemLabel(string | Htmlable | Closure | null $label): static
-1335:    public function simple(Field | Closure | null $field): static
-### Authenticate
-<?php
-
-namespace Filament\Http\Middleware;
-
-use Filament\Facades\Filament;
-use Filament\Models\Contracts\FilamentUser;
-use Illuminate\Auth\Middleware\Authenticate as Middleware;
-use Illuminate\Database\Eloquent\Model;
-
-class Authenticate extends Middleware
-{
-    /**
-     * @param  array<string>  $guards
-     */
-    protected function authenticate($request, array $guards): void
-    {
-        $guard = Filament::auth();
-
-        if (! $guard->check()) {
-            $this->unauthenticated($request, $guards);
-
-            return; /** @phpstan-ignore-line */
-        }
-
-        $this->auth->shouldUse(Filament::getAuthGuard());
-
-        /** @var Model $user */
-        $user = $guard->user();
-
-        $panel = Filament::getCurrentOrDefaultPanel();
-
-        // Security: If the user model does not implement `FilamentUser`,
-        // access is only allowed in local environments. In production,
-        // implement `FilamentUser` with `canAccessPanel()`.
-        abort_if(
-            $user instanceof FilamentUser ?
-                (! $user->canAccessPanel($panel)) :
-                (config('app.env') !== 'local'),
-            403,
-        );
-    }
-
-    protected function redirectTo($request): ?string
-    {
-        return Filament::getLoginUrl();
-    }
-}
-### sticky stats
-40:    public function content(Schema $schema): Schema
-48:    public function getSectionContentComponent(): Component
-62:    protected function getColumns(): int | array | null
-81:    protected function getDescription(): ?string
-86:    protected function getHeading(): ?string
-94:    protected function getCachedStats(): array
-116:    protected function getCards(): array
-124:    protected function getStats(): array
+  ✓ the due command queues a sync for each due instance                  0.04s  
+  ✓ the due command is scheduled every minute                            0.03s  
+  ✓ the sync command runs one instance now and reports the result        0.06s  
+  ✓ the sync command fails with the reason when the run fails            0.05s  
+  ✓ the sync command with all runs every enabled instance                0.08s  
+  ✓ the sync command needs an instance that exists                       0.04s  
+
+   PASS  Tests\Feature\Sync\SyncJobTest
+  ✓ a good run records its success                                       0.06s  
+  ✓ a disabled or missing instance is left alone                         0.05s  
+  ✓ unavailable is retried after a backoff                               0.04s  
+  ✓ the backoff doubles up to a ceiling and then gives up                0.03s  
+  ✓ rate limited is released for as long as the service asked            0.05s  
+  ✓ invalid credentials stop the instance without a retry                0.04s  
+  ✓ invalid configuration names the setting and does not retry           0.05s  
+  ✓ anything else is a bug that is reported and not retried              0.05s  
+  ✓ contract failures are not reported as bugs                           0.04s  
+  ✓ a failure keeps the time of the last success                         0.06s  
+  ✓ an instance whose package is gone fails for the admin to see         0.04s  
+  ✓ when the queue gives up the status does not stay retrying            0.04s  
+  ✓ the same sync is queued once and syncs of one instance do not overl… 0.03s  
+  ✓ the job runs through the queue end to end                            0.06s  
+
+   PASS  Tests\Feature\Webhooks\WebhookTest
+  ✓ a verified call queues the sync of the instances it names            0.07s  
+  ✓ without ids the whole instance is synced                             0.05s  
+  ✓ without an instance filter every enabled instance of the source is…  0.05s  
+  ✓ the values of the request are compared as text                       0.05s  
+  ✓ an unmatched request queues nothing but is still accepted            0.05s  
+  ✓ a source the webhook does not refresh is ignored                     0.05s  
+  ✓ a call the package does not verify is refused                        0.05s  
+  ✓ a webhook without a configured secret verifies nothing               0.05s  
+  ✓ an unknown webhook is not found                                      0.05s  
+  ✓ only post is served                                                  0.28s  
+  ✓ the route has no web middleware so no session and no csrf            0.04s  
+  ✓ calls are rate limited per caller and endpoint                       0.06s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Content\EntryEditorTest > two entries with the same…   
+  Failed asserting that two strings are identical.
+  -'chosen'
+  +'a-chosen'
+  
+
+  at tests/Feature/Content/EntryEditorTest.php:82
+     78▕     public function test_two_entries_with_the_same_title_get_different_slugs(): void
+     79▕     {
+     80▕         $this->assertSame('dune', $this->editor->create('book', $this->input(), null)->slug);
+     81▕         $this->assertSame('dune-2', $this->editor->create('book', $this->input(), null)->slug);
+  ➜  82▕         $this->assertSame('chosen', $this->editor->create('book', $this->input(['slug' => 'A Chosen!']), null)->slug);
+     83▕     }
+     84▕ 
+     85▕     public function test_the_rules_sources_are_held_to_apply_to_what_is_written_by_hand(): void
+     86▕     {
+
+  1   tests/Feature/Content/EntryEditorTest.php:82
+
+
+  Tests:    1 failed, 162 passed (488 assertions)
+  Duration: 6.93s
+
+Runtime:       PHP 8.4.26
+Configuration: /home/runner/work/laravel-blog/laravel-blog/contracts/phpunit.xml
+
+.............                                                     13 / 13 (100%)
+
+Time: 00:00.012, Memory: 8.00 MB
+
+OK (13 tests, 67 assertions)
+### Page content
+84:    protected string $view = 'filament-panels::pages.page';
+567:    public function content(Schema $schema): Schema
+### markAsRequired
+vendor/filament/forms/src/Components/Concerns/CanBeMarkedAsRequired.php:11:    public function markAsRequired(bool | Closure | null $condition = true): static
+vendor/filament/forms/src/Components/Repeater/TableColumn.php:54:    public function markAsRequired(bool | Closure $condition = true): static
+### select
+472:    public function getOptionLabelUsing(?Closure $callback): static
+486:    public function getOptionLabelsUsing(?Closure $callback): static
+493:    public function getSearchResultsUsing(?Closure $callback): static
+570:    public function getOptionLabel(bool $withDefault = true): ?string
+630:    public function getOptionLabels(bool $withDefaults = true, ?array $options = null): array
+760:    public function getOptionLabelsForJs(): array
+1479:    public function getOptionLabelFromRecordUsing(?Closure $callback): static
+1491:    public function getOptionLabelFromRecord(Model $record): string
+### tabs
+grep: vendor/filament/filament/src/Resources/Pages/ListRecords/Concerns/*.php: No such file or directory
+### Heroicon
+6
+### makeuser
+3:namespace Filament\Commands;
+17:use function Laravel\Prompts\password;
+20:#[AsCommand(name: 'make:filament-user', aliases: [
+30:    protected $name = 'make:filament-user';
+47:                name: 'name',
+50:                description: 'The name of the user',
+53:                name: 'email',
+56:                description: 'A valid and unique email address',
+59:                name: 'password',
+62:                description: 'The password for the user (min. 8 characters)',
+65:                name: 'panel',
+74:     * @var array{'name': string | null, 'email': string | null, 'password': string | null}
+101:     * @return array{'name': string, 'email': string, 'password': string}
+106:            'name' => $this->options['name'] ?? text(
+111:            'email' => $this->options['email'] ?? text(
+114:                validate: fn (string $email): ?string => match (true) {
+115:                    ! filter_var($email, FILTER_VALIDATE_EMAIL) => 'The email address must be valid.',
+116:                    static::getUserModel()::query()->where('email', $email)->exists() => 'A user with this email address already exists',
+121:            'password' => Hash::make($this->options['password'] ?? password(
+140:        $this->components->info('Success! ' . ($user->getAttribute('email') ?? $user->getAttribute('username') ?? 'You') . " may now log in at {$loginUrl}");
+### testing
+23:    public function assertSchemaComponentExists(): Closure
+59:    public function assertSchemaComponentDoesNotExist(): Closure
+87:    public function assertSchemaComponentVisible(): Closure
+116:    public function assertSchemaComponentHidden(): Closure
+145:    public function assertSchemaExists(): Closure
+163:    public function assertSchemaStateSet(): Closure
+206:    public function assertSchemaComponentStateSet(): Closure
+235:    public function assertSchemaComponentStateNotSet(): Closure
+264:    public function assertWizardStepExists(): Closure
+291:    public function assertWizardCurrentStep(): Closure
+23:    public function fillForm(): Closure
+75:    public function assertFormSet(): Closure
+84:    public function assertHasFormErrors(): Closure
+119:    public function assertHasNoFormErrors(): Closure
+154:    public function assertFormExists(): Closure
+163:    public function assertFormComponentExists(): Closure
+177:    public function assertFormComponentDoesNotExist(): Closure
+186:    public function assertFormFieldExists(): Closure
+228:    public function assertFormFieldDoesNotExist(): Closure
+257:    public function assertFormFieldDisabled(): Closure
+294:    public function assertFormFieldIsDisabled(): Closure
+299:    public function assertFormFieldEnabled(): Closure
+336:    public function assertFormFieldIsEnabled(): Closure
+341:    public function assertFormFieldReadOnly(): Closure
+373:    public function assertFormFieldIsReadOnly(): Closure
+378:    public function assertFormFieldHidden(): Closure
+410:    public function assertFormFieldIsHidden(): Closure
+415:    public function assertFormFieldVisible(): Closure
+447:    public function assertFormFieldIsVisible(): Closure
+50:    public function assertFormComponentActionDataSet(): Closure
+59:    public function callFormComponentAction(): Closure
+72:    public function callMountedFormComponentAction(): Closure
+81:    public function assertFormComponentActionExists(): Closure
+94:    public function assertFormComponentActionDoesNotExist(): Closure
+107:    public function assertFormComponentActionVisible(): Closure
+120:    public function assertFormComponentActionHidden(): Closure
+133:    public function assertFormComponentActionEnabled(): Closure
+146:    public function assertFormComponentActionDisabled(): Closure
+159:    public function assertFormComponentActionHasIcon(): Closure
+172:    public function assertFormComponentActionDoesNotHaveIcon(): Closure
+185:    public function assertFormComponentActionHasLabel(): Closure
+198:    public function assertFormComponentActionDoesNotHaveLabel(): Closure
+211:    public function assertFormComponentActionHasColor(): Closure
+224:    public function assertFormComponentActionDoesNotHaveColor(): Closure
+237:    public function assertFormComponentActionHasUrl(): Closure
+250:    public function assertFormComponentActionDoesNotHaveUrl(): Closure
+263:    public function assertFormComponentActionShouldOpenUrlInNewTab(): Closure
+276:    public function assertFormComponentActionShouldNotOpenUrlInNewTab(): Closure
+289:    public function assertFormComponentActionMounted(): Closure
+302:    public function assertFormComponentActionNotMounted(): Closure
+315:    public function assertFormComponentActionHalted(): Closure
+320:    public function assertHasFormComponentActionErrors(): Closure
+329:    public function assertHasNoFormComponentActionErrors(): Closure
+23:    public function assertCanRenderTableColumn(): Closure
+45:    public function assertCanNotRenderTableColumn(): Closure
+67:    protected function assertTableRecordKeyExists(): Closure
+83:    public function assertTableColumnExists(): Closure
+121:    public function assertTableColumnDoesNotExist(): Closure
+165:    public function assertTableColumnVisible(): Closure
+184:    public function assertTableColumnHidden(): Closure
+203:    public function assertTableColumnStateSet(): Closure
+252:    public function assertTableColumnStateNotSet(): Closure
+301:    public function assertTableColumnFormattedStateSet(): Closure
+342:    public function assertTableColumnFormattedStateNotSet(): Closure
+383:    public function assertTableColumnHasExtraAttributes(): Closure
+420:    public function assertTableColumnDoesNotHaveExtraAttributes(): Closure
+457:    public function assertTableColumnHasDescription(): Closure
+495:    public function assertTableColumnDoesNotHaveDescription(): Closure
+533:    public function assertTableSelectColumnHasOptions(): Closure
+571:    public function assertTableSelectColumnDoesNotHaveOptions(): Closure
+cut: write error: Broken pipe
+### Livewire comp
+35:    public static function make(string | Closure $component, array | Closure $data = []): static
+### color
+Array
+(
+    [50] => oklch(0.996 0.013 115.823)
+    [100] => oklch(0.992 0.026 116.068)
+    [200] => oklch(0.98 0.064 117.879)
+    [300] => oklch(0.969 0.102 118.218)
+    [400] => oklch(0.951 0.167 119.898)
+    [500] => oklch(0.938 0.211 121.801)
+    [600] => oklch(0.867 0.195 121.815)
+    [700] => oklch(0.755 0.168 121.628)
+    [800] => oklch(0.641 0.142 121.661)
+    [900] => oklch(0.554 0.121 121.392)
+    [950] => oklch(0.396 0.084 121.057)
+)
+Array
+(
+    [bg] => 600
+    [hover:bg] => 500
+    [dark:bg] => 500
+    [dark:hover:bg] => 400
+    [text] => 950
+    [hover:text] => 950
+    [dark:text] => 950
+    [dark:hover:text] => 950
+)
 exit=0
