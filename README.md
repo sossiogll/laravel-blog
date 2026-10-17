@@ -25,6 +25,12 @@ and migrates the database; it takes a few minutes. Then open <http://localhost:8
 docker compose exec app php artisan make:filament-user
 ```
 
+`make:filament-user` is Filament's own command (it also takes `--name`, `--email` and `--password` to skip the
+prompts), so the core has no command of its own for it.
+
+The admin draws everything from the installed packages. With none (see "Add packages") the Content and Sources menus
+are empty and System > Packages says so. Syncs run on the `queue` service (Horizon); "Sync now" only queues them.
+
 | Service | URL |
 | --- | --- |
 | App | <http://localhost:8000> |
