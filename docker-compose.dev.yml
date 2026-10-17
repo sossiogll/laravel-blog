@@ -1,15 +1,24 @@
-# Development stack. Production does not use this file.
+# Development stack: `docker compose -f docker-compose.dev.yml up`. Production is docker-compose.yml.
+# The sources are mounted, so PHP changes apply at once; the queue and scheduler restart on PHP changes
+# (docker/app/watch-restart.sh) and Vite hot-reloads the assets.
 # HOST_UID / HOST_GID make files created in the containers belong to you on Linux:
-#   HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose up --build
+#   HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.dev.yml up --build
+# XDEBUG_MODE=debug (in .env or the shell) turns Xdebug on; see the README.
 
 x-app: &app
   build:
     context: .
     dockerfile: docker/app/Dockerfile
+    target: dev
     args:
       UID: ${HOST_UID:-1000}
       GID: ${HOST_GID:-1000}
-  image: gllhub-app
+  image: gllhub-dev
+  environment:
+    XDEBUG_MODE: ${XDEBUG_MODE:-off}
+  extra_hosts:
+    # Docker Desktop defines it already; on Linux this makes it point at the host.
+    - "host.docker.internal:host-gateway"
   volumes:
     - .:/app
     - ../gllhub-packages:/gllhub-packages:ro
@@ -19,6 +28,7 @@ services:
     <<: *app
     environment:
       BOOTSTRAP: "1"
+      XDEBUG_MODE: ${XDEBUG_MODE:-off}
     ports:
       - "8000:8000"
     depends_on:
@@ -36,14 +46,14 @@ services:
 
   queue:
     <<: *app
-    command: ["php", "artisan", "horizon"]
+    command: ["watch-restart", "php", "artisan", "horizon"]
     depends_on:
       app:
         condition: service_healthy
 
   scheduler:
     <<: *app
-    command: ["php", "artisan", "schedule:work"]
+    command: ["watch-restart", "php", "artisan", "schedule:work"]
     depends_on:
       app:
         condition: service_healthy
@@ -59,7 +69,13 @@ services:
       - .:/app
     ports:
       - "5173:5173"
-    command: ["sh", "-c", "npm install && npm run dev -- --host 0.0.0.0"]
+    command: ["sh", "-c", "npm install && npm run dev"]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:5173/@vite/client').then(r => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 300s
 
   db:
     image: mariadb:11
