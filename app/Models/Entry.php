@@ -56,6 +56,15 @@ class Entry extends Model implements HasMedia
         ];
     }
 
+    /**
+     * No source instance = the person owns every column. An entry whose instance was deleted becomes
+     * hand-written too: the content is kept, and nothing is left to overwrite it.
+     */
+    public function isHandWritten(): bool
+    {
+        return $this->source_instance_id === null;
+    }
+
     /** @return BelongsTo<SourceInstance, $this> */
     public function sourceInstance(): BelongsTo
     {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Content\Rules;
 
 use Gll\Hub\Contracts\Content\ContentTypeDefinition;
+use Gll\Hub\Contracts\Content\EntryRules;
 use Gll\Hub\Contracts\Content\FieldRules;
 
 /**
@@ -30,6 +31,24 @@ final class EntryValidator
             } else {
                 array_push($v, ...FieldRules::violations($field, $value));
             }
+        }
+
+        return $v;
+    }
+
+    /**
+     * The columns every entry has whatever its type, held to the limits a source's entries are held to.
+     *
+     * @return list<string>
+     */
+    public static function columns(string $title, string $language): array
+    {
+        $v = [];
+        if (mb_strlen($title) > EntryRules::MAX_TITLE) {
+            $v[] = 'the title is longer than ' . EntryRules::MAX_TITLE . ' characters';
+        }
+        if (! EntryRules::isLanguage($language)) {
+            $v[] = "language \"{$language}\" is not a language tag such as \"en\" or \"pt-BR\"";
         }
 
         return $v;

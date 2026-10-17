@@ -6,7 +6,6 @@ namespace App\Content;
 
 use App\Models\Entry;
 use Closure;
-use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Arr;
 use RuntimeException;
 
@@ -24,8 +23,6 @@ use RuntimeException;
  */
 final class EntryWriter
 {
-    private const SLUG_ATTEMPTS = 5;
-
     public function __construct(private readonly SlugAllocator $slugs)
     {
     }
@@ -75,20 +72,14 @@ final class EntryWriter
     {
         $row = $this->columns($instanceId, $externalId, $values);
 
-        for ($attempt = 0; $attempt < self::SLUG_ATTEMPTS; $attempt++) {
-            $row['slug'] = $this->slugs->free($values['type'], $values['language'], $slugBase);
-
-            try {
-                return (int) Entry::query()->insertGetId($row);
-            } catch (UniqueConstraintViolationException) {
-                if ($this->current($instanceId, $externalId) !== null) {
-                    return null;
-                }
-                // Otherwise the slug was claimed after we chose it: choose again.
-            }
-        }
-
-        throw new RuntimeException("No free slug for \"{$slugBase}\" after " . self::SLUG_ATTEMPTS . ' attempts');
+        return $this->slugs->claim(
+            $values['type'],
+            $values['language'],
+            $slugBase,
+            static fn (string $slug): int => (int) Entry::query()->insertGetId($row + ['slug' => $slug]),
+            // The other index it can lose on: someone created this very entry since our read.
+            fn (): bool => $this->current($instanceId, $externalId) !== null,
+        );
     }
 
     /**
