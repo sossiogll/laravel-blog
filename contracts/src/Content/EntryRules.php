@@ -21,6 +21,12 @@ final class EntryRules
     public const MAX_TRANSLATION_KEY = 255;
     private const LANGUAGE = '/^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$/';
 
+    /** Whether $language is a tag such as "en" or "pt-BR" that fits the core's column; the core asks it of entries written by hand too. */
+    public static function isLanguage(string $language): bool
+    {
+        return preg_match(self::LANGUAGE, $language) === 1 && strlen($language) <= 12;
+    }
+
     /**
      * @param list<ContentTypeDefinition> $types every type known to the caller, not only the produced ones
      * @return list<string> empty = the entry is acceptable
@@ -55,7 +61,7 @@ final class EntryRules
         } elseif (mb_strlen($entry->title) > self::MAX_TITLE) {
             $v[] = "{$at}: title is longer than " . self::MAX_TITLE . ' characters';
         }
-        if (preg_match(self::LANGUAGE, $entry->language) !== 1 || strlen($entry->language) > 12) {
+        if (! self::isLanguage($entry->language)) {
             $v[] = "{$at}: language \"{$entry->language}\" is not a language tag such as \"en\" or \"pt-BR\"";
         }
         if ($entry->translationKey !== null && strlen($entry->translationKey) > self::MAX_TRANSLATION_KEY) {
