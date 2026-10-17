@@ -1,0 +1,93 @@
+# Development stack. Production does not use this file.
+# HOST_UID / HOST_GID make files created in the containers belong to you on Linux:
+#   HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose up --build
+
+x-app: &app
+  build:
+    context: .
+    dockerfile: docker/app/Dockerfile
+    args:
+      UID: ${HOST_UID:-1000}
+      GID: ${HOST_GID:-1000}
+  image: gllhub-app
+  volumes:
+    - .:/app
+    - ../gllhub-packages:/gllhub-packages:ro
+
+services:
+  app:
+    <<: *app
+    environment:
+      BOOTSTRAP: "1"
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/up"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      # The first start runs composer install.
+      start_period: 600s
+
+  queue:
+    <<: *app
+    command: ["php", "artisan", "horizon"]
+    depends_on:
+      app:
+        condition: service_healthy
+
+  scheduler:
+    <<: *app
+    command: ["php", "artisan", "schedule:work"]
+    depends_on:
+      app:
+        condition: service_healthy
+
+  vite:
+    image: node:22
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    working_dir: /app
+    environment:
+      # The container user has no home directory.
+      npm_config_cache: /tmp/.npm
+    volumes:
+      - .:/app
+    ports:
+      - "5173:5173"
+    command: ["sh", "-c", "npm install && npm run dev -- --host 0.0.0.0"]
+
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_DATABASE: gllhub
+      MARIADB_USER: gllhub
+      MARIADB_PASSWORD: gllhub
+      MARIADB_ROOT_PASSWORD: root
+    volumes:
+      - db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - "8025:8025"
+
+volumes:
+  db:
