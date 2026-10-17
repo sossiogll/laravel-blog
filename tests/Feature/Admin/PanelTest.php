@@ -7,6 +7,10 @@ namespace Tests\Feature\Admin;
 use App\Filament\Livewire\PackageSettingsForm;
 use App\Filament\Pages\Packages;
 use App\Filament\Resources\Entries\EntryResource;
+use App\Filament\Widgets\EntriesPerType;
+use App\Filament\Widgets\FailingInstances;
+use App\Filament\Widgets\InstancesByStatus;
+use App\Models\SyncStatus;
 use App\Models\PackageSetting;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Livewire;
@@ -70,5 +74,20 @@ final class PanelTest extends AdminTestCase
         $stored = PackageSetting::find('acme/library');
         $this->assertSame(['region' => 'us'], $stored->settings);
         $this->assertSame(['key' => 'abc', 'secret' => 'hook'], $stored->credentials);
+    }
+
+    public function test_the_dashboard_counts_entries_and_lists_the_instances_that_need_attention(): void
+    {
+        $this->handWritten('Dune');
+        $this->handWritten('Emma');
+        $failing = $this->makeInstance(attributes: ['label' => 'Broken shelf', 'status' => SyncStatus::Failing, 'last_error' => 'Bad token']);
+        $healthy = $this->makeInstance('latest', ['label' => 'Fine shelf', 'status' => SyncStatus::Ok]);
+
+        Livewire::test(EntriesPerType::class)->assertSee('Books')->assertSee('2');
+        Livewire::test(InstancesByStatus::class)->assertSee('Failing')->assertSee('Ok');
+        Livewire::test(FailingInstances::class)
+            ->assertCanSeeTableRecords([$failing])
+            ->assertCanNotSeeTableRecords([$healthy])
+            ->assertSee('Bad token');
     }
 }
