@@ -31,6 +31,16 @@ final class EntryRulesTest extends TestCase
         return new ExternalEntry(externalId: 'x', type: 'article', title: $title, language: $language, fields: $fields);
     }
 
+    public function test_a_language_is_a_short_tag(): void
+    {
+        foreach (['en', 'it', 'pt-BR', 'zh-Hant-TW'] as $good) {
+            $this->assertTrue(EntryRules::isLanguage($good), $good);
+        }
+        foreach (['', 'e', 'EN', 'english', 'en_US', 'en-', 'en-abcdefghij'] as $bad) {
+            $this->assertFalse(EntryRules::isLanguage($bad), $bad);
+        }
+    }
+
     public function test_a_good_entry_has_no_violations(): void
     {
         $this->assertSame([], $this->violations(FeedSource::sample('x')));
