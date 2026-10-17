@@ -79,7 +79,7 @@ final class EntryEditorTest extends HubTestCase
     {
         $this->assertSame('dune', $this->editor->create('book', $this->input(), null)->slug);
         $this->assertSame('dune-2', $this->editor->create('book', $this->input(), null)->slug);
-        $this->assertSame('chosen', $this->editor->create('book', $this->input(['slug' => 'A Chosen!']), null)->slug);
+        $this->assertSame('a-chosen', $this->editor->create('book', $this->input(['slug' => 'A Chosen!']), null)->slug);
     }
 
     public function test_the_rules_sources_are_held_to_apply_to_what_is_written_by_hand(): void
