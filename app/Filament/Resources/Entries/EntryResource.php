@@ -27,6 +27,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use UnitEnum;
 
+use function Filament\original_request;
+
 /**
  * Every entry of every content type, in one resource. What a type is called and what fields it has come from the
  * registry, so a package adds a type to the admin by being installed.

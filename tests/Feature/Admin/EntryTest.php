@@ -61,7 +61,7 @@ final class EntryTest extends AdminTestCase
         $this->assertSame('Dune Messiah', $fresh->title);
         $this->assertSame('dune', $fresh->slug);
         $this->assertSame(['isbn' => '2'], $fresh->fields);
-        $this->assertSame(['position' => 3], $fresh->curated);
+        $this->assertSame(['featured' => false, 'position' => 3], $fresh->curated);
     }
 
     public function test_a_synced_entry_shows_what_the_source_owns_but_only_takes_curated_values(): void
