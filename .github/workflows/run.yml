@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -25,7 +25,7 @@ jobs:
           tools: composer:v2
           extensions: mbstring, intl, pdo_sqlite, pdo_mysql, zip, gd, bcmath, exif
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
 
@@ -36,10 +36,15 @@ jobs:
           set +e
           bash .github/run.sh > .github/run.log 2>&1
           echo "exit=$?" >> .github/run.log
+          # The log is also an annotation: readable where the Actions logs are not.
+          tail -c 3500 .github/run.log | python3 -c 'import sys,urllib.parse; t=sys.stdin.read(); print("::notice title=run.log::" + t.replace("%","%25").replace("\r","%0D").replace("\n","%0A"))'
           exit 0
 
       - name: Commit the log and push
         run: |
           git add .github/run.log
           git commit -q -m "run: log of $(git rev-parse --short HEAD)" || true
-          git push origin HEAD:${GITHUB_REF_NAME}
+          if ! out=$(git push origin "HEAD:${GITHUB_REF_NAME}" 2>&1); then
+            echo "::error title=push::$(echo "$out" | tail -c 1500 | sed ':a;N;$!ba;s/\n/%0A/g')"
+            exit 1
+          fi
