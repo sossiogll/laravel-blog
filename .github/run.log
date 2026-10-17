@@ -1,397 +1,525 @@
-### theme mode
-vendor/filament/filament/src/Panel/Concerns/HasTheme.php:78:    public function defaultThemeMode(ThemeMode $mode): static
-vendor/filament/filament/src/Panel/Concerns/HasBrandLogo.php:30:    public function darkModeBrandLogo(string | Htmlable | Closure | null $logo): static
-vendor/filament/filament/src/Panel/Concerns/HasDarkMode.php:15:    public function darkMode(bool | Closure $condition = true, bool | Closure $isForced = false): static
-### font
-vendor/filament/filament/src/Panel/Concerns/HasFont.php:50:    public function font(string | Closure | null $family, string | Closure | null $url = null, string | Closure | null $provider = null, array | Closure | null $preload = null): static
-### color.php 580-700
-     * `$shouldStartFromDarkest` is `true`. Shades outside `[$minShade, $maxShade]` are skipped. Returns `null`
-     * if no shade satisfies the constraints.
-     *
-     * @param  array<int, string>  $palette
-     */
-    public static function findShade(
-        array $palette,
-        string $surface,
-        float $minRatio = self::WCAG_AA_TEXT,
-        ?int $maxShade = null,
-        ?int $minShade = null,
-        bool $shouldStartFromDarkest = false,
-    ): ?int {
-        $shouldStartFromDarkest ? krsort($palette) : ksort($palette);
+### button.css
+.fi-btn {
+    /* `align-middle` keeps the button's placement in inline flow independent of its internal baseline, which shifts when the loading indicator is the first grid item. */
+    @apply relative inline-grid grid-flow-col items-center justify-center gap-1.5 rounded-lg px-3 py-2 align-middle text-sm font-medium transition duration-75 outline-none;
 
-        foreach ($palette as $shade => $value) {
-            if (($maxShade !== null) && ($shade > $maxShade)) {
-                continue;
+    &.fi-force-enabled,
+    &:not(.fi-disabled):not([disabled]) {
+        @apply focus-visible:ring-2;
+    }
+
+    &[aria-pressed]:focus-visible:not([disabled]) {
+        @apply z-1 ring-2 ring-gray-950/10 dark:ring-white/20;
+    }
+
+    &.fi-disabled:not(.fi-force-enabled),
+    &[disabled]:not(.fi-force-enabled) {
+        @apply cursor-default opacity-70;
+
+        &:not([x-tooltip]) {
+            @apply pointer-events-none;
+        }
+    }
+
+    & > .fi-icon {
+        @apply text-gray-400 transition duration-75 dark:text-gray-500;
+    }
+
+    &.fi-size-xs {
+        @apply gap-1 px-2 py-1.5 text-xs;
+    }
+
+    &.fi-size-sm {
+        @apply gap-1 px-2.5 py-1.5 text-sm;
+    }
+
+    &.fi-size-lg {
+        @apply gap-1.5 px-3.5 py-2.5 text-sm;
+    }
+
+    &.fi-size-xl {
+        @apply gap-1.5 px-4 py-3 text-sm;
+    }
+
+    &.fi-outlined {
+        @apply text-gray-950 shadow-sm ring-1 ring-gray-300 dark:text-white dark:ring-gray-700;
+
+        &.fi-force-enabled,
+        &:not(.fi-disabled):not([disabled]) {
+            @apply hover:bg-gray-400/10 focus-visible:ring-gray-400/40;
+        }
+
+        &.fi-color {
+            @apply ring-color-600 dark:ring-color-500 text-(--text) dark:text-(--dark-text);
+
+            &.fi-force-enabled,
+            &:not(.fi-disabled):not([disabled]) {
+                @apply focus-visible:ring-color-500/40 dark:focus-visible:ring-color-400/40 hover:bg-color-500/10 dark:hover:bg-color-600/10;
             }
 
-            if (($minShade !== null) && ($shade < $minShade)) {
-                continue;
+            & > .fi-icon {
+                @apply text-color-600 dark:text-color-400;
             }
+        }
+    }
 
-            if (static::calculateContrastRatio($surface, $value) >= $minRatio) {
-                return $shade;
+    &:not(.fi-outlined) {
+        @apply bg-white text-gray-950 dark:bg-white/5 dark:text-white;
+
+        &.fi-force-enabled,
+        &:not(.fi-disabled):not([disabled]) {
+            @apply hover:bg-gray-50 dark:hover:bg-white/10;
+        }
+
+        input:checked + label&,
+        &[aria-pressed='true'] {
+            @apply bg-gray-400 text-white ring-0 dark:bg-gray-600;
+
+            &.fi-force-enabled,
+            &:not(.fi-disabled):not([disabled]) {
+                @apply hover:bg-gray-300 dark:hover:bg-gray-500;
             }
         }
 
+        &.fi-color {
+            &:not(label):not([aria-pressed]) {
+                @apply bg-(--bg) text-(--text) dark:bg-(--dark-bg) dark:text-(--dark-text);
+
+                &.fi-force-enabled,
+                &:not(.fi-disabled):not([disabled]) {
+                    @apply focus-visible:ring-color-500/50 dark:focus-visible:ring-color-400/50 hover:bg-(--hover-bg) hover:text-(--hover-text) dark:hover:bg-(--dark-hover-bg) dark:hover:text-(--dark-hover-text);
+                }
+
+                & > .fi-icon {
+                    @apply text-(--text) dark:text-(--dark-text);
+                }
+            }
+
+            &:is(label, [aria-pressed]) {
+                input:checked + &,
+                &[aria-pressed='true'] {
+                    @apply bg-(--bg) text-(--text) ring-0 dark:bg-(--dark-bg) dark:text-(--dark-text);
+                }
+
+                &.fi-force-enabled,
+                &:not(.fi-disabled):not([disabled]) {
+                    input:checked + &,
+                    &[aria-pressed='true'] {
+                        @apply hover:bg-(--hover-bg) hover:text-(--hover-text) dark:hover:bg-(--dark-hover-bg) dark:hover:text-(--dark-hover-text);
+                    }
+
+                    input:focus-visible + & {
+                        @apply z-1 ring-2 ring-gray-950/10 dark:ring-white/20;
+                    }
+
+                    input:checked:focus-visible + & {
+                        @apply ring-color-500/50 dark:ring-color-400/50;
+                    }
+                }
+
+                &[aria-pressed='true']:focus-visible:not([disabled]) {
+                    @apply ring-color-500/50 dark:ring-color-400/50 ring-2;
+                }
+            }
+        }
+    }
+
+    &:is(label, [aria-pressed]) {
+        @apply cursor-pointer;
+
+        &
+            > .fi-icon:is(
+                :checked + label > .fi-icon,
+                [aria-pressed='true'] > .fi-icon
+            ) {
+            @apply text-(--text) dark:text-(--dark-text);
+        }
+    }
+
+    &:not(.fi-color),
+    &:is(label, [aria-pressed]) {
+        @apply ring-1 ring-gray-950/10 dark:ring-white/20;
+### isLight usage
+vendor/filament/support/src/Colors/Color.php
+vendor/filament/support/src/View/Components/ColorMaps/ButtonComponentColorMap.php
+vendor/filament/support/src/View/Components/ColorMaps/ComponentColorMap.php
+vendor/filament/support/src/View/Components/IconButtonComponent.php
+vendor/filament/support/src/View/Components/ToggleComponent.php
+### navitems
+vendor/filament/filament/src/FilamentManager.php:355:    public function getNavigationItems(): array
+vendor/filament/filament/src/FilamentManager.php:658:    public function getUrl(?Model $tenant = null): ?string
+vendor/filament/filament/src/Navigation/MenuItem.php:156:    public function getUrl(): ?string
+vendor/filament/filament/src/Navigation/NavigationItem.php:249:    public function getUrl(): ?string
+vendor/filament/filament/src/Navigation/NavigationManager.php:278:    public function getNavigationItems(): array
+vendor/filament/filament/src/Panel/Concerns/HasNavigation.php:148:    public function getNavigationItems(): array
+vendor/filament/filament/src/Panel/Concerns/HasRoutes.php:170:    public function getUrl(?Model $tenant = null): ?string
+vendor/filament/filament/src/Pages/Page.php:94:    public static function getUrl(array $parameters = [], bool $isAbsolute = true, ?string $panel = null, ?Model $tenant = null, bool $shouldGuessMissingParameters = false, ?string $configuration = null): string
+vendor/filament/filament/src/Pages/Page.php:148:    public static function getNavigationItems(): array
+vendor/filament/filament/src/Resources/Resource/Concerns/HasNavigation.php:61:    public static function getNavigationItems(): array
+### create body
+     */
+    public bool $isCreating = false;
+
+    public function getBreadcrumb(): string
+    {
+        return static::$breadcrumb ?? __('filament-panels::resources/pages/create-record.breadcrumb');
+    }
+
+    public function mount(): void
+    {
+        $this->authorizeAccess();
+
+        $this->fillForm();
+
+        $this->previousUrl = url()->previous();
+    }
+
+    protected function authorizeAccess(): void
+    {
+        abort_unless(static::getResource()::canCreate(), 403);
+    }
+
+    public function hydrate(): void
+    {
+        $this->authorizeAccess();
+    }
+
+    protected function fillForm(): void
+    {
+        $this->callHook('beforeFill');
+
+        $this->form->fill();
+
+        $this->callHook('afterFill');
+    }
+
+    public function create(bool $another = false): void
+    {
+        if ($this->isCreating) {
+            return;
+        }
+
+        $this->isCreating = true;
+
+        $this->authorizeAccess();
+
+        if ($another) {
+            $preserveRawState = $this->preserveFormDataWhenCreatingAnother($this->form->getRawState());
+        }
+
+        try {
+            $this->beginDatabaseTransaction();
+
+            $this->callHook('beforeValidate');
+
+            $data = $this->form->getState();
+
+            $this->callHook('afterValidate');
+
+            $data = $this->mutateFormDataBeforeCreate($data);
+
+            $this->callHook('beforeCreate');
+
+            $this->record = $this->handleRecordCreation($data);
+
+            $this->form->model($this->getRecord())->saveRelationships();
+
+            $this->callHook('afterCreate');
+            Event::dispatch(RecordCreated::class, ['record' => $this->record, 'data' => $data, 'page' => $this]);
+            Event::dispatch(RecordSaved::class, ['record' => $this->record, 'data' => $data, 'page' => $this]);
+        } catch (Halt $exception) {
+            $exception->shouldRollbackDatabaseTransaction() ?
+                $this->rollBackDatabaseTransaction() :
+                $this->commitDatabaseTransaction();
+
+            $this->isCreating = false;
+
+            return;
+        } catch (Throwable $exception) {
+            $this->rollBackDatabaseTransaction();
+    }
+
+    public function getTitle(): string | Htmlable
+    {
+        if (filled(static::$title)) {
+            return static::$title;
+        }
+
+        return __('filament-panels::resources/pages/create-record.title', [
+            'label' => static::getResource()::getTitleCaseModelLabel(),
+        ]);
+    }
+
+    public function defaultForm(Schema $schema): Schema
+    {
+        if (! $schema->hasCustomColumns()) {
+            $schema->columns($this->hasInlineLabels() ? 1 : 2);
+        }
+
+        return $schema
+            ->inlineLabel($this->hasInlineLabels())
+            ->model($this->getModel())
+            ->operation('create')
+            ->statePath('data');
+    }
+
+    public function form(Schema $schema): Schema
+    {
+        return static::getResource()::form($schema);
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        $resource = static::getResource();
+
+        if (
+### edit body
+    }
+
+    public function mount(int | string $record): void
+    {
+        $this->record = $this->resolveRecord($record);
+
+        $this->authorizeAccess();
+
+        $this->fillForm();
+
+        $this->previousUrl = url()->previous();
+    }
+
+    protected function authorizeAccess(): void
+    {
+        abort_unless(static::getResource()::canEdit($this->getRecord()), 403);
+    }
+
+    public function hydrate(): void
+    {
+        $this->authorizeAccess();
+    }
+
+    protected function fillForm(): void
+    {
+        /** @internal Read the DocBlock above the following method. */
+        $this->fillFormWithDataAndCallHooks($this->getRecord());
+    }
+
+    /**
+     * @internal Never override or call this method. If you completely override `fillForm()`, copy the contents of this method into your override.
+     *
+     * @param  array<string, mixed>  $extraData
+     */
+    protected function fillFormWithDataAndCallHooks(Model $record, array $extraData = []): void
+    {
+        $this->callHook('beforeFill');
+
+        $data = $this->mutateFormDataBeforeFill([
+            ...$record->attributesToArray(),
+            ...$extraData,
+        ]);
+
+        $this->form->fill($data);
+
+        $this->callHook('afterFill');
+    }
+
+    /**
+     * @param  array<string>  $statePaths
+     */
+
+        return $data;
+    }
+
+    public function save(bool $shouldRedirect = true, bool $shouldSendSavedNotification = true): void
+    {
+        $this->authorizeAccess();
+
+        try {
+            $this->beginDatabaseTransaction();
+
+            $this->callHook('beforeValidate');
+
+            $data = $this->form->getState(afterValidate: function (): void {
+                $this->callHook('afterValidate');
+
+                $this->callHook('beforeSave');
+            });
+
+            $data = $this->mutateFormDataBeforeSave($data);
+
+            $this->handleRecordUpdate($this->getRecord(), $data);
+
+            $this->callHook('afterSave');
+            Event::dispatch(RecordUpdated::class, ['record' => $this->record, 'data' => $data, 'page' => $this]);
+            Event::dispatch(RecordSaved::class, ['record' => $this->record, 'data' => $data, 'page' => $this]);
+        } catch (Halt $exception) {
+            $exception->shouldRollbackDatabaseTransaction() ?
+                $this->rollBackDatabaseTransaction() :
+                $this->commitDatabaseTransaction();
+
+            return;
+        } catch (Throwable $exception) {
+            $this->rollBackDatabaseTransaction();
+
+            throw $exception;
+        }
+
+        $this->commitDatabaseTransaction();
+
+        $this->rememberData();
+
+        if ($shouldSendSavedNotification) {
+            $this->getSavedNotification()?->send();
+        }
+
+        if ($shouldRedirect && ($redirectUrl = $this->getRedirectUrl())) {
+            $this->redirect($redirectUrl, navigate: FilamentView::hasSpaMode($redirectUrl));
+        }
+    }
+
+            )
+            ->color('gray');
+    }
+
+    public function defaultForm(Schema $schema): Schema
+    {
+        if (! $schema->hasCustomColumns()) {
+            $schema->columns($this->hasInlineLabels() ? 1 : 2);
+        }
+
+        return $schema
+            ->inlineLabel($this->hasInlineLabels())
+            ->model($this->getRecord())
+            ->operation('edit')
+            ->statePath('data');
+    }
+
+    public function form(Schema $schema): Schema
+    {
+        return static::getResource()::form($schema);
+    }
+
+    public function getContentTabComponent(): Tab
+### list
+    public ?string $activeTab = null;
+
+    public function mount(): void
+    {
+        $this->authorizeAccess();
+
+        $this->loadDefaultActiveTab();
+    }
+
+    protected function authorizeAccess(): void {}
+
+    public function getBreadcrumb(): ?string
+    {
+        return static::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb');
+    }
+
+    public function table(Table $table): Table
+    {
+        return $table;
+    }
+
+    public function getTitle(): string | Htmlable
+    {
+        return static::$title ?? static::getResource()::getTitleCasePluralModelLabel();
+    }
+
+    public function form(Schema $schema): Schema
+    {
+        return static::getResource()::form($schema);
+    }
+
+    public function infolist(Schema $schema): Schema
+    {
+        return static::getResource()::infolist($schema);
+    }
+
+    public function getDefaultActionSchemaResolver(Action $action): ?Closure
+    {
+        return match (true) {
+            $action instanceof CreateAction, $action instanceof EditAction => fn (Schema $schema): Schema => $this->form($schema->hasCustomColumns() ? $schema : $schema->columns(2)),
+            $action instanceof ViewAction => fn (Schema $schema): Schema => $this->infolist($this->form($schema->hasCustomColumns() ? $schema : $schema->columns(2))),
+            default => null,
+        };
+    }
+
+    /**
+     * @return Model|class-string<Model>|null
+     */
+    protected function getMountedActionSchemaModel(): Model | string | null
+    {
+        return $this->getModel();
+    }
+
+    /**
+     * @deprecated Override the `table()` method to configure the table.
+     */
+    public function getPluralModelLabel(): ?string
+    {
         return null;
     }
 
-    /**
-     * @return array<int, string>
-     */
-    public static function generateV3Palette(string $color): array
+    protected function makeTable(): Table
     {
-        $color = str_replace(' ', '', static::convertToRgb($color));
-        [$baseRed, $baseGreen, $baseBlue] = sscanf($color, 'rgb(%d,%d,%d)');
+        $table = $this->makeBaseTable()
+            ->query(fn (): Builder => $this->getTableQuery())
+            ->when(
+                $this->getParentRecord(),
+                fn (Table $table, Model $parentRecord): Table => $table->modifyQueryUsing(
+                    fn (Builder $query) => static::getResource()::scopeEloquentQueryToParent($query, $parentRecord),
+                ),
+            )
+            ->modifyQueryUsing($this->modifyQueryWithActiveTab(...))
+            ->when($this->getModelLabel(), fn (Table $table, string $modelLabel): Table => $table->modelLabel($modelLabel))
+            ->when($this->getPluralModelLabel(), fn (Table $table, string $pluralModelLabel): Table => $table->pluralModelLabel($pluralModelLabel))
+            ->recordAction(function (Model $record, Table $table): ?string {
+                foreach (['view', 'edit'] as $action) {
+                    $action = $table->getAction($action);
 
-        $colors = [];
-
-        $intensityMap = [
-            50 => 0.95,
-            100 => 0.9,
-            200 => 0.75,
-            300 => 0.6,
-            400 => 0.3,
-            500 => 1.0,
-            600 => 0.9,
-            700 => 0.75,
-            800 => 0.6,
-            900 => 0.49,
-            950 => 0.3,
-        ];
-
-        foreach ($intensityMap as $shade => $intensity) {
-            if ($shade < 500) {
-                $red = ((255 - $baseRed) * $intensity) + $baseRed;
-                $green = ((255 - $baseGreen) * $intensity) + $baseGreen;
-                $blue = ((255 - $baseBlue) * $intensity) + $baseBlue;
-            } else {
-                $red = $baseRed * $intensity;
-                $green = $baseGreen * $intensity;
-                $blue = $baseBlue * $intensity;
-            }
-
-            $colors[$shade] = static::convertToOklch(sprintf('%s, %s, %s', round($red), round($green), round($blue)));
-        }
-
-        return $colors;
+                    if (! $action) {
+                        continue;
+                    }
+        return $table;
     }
 
     /**
-     * @return array<int, string>
+     * @deprecated Override the `table()` method to configure the table.
      */
-    public static function hex(string $color): array
+    protected function getTableQuery(): Builder | Relation | null
     {
-        return static::generatePalette($color);
+        return static::getResource()::getEloquentQuery();
     }
 
     /**
-     * @return array<int, string>
+     * @return array<NavigationItem | NavigationGroup>
      */
-    public static function rgb(string $color): array
+    public function getSubNavigation(): array
     {
-        return static::generatePalette($color);
-    }
-
-    /**
-     * @return array<int, string>
-     */
-    public static function generatePalette(string $color): array
-    {
-        $color = static::convertToOklch($color);
-
-        [, $chroma, $hue] = sscanf($color, 'oklch(%f %f %f)');
-
-        $isAchromatic = $chroma < 0.03;
-
-        return array_map(
-            fn (array $constants): string => "oklch({$constants[0]} " . ($isAchromatic ? '0' : $constants[1]) . " {$hue})",
-            [
-                50 => [0.97717647058824, 0.01395454545455],
-                100 => [0.95035294117647, 0.03272727272727],
-                200 => [0.90547058823529, 0.06318181818182],
-                300 => [0.84047058823529, 0.10604545454546],
-                400 => [0.75352941176471, 0.15027272727273],
-                500 => [0.68270588235294, 0.17009090909091],
-                600 => [0.59782352941176, 0.16913636363636],
-                700 => [0.51494117647059, 0.14940909090909],
-                800 => [0.44611764705882, 0.12331818181818],
-                900 => [0.39458823529412, 0.09963636363636],
-                950 => [0.27788235294118, 0.07136363636364],
-            ],
-        );
-    }
-
-    /**
-     * @return array<string, array<int, string>>
-     */
-    public static function all(): array
-    {
-        return [
-            'slate' => static::Slate,
-            'gray' => static::Gray,
-### css
-vendor/filament/support/resources/css:
-base.css
-components
-index.css
-sortable.css
-utilities.css
-
-vendor/filament/support/resources/css/components:
-avatar.css
-badge.css
-breadcrumbs.css
-button.css
-callout.css
-dropdown
-empty-state.css
-fieldset.css
-grid.css
-icon-button.css
-icon.css
-input
-link.css
-loading-indicator.css
-loading-section.css
-modal.css
-pagination.css
-section.css
-tabs.css
-toggle.css
-tooltip.css
-vendor/filament/filament/resources/css/components/page.css
-vendor/filament/forms/resources/css/components/file-upload.css
-vendor/filament/forms/resources/css/components/toggle-buttons.css
-vendor/filament/support/resources/css/components/section.css
-vendor/filament/support/resources/css/components/input/wrapper.css
-vendor/filament/support/resources/css/components/button.css
-vendor/filament/support/resources/css/components/icon-button.css
-vendor/filament/tables/resources/css/container.css
-vendor/filament/tables/resources/css/actions.css
-### Resource fns
-vendor/filament/filament/src/Resources/Resource.php:58:    public static function form(Schema $schema): Schema
-vendor/filament/filament/src/Resources/Resource.php:68:    public static function table(Table $table): Table
-vendor/filament/filament/src/Resources/Resource.php:88:    public static function getEloquentQuery(): Builder
-vendor/filament/filament/src/Resources/Concerns/InteractsWithRelationshipTable.php:83:    public function form(Schema $schema): Schema
-vendor/filament/filament/src/Resources/Concerns/InteractsWithRelationshipTable.php:354:    protected function canCreate(): bool
-### createrecord
-59:    public function getBreadcrumb(): string
-64:    public function mount(): void
-73:    protected function authorizeAccess(): void
-78:    public function hydrate(): void
-83:    protected function fillForm(): void
-92:    public function create(bool $another = false): void
-179:    protected function preserveFormDataWhenCreatingAnother(array $data): array
-184:    protected function getCreatedNotification(): ?Notification
-197:    protected function getCreatedNotificationTitle(): ?string
-205:    protected function getCreatedNotificationMessage(): ?string
-210:    public function createAnother(): void
-219:    protected function handleRecordCreation(array $data): Model
-232:    protected function associateRecordWithParent(Model $record, Model $parent): Model
-241:    protected function mutateFormDataBeforeCreate(array $data): array
-249:    protected function getFormActions(): array
-258:    protected function getCreateFormAction(): Action
-269:    protected function getSubmitFormAction(): Action
-274:    protected function getSubmitFormLivewireMethodName(): string
-279:    protected function getCreateAnotherFormAction(): Action
-288:    protected function getCancelFormAction(): Action
-302:    public function getTitle(): string | Htmlable
-313:    public function defaultForm(Schema $schema): Schema
-326:    public function form(Schema $schema): Schema
-331:    protected function getRedirectUrl(): string
-360:    protected function getRedirectUrlParameters(): array
-368:    protected function getMountedActionSchemaModel(): Model | string | null
-373:    public function canCreateAnother(): bool
-378:    public static function disableCreateAnother(): void
-386:    public function getRecord(): ?Model
-391:    public function content(Schema $schema): Schema
-399:    public function getFormContentComponent(): Component
-416:    public function getFormActionsContentComponent(): Component
-425:    public function hasFormWrapper(): bool
-433:    public function getPageClasses(): array
-441:    protected function hasFullWidthFormActions(): bool
-### edit
-61:    public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
-68:    public function getBreadcrumb(): string
-73:    public static function getNavigationLabel(): string | Htmlable
-82:    public function getContentTabLabel(): ?string
-87:    public function mount(int | string $record): void
-98:    protected function authorizeAccess(): void
-103:    public function hydrate(): void
-108:    protected function fillForm(): void
-119:    protected function fillFormWithDataAndCallHooks(Model $record, array $extraData = []): void
-136:    public function refreshFormData(array $statePaths): void
-148:    protected function mutateFormDataBeforeFill(array $data): array
-159:    public function save(bool $shouldRedirect = true, bool $shouldSendSavedNotification = true): void
-168:            $data = $this->form->getState(afterValidate: function (): void {
-206:    public function saveFormComponentOnly(Component $component): void
-252:    protected function getSavedNotification(): ?Notification
-265:    protected function getSavedNotificationTitle(): ?string
-273:    protected function getSavedNotificationMessage(): ?string
-281:    protected function handleRecordUpdate(Model $record, array $data): Model
-292:    protected function mutateFormDataBeforeSave(array $data): array
-297:    public function getDefaultActionSchemaResolver(Action $action): ?Closure
-307:    public function getTitle(): string | Htmlable
-321:    protected function getFormActions(): array
-329:    protected function getSaveFormAction(): Action
-340:    protected function getSubmitFormAction(): Action
-345:    protected function getSubmitFormLivewireMethodName(): string
-350:    protected function getCancelFormAction(): Action
-364:    public function defaultForm(Schema $schema): Schema
-377:    public function form(Schema $schema): Schema
-382:    public function getContentTabComponent(): Tab
-390:    protected function getRedirectUrl(): ?string
-420:    protected function getRedirectUrlParameters(): array
-425:    public static function shouldRegisterNavigation(array $parameters = []): bool
-430:    public function content(Schema $schema): Schema
-446:    public function getFormContentComponent(): Component
-463:    public function getFormActionsContentComponent(): Component
-472:    public function hasFormWrapper(): bool
-480:    public function getPageClasses(): array
-489:    protected function hasFullWidthFormActions(): bool
-497:    public function getRecord(): Model
-### list
-57:    public function mount(): void
-64:    protected function authorizeAccess(): void {}
-66:    public function getBreadcrumb(): ?string
-71:    public function table(Table $table): Table
-76:    public function getTitle(): string | Htmlable
-81:    public function form(Schema $schema): Schema
-86:    public function infolist(Schema $schema): Schema
-91:    public function getDefaultActionSchemaResolver(Action $action): ?Closure
-103:    protected function getMountedActionSchemaModel(): Model | string | null
-111:    public function getPluralModelLabel(): ?string
-116:    protected function makeTable(): Table
-129:            ->recordAction(function (Model $record, Table $table): ?string {
-162:            $table->recordUrl(function (Model $record, Table $table): ?string {
-221:    protected function getTableQuery(): Builder | Relation | null
-229:    public function getSubNavigation(): array
-238:    public function content(Schema $schema): Schema
-252:    public function getPageClasses(): array
-### spatie upload
-<?php
-
-namespace Filament\Forms\Components;
-
-use Closure;
-use Filament\Support\Concerns\HasMediaFilter;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use League\Flysystem\UnableToCheckFileExistence;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\MediaCollections\FileAdder;
-use Spatie\MediaLibrary\MediaCollections\MediaCollection;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Throwable;
-
-class SpatieMediaLibraryFileUpload extends FileUpload
-{
-    use HasMediaFilter;
-
-    protected string | Closure | null $collection = null;
-
-    protected string | Closure | null $conversion = null;
-
-    protected string | Closure | null $conversionsDisk = null;
-
-    protected bool | Closure $hasResponsiveImages = false;
-
-    protected string | Closure | null $mediaName = null;
-
-    /**
-     * @var array<string, mixed> | Closure | null
-     */
-    protected array | Closure | null $customHeaders = null;
-
-    /**
-     * @var array<string, mixed> | Closure | null
-     */
-    protected array | Closure | null $customProperties = null;
-
-    /**
-     * @var array<string, array<string, string>> | Closure | null
-     */
-    protected array | Closure | null $manipulations = null;
-
-    /**
-     * @var array<string, mixed> | Closure | null
-     */
-    protected array | Closure | null $properties = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->preventFilePathTampering(false);
-
-        $this->loadStateFromRelationshipsUsing(static function (SpatieMediaLibraryFileUpload $component, HasMedia $record): void {
-            /** @var Model&HasMedia $record */
-            $media = $record->load('media')->getMedia($component->getCollection() ?? 'default')
-                ->when(
-                    $component->hasMediaFilter(),
-                    fn (Collection $media) => $component->filterMedia($media)
-                )
-                ->when(
-                    ! $component->isMultiple(),
-                    fn (Collection $media): Collection => $media->take(1),
-                )
-                ->mapWithKeys(function (Media $media): array {
-                    $uuid = $media->getAttributeValue('uuid');
-
-                    return [$uuid => $uuid];
-                })
-                ->toArray();
-
-            $component->rawState($media);
-        });
-
-        $this->afterStateHydrated(null);
-
-        $this->beforeStateDehydrated(null);
-
-        $this->dehydrated(false);
-
-        $this->getUploadedFileUsing(static function (SpatieMediaLibraryFileUpload $component, string $file): ?array {
-            if (! $component->getRecord()) {
-                return null;
-            }
-
-            /** @var ?Media $media */
-### navitem
-56:    final public function __construct(string | Htmlable | Closure | null $label = null)
-63:    public static function make(string | Htmlable | Closure | null $label = null): static
-71:    public function key(string | Closure | null $key): static
-81:    public function badge(string | Closure | null $badge, string | array | Closure | null $color = null): static
-89:    public function group(string | UnitEnum | Closure | null $group): static
-96:    public function parentItem(string | Closure | null $group): static
-103:    public function icon(string | BackedEnum | Htmlable | Closure | null $icon): static
-110:    public function visible(bool | Closure $condition = true): static
-117:    public function hidden(bool | Closure $condition = true): static
-124:    public function activeIcon(string | BackedEnum | Htmlable | Closure | null $activeIcon): static
-131:    public function isActiveWhen(?Closure $callback): static
-138:    public function label(string | Htmlable | Closure $label): static
-145:    public function openUrlInNewTab(bool | Closure $condition = true): static
-152:    public function sort(int | Closure | null $sort): static
-159:    public function url(string | Closure | null $url, bool | Closure | null $shouldOpenInNewTab = null): static
-174:    public function getKey(): string
-181:    public function getBadge(): ?string
-189:    public function getBadgeColor(?string $badge = null): string | array | null
-196:    public function getGroup(): string | UnitEnum | null
-201:    public function getParentItem(): ?string
-206:    public function getIcon(): string | BackedEnum | Htmlable | null
-220:    public function isVisible(): bool
-225:    public function isHidden(): bool
-234:    public function getActiveIcon(): string | BackedEnum | Htmlable | null
-239:    public function getLabel(): string | Htmlable
-244:    public function getSort(): int
-249:    public function getUrl(): ?string
-254:    public function isActive(): bool
-263:    public function isChildItemsActive(): bool
-274:    public function shouldOpenUrlInNewTab(): bool
-282:    public function childItems(array | Arrayable $items): static
-292:    public function getChildItems(): array | Arrayable
+### Resource.getNavigationItems
+vendor/filament/filament/src/FilamentManager.php:355:    public function getNavigationItems(): array
+vendor/filament/filament/src/FilamentManager.php:357:        return $this->getCurrentOrDefaultPanel()->getNavigationItems();
+vendor/filament/filament/src/Navigation/NavigationManager.php:41:            $this->panel->getNavigationItems(),
+vendor/filament/filament/src/Navigation/NavigationManager.php:60:        return collect($this->getNavigationItems())
+vendor/filament/filament/src/Navigation/NavigationManager.php:278:    public function getNavigationItems(): array
+vendor/filament/filament/src/Panel/Concerns/HasNavigation.php:148:    public function getNavigationItems(): array
+vendor/filament/filament/src/Pages/Concerns/HasSubNavigation.php:191:                $component::getNavigationItems($parameters) :
+vendor/filament/filament/src/Pages/Concerns/HasSubNavigation.php:192:                $component::getNavigationItems();
+vendor/filament/filament/src/Pages/Page.php:142:            ->navigationItems(static::getNavigationItems());
+vendor/filament/filament/src/Pages/Page.php:148:    public static function getNavigationItems(): array
+### routes
+194:    public static function route(string $path): PageRegistration
+195-    {
+196-        return new PageRegistration(
+197-            page: static::class,
+198-            route: fn (Panel $panel): Route => RouteFacade::get($path, static::class)
+199-                ->middleware(static::getRouteMiddleware($panel))
+200-                ->withoutMiddleware(static::getWithoutRouteMiddleware($panel)),
+201-        );
+202-    }
+203-
+204-    public static function getEmailVerifiedMiddleware(Panel $panel): string
+205-    {
+206-        return static::getResource()::getEmailVerifiedMiddleware($panel);
 exit=0
