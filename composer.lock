@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0bc4314122b9da04135840b3d1f6166c",
+    "content-hash": "a1a1d94c5d5e9dad34ef1b5a1d0406d2",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -1781,11 +1781,11 @@
         },
         {
             "name": "gllhub/contracts",
-            "version": "dev-run/deps",
+            "version": "1.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "contracts",
-                "reference": "06e466dcd9102666d474b12d3abfb6d00db262d3"
+                "reference": "896ba6d6e347756a5f32dccd41464172c8af1c70"
             },
             "require": {
                 "php": "^8.3",
