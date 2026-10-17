@@ -1,549 +1,397 @@
-Installing dependencies from lock file (including require-dev)
-Verifying lock file contents can be installed on current platform.
-Package operations: 160 installs, 0 updates, 0 removals
-  - Downloading wikimedia/composer-merge-plugin (v2.1.0)
-  - Downloading voku/portable-ascii (2.1.1)
-  - Downloading symfony/polyfill-php80 (v1.43.0)
-  - Downloading symfony/polyfill-mbstring (v1.43.0)
-  - Downloading symfony/polyfill-ctype (v1.37.0)
-  - Downloading phpoption/phpoption (1.10.0)
-  - Downloading graham-campbell/result-type (v1.2.0)
-  - Downloading vlucas/phpdotenv (v5.7.0)
-  - Downloading symfony/css-selector (v8.1.6)
-  - Downloading tijsverkoyen/css-to-inline-styles (v2.4.0)
-  - Downloading symfony/deprecation-contracts (v3.7.1)
-  - Downloading symfony/var-dumper (v7.4.21)
-  - Downloading symfony/polyfill-uuid (v1.43.0)
-  - Downloading symfony/uid (v7.4.21)
-  - Downloading symfony/routing (v7.4.21)
-  - Downloading symfony/process (v7.4.21)
-  - Downloading symfony/polyfill-php85 (v1.43.0)
-  - Downloading symfony/polyfill-php84 (v1.43.0)
-  - Downloading symfony/polyfill-php83 (v1.43.0)
-  - Downloading symfony/polyfill-intl-normalizer (v1.43.0)
-  - Downloading symfony/polyfill-intl-idn (v1.43.0)
-  - Downloading symfony/mime (v7.4.19)
-  - Downloading psr/container (2.0.2)
-  - Downloading symfony/service-contracts (v3.7.3)
-  - Downloading psr/event-dispatcher (1.0.0)
-  - Downloading symfony/event-dispatcher-contracts (v3.7.1)
-  - Downloading symfony/event-dispatcher (v8.1.5)
-  - Downloading psr/log (3.0.2)
-  - Downloading doctrine/lexer (3.0.3)
-  - Downloading egulias/email-validator (4.0.4)
-  - Downloading symfony/mailer (v7.4.19)
-  - Downloading symfony/http-foundation (v7.4.21)
-  - Downloading symfony/error-handler (v7.4.20)
-  - Downloading symfony/http-kernel (v7.4.21)
-  - Downloading symfony/finder (v7.4.20)
-  - Downloading symfony/polyfill-intl-grapheme (v1.43.0)
-  - Downloading symfony/string (v8.1.9)
-  - Downloading symfony/console (v7.4.21)
-  - Downloading ramsey/collection (2.1.1)
-  - Downloading brick/math (0.14.8)
-  - Downloading ramsey/uuid (4.9.4)
-  - Downloading psr/simple-cache (3.0.0)
-  - Downloading nunomaduro/termwind (v2.4.0)
-  - Downloading symfony/translation-contracts (v3.7.1)
-  - Downloading symfony/translation (v8.1.5)
-  - Downloading psr/clock (1.0.0)
-  - Downloading symfony/clock (v8.1.9)
-  - Downloading carbonphp/carbon-doctrine-types (3.2.1)
-  - Downloading nesbot/carbon (3.14.2)
-  - Downloading monolog/monolog (3.12.1)
-  - Downloading psr/http-message (2.0)
-  - Downloading psr/http-factory (1.1.0)
-  - Downloading league/uri-interfaces (7.9.0)
-  - Downloading league/uri (7.9.0)
-  - Downloading league/mime-type-detection (1.17.0)
-  - Downloading league/flysystem-local (3.35.3)
-  - Downloading league/flysystem (3.36.0)
-  - Downloading nette/utils (v4.1.5)
-  - Downloading nette/schema (v1.3.6)
-  - Downloading dflydev/dot-access-data (v3.0.3)
-  - Downloading league/config (v1.2.0)
-  - Downloading league/commonmark (2.10.3)
-  - Downloading laravel/serializable-closure (v2.1.0)
-  - Downloading laravel/prompts (v0.3.26)
-  - Downloading guzzlehttp/uri-template (v1.0.11)
-  - Downloading psr/http-client (1.0.3)
-  - Downloading ralouphie/getallheaders (3.0.3)
-  - Downloading guzzlehttp/psr7 (2.13.1)
-  - Downloading guzzlehttp/promises (2.5.3)
-  - Downloading guzzlehttp/guzzle (7.15.5)
-  - Downloading fruitcake/php-cors (v1.4.0)
-  - Downloading dragonmantank/cron-expression (v3.6.0)
-  - Downloading doctrine/inflector (2.1.0)
-  - Downloading laravel/framework (v12.70.0)
-  - Downloading anourvalar/eloquent-serialize (1.3.12)
-  - Downloading blade-ui-kit/blade-icons (1.10.1)
-  - Downloading blade-ui-kit/blade-heroicons (2.7.0)
-  - Downloading chillerlan/php-settings-container (3.3.0)
-  - Downloading composer/pcre (3.4.0)
-  - Downloading composer/class-map-generator (1.8.0)
-  - Downloading danharrin/date-format-converter (v0.3.1)
-  - Downloading danharrin/livewire-rate-limiting (v2.3.0)
-  - Downloading fakerphp/faker (v1.24.1)
-  - Downloading paragonie/constant_time_encoding (v3.1.3)
-  - Downloading pragmarx/google2fa (v9.1.0)
-  - Downloading pragmarx/google2fa-qrcode (v4.0.0)
-  - Downloading symfony/html-sanitizer (v8.1.8)
-  - Downloading spatie/laravel-package-tools (1.93.3)
-  - Downloading spatie/invade (2.1.1)
-  - Downloading ryangjchandler/blade-capture-directive (v1.1.1)
-  - Downloading nette/php-generator (v4.2.2)
-  - Downloading livewire/livewire (v3.8.10)
-  - Downloading league/uri-components (7.9.0)
-  - Downloading kirschbaum-development/eloquent-power-joins (4.3.5)
-  - Downloading filament/support (v4.15.2)
-  - Downloading openspout/openspout (v4.32.0)
-  - Downloading league/csv (9.28.0)
-  - Downloading filament/actions (v4.15.2)
-  - Downloading filament/notifications (v4.15.2)
-  - Downloading filament/schemas (v4.15.2)
-  - Downloading filament/infolists (v4.15.2)
-  - Downloading spatie/shiki-php (2.4.0)
-  - Downloading scrivo/highlight.php (v9.18.1.10)
-  - Downloading ueberdosis/tiptap-php (2.2.0)
-  - Downloading filament/forms (v4.15.2)
-  - Downloading filament/widgets (v4.15.2)
-  - Downloading filament/query-builder (v4.15.2)
-  - Downloading filament/tables (v4.15.2)
-  - Downloading chillerlan/php-qrcode (5.0.5)
-  - Downloading filament/filament (v4.15.2)
-  - Downloading laravel/sentinel (v1.1.0)
-  - Downloading laravel/horizon (v5.50.1)
-  - Downloading laravel/pail (v1.2.7)
-  - Downloading laravel/pint (v1.32.1)
-  - Downloading symfony/yaml (v8.1.9)
-  - Downloading laravel/sail (v1.69.0)
-  - Downloading laravel/sanctum (v4.3.3)
-  - Downloading nikic/php-parser (v5.9.0)
-  - Downloading psy/psysh (v0.12.24)
-  - Downloading laravel/tinker (v2.11.1)
-  - Downloading hamcrest/hamcrest-php (v3.0.0)
-  - Downloading mockery/mockery (1.6.15)
-  - Downloading filp/whoops (2.18.6)
-  - Downloading nunomaduro/collision (v8.9.5)
-  - Downloading staabm/side-effects-detector (1.0.5)
-  - Downloading sebastian/version (5.0.2)
-  - Downloading sebastian/type (5.1.3)
-  - Downloading sebastian/recursion-context (6.0.3)
-  - Downloading sebastian/object-reflector (4.0.1)
-  - Downloading sebastian/object-enumerator (6.0.1)
-  - Downloading sebastian/global-state (7.0.2)
-  - Downloading sebastian/exporter (6.3.2)
-  - Downloading sebastian/environment (7.2.1)
-  - Downloading sebastian/diff (6.0.2)
-  - Downloading sebastian/comparator (6.3.3)
-  - Downloading sebastian/code-unit (3.0.3)
-  - Downloading sebastian/cli-parser (3.0.2)
-  - Downloading phpunit/php-timer (7.0.1)
-  - Downloading phpunit/php-text-template (4.0.1)
-  - Downloading phpunit/php-invoker (5.0.1)
-  - Downloading phpunit/php-file-iterator (5.1.1)
-  - Downloading theseer/tokenizer (1.3.1)
-  - Downloading sebastian/lines-of-code (3.0.1)
-  - Downloading sebastian/complexity (4.0.1)
-  - Downloading sebastian/code-unit-reverse-lookup (4.0.1)
-  - Downloading phpunit/php-code-coverage (11.0.12)
-  - Downloading phar-io/version (3.2.1)
-  - Downloading phar-io/manifest (2.0.4)
-  - Downloading myclabs/deep-copy (1.14.0)
-  - Downloading phpunit/phpunit (11.5.57)
-  - Downloading spatie/image-optimizer (1.10.0)
-  - Downloading spatie/temporary-directory (2.4.0)
-  - Downloading spatie/laravel-signal-aware-command (2.1.2)
-  - Downloading spatie/db-dumper (3.8.3)
-  - Downloading spatie/laravel-backup (9.4.1)
-  - Downloading spatie/image (3.9.7)
-  - Downloading maennchen/zipstream-php (3.2.2)
-  - Downloading composer/semver (3.5.1)
-  - Downloading spatie/laravel-medialibrary (11.23.9)
-  - Installing wikimedia/composer-merge-plugin (v2.1.0): Extracting archive
-  - Installing voku/portable-ascii (2.1.1): Extracting archive
-  - Installing symfony/polyfill-php80 (v1.43.0): Extracting archive
-  - Installing symfony/polyfill-mbstring (v1.43.0): Extracting archive
-  - Installing symfony/polyfill-ctype (v1.37.0): Extracting archive
-  - Installing phpoption/phpoption (1.10.0): Extracting archive
-  - Installing graham-campbell/result-type (v1.2.0): Extracting archive
-  - Installing vlucas/phpdotenv (v5.7.0): Extracting archive
-  - Installing symfony/css-selector (v8.1.6): Extracting archive
-  - Installing tijsverkoyen/css-to-inline-styles (v2.4.0): Extracting archive
-  - Installing symfony/deprecation-contracts (v3.7.1): Extracting archive
-  - Installing symfony/var-dumper (v7.4.21): Extracting archive
-  - Installing symfony/polyfill-uuid (v1.43.0): Extracting archive
-  - Installing symfony/uid (v7.4.21): Extracting archive
-  - Installing symfony/routing (v7.4.21): Extracting archive
-  - Installing symfony/process (v7.4.21): Extracting archive
-  - Installing symfony/polyfill-php85 (v1.43.0): Extracting archive
-  - Installing symfony/polyfill-php84 (v1.43.0): Extracting archive
-  - Installing symfony/polyfill-php83 (v1.43.0): Extracting archive
-  - Installing symfony/polyfill-intl-normalizer (v1.43.0): Extracting archive
-  - Installing symfony/polyfill-intl-idn (v1.43.0): Extracting archive
-  - Installing symfony/mime (v7.4.19): Extracting archive
-  - Installing psr/container (2.0.2): Extracting archive
-  - Installing symfony/service-contracts (v3.7.3): Extracting archive
-  - Installing psr/event-dispatcher (1.0.0): Extracting archive
-  - Installing symfony/event-dispatcher-contracts (v3.7.1): Extracting archive
-  - Installing symfony/event-dispatcher (v8.1.5): Extracting archive
-  - Installing psr/log (3.0.2): Extracting archive
-  - Installing doctrine/lexer (3.0.3): Extracting archive
-  - Installing egulias/email-validator (4.0.4): Extracting archive
-  - Installing symfony/mailer (v7.4.19): Extracting archive
-  - Installing symfony/http-foundation (v7.4.21): Extracting archive
-  - Installing symfony/error-handler (v7.4.20): Extracting archive
-  - Installing symfony/http-kernel (v7.4.21): Extracting archive
-  - Installing symfony/finder (v7.4.20): Extracting archive
-  - Installing symfony/polyfill-intl-grapheme (v1.43.0): Extracting archive
-  - Installing symfony/string (v8.1.9): Extracting archive
-  - Installing symfony/console (v7.4.21): Extracting archive
-  - Installing ramsey/collection (2.1.1): Extracting archive
-  - Installing brick/math (0.14.8): Extracting archive
-  - Installing ramsey/uuid (4.9.4): Extracting archive
-  - Installing psr/simple-cache (3.0.0): Extracting archive
-  - Installing nunomaduro/termwind (v2.4.0): Extracting archive
-  - Installing symfony/translation-contracts (v3.7.1): Extracting archive
-  - Installing symfony/translation (v8.1.5): Extracting archive
-  - Installing psr/clock (1.0.0): Extracting archive
-  - Installing symfony/clock (v8.1.9): Extracting archive
-  - Installing carbonphp/carbon-doctrine-types (3.2.1): Extracting archive
-  - Installing nesbot/carbon (3.14.2): Extracting archive
-  - Installing monolog/monolog (3.12.1): Extracting archive
-  - Installing psr/http-message (2.0): Extracting archive
-  - Installing psr/http-factory (1.1.0): Extracting archive
-  - Installing league/uri-interfaces (7.9.0): Extracting archive
-  - Installing league/uri (7.9.0): Extracting archive
-  - Installing league/mime-type-detection (1.17.0): Extracting archive
-  - Installing league/flysystem-local (3.35.3): Extracting archive
-  - Installing league/flysystem (3.36.0): Extracting archive
-  - Installing nette/utils (v4.1.5): Extracting archive
-  - Installing nette/schema (v1.3.6): Extracting archive
-  - Installing dflydev/dot-access-data (v3.0.3): Extracting archive
-  - Installing league/config (v1.2.0): Extracting archive
-  - Installing league/commonmark (2.10.3): Extracting archive
-  - Installing laravel/serializable-closure (v2.1.0): Extracting archive
-  - Installing laravel/prompts (v0.3.26): Extracting archive
-  - Installing guzzlehttp/uri-template (v1.0.11): Extracting archive
-  - Installing psr/http-client (1.0.3): Extracting archive
-  - Installing ralouphie/getallheaders (3.0.3): Extracting archive
-  - Installing guzzlehttp/psr7 (2.13.1): Extracting archive
-  - Installing guzzlehttp/promises (2.5.3): Extracting archive
-  - Installing guzzlehttp/guzzle (7.15.5): Extracting archive
-  - Installing fruitcake/php-cors (v1.4.0): Extracting archive
-  - Installing dragonmantank/cron-expression (v3.6.0): Extracting archive
-  - Installing doctrine/inflector (2.1.0): Extracting archive
-  - Installing laravel/framework (v12.70.0): Extracting archive
-  - Installing anourvalar/eloquent-serialize (1.3.12): Extracting archive
-  - Installing blade-ui-kit/blade-icons (1.10.1): Extracting archive
-  - Installing blade-ui-kit/blade-heroicons (2.7.0): Extracting archive
-  - Installing chillerlan/php-settings-container (3.3.0): Extracting archive
-  - Installing composer/pcre (3.4.0): Extracting archive
-  - Installing composer/class-map-generator (1.8.0): Extracting archive
-  - Installing danharrin/date-format-converter (v0.3.1): Extracting archive
-  - Installing danharrin/livewire-rate-limiting (v2.3.0): Extracting archive
-  - Installing fakerphp/faker (v1.24.1): Extracting archive
-  - Installing paragonie/constant_time_encoding (v3.1.3): Extracting archive
-  - Installing pragmarx/google2fa (v9.1.0): Extracting archive
-  - Installing pragmarx/google2fa-qrcode (v4.0.0): Extracting archive
-  - Installing symfony/html-sanitizer (v8.1.8): Extracting archive
-  - Installing spatie/laravel-package-tools (1.93.3): Extracting archive
-  - Installing spatie/invade (2.1.1): Extracting archive
-  - Installing ryangjchandler/blade-capture-directive (v1.1.1): Extracting archive
-  - Installing nette/php-generator (v4.2.2): Extracting archive
-  - Installing livewire/livewire (v3.8.10): Extracting archive
-  - Installing league/uri-components (7.9.0): Extracting archive
-  - Installing kirschbaum-development/eloquent-power-joins (4.3.5): Extracting archive
-  - Installing filament/support (v4.15.2): Extracting archive
-  - Installing openspout/openspout (v4.32.0): Extracting archive
-  - Installing league/csv (9.28.0): Extracting archive
-  - Installing filament/actions (v4.15.2): Extracting archive
-  - Installing filament/notifications (v4.15.2): Extracting archive
-  - Installing filament/schemas (v4.15.2): Extracting archive
-  - Installing filament/infolists (v4.15.2): Extracting archive
-  - Installing spatie/shiki-php (2.4.0): Extracting archive
-  - Installing scrivo/highlight.php (v9.18.1.10): Extracting archive
-  - Installing ueberdosis/tiptap-php (2.2.0): Extracting archive
-  - Installing filament/forms (v4.15.2): Extracting archive
-  - Installing filament/widgets (v4.15.2): Extracting archive
-  - Installing filament/query-builder (v4.15.2): Extracting archive
-  - Installing filament/tables (v4.15.2): Extracting archive
-  - Installing chillerlan/php-qrcode (5.0.5): Extracting archive
-  - Installing filament/filament (v4.15.2): Extracting archive
-  - Installing gllhub/contracts (1.0.x-dev 896ba6d): Symlinking from contracts
-  - Installing laravel/sentinel (v1.1.0): Extracting archive
-  - Installing laravel/horizon (v5.50.1): Extracting archive
-  - Installing laravel/pail (v1.2.7): Extracting archive
-  - Installing laravel/pint (v1.32.1): Extracting archive
-  - Installing symfony/yaml (v8.1.9): Extracting archive
-  - Installing laravel/sail (v1.69.0): Extracting archive
-  - Installing laravel/sanctum (v4.3.3): Extracting archive
-  - Installing nikic/php-parser (v5.9.0): Extracting archive
-  - Installing psy/psysh (v0.12.24): Extracting archive
-  - Installing laravel/tinker (v2.11.1): Extracting archive
-  - Installing hamcrest/hamcrest-php (v3.0.0): Extracting archive
-  - Installing mockery/mockery (1.6.15): Extracting archive
-  - Installing filp/whoops (2.18.6): Extracting archive
-  - Installing nunomaduro/collision (v8.9.5): Extracting archive
-  - Installing staabm/side-effects-detector (1.0.5): Extracting archive
-  - Installing sebastian/version (5.0.2): Extracting archive
-  - Installing sebastian/type (5.1.3): Extracting archive
-  - Installing sebastian/recursion-context (6.0.3): Extracting archive
-  - Installing sebastian/object-reflector (4.0.1): Extracting archive
-  - Installing sebastian/object-enumerator (6.0.1): Extracting archive
-  - Installing sebastian/global-state (7.0.2): Extracting archive
-  - Installing sebastian/exporter (6.3.2): Extracting archive
-  - Installing sebastian/environment (7.2.1): Extracting archive
-  - Installing sebastian/diff (6.0.2): Extracting archive
-  - Installing sebastian/comparator (6.3.3): Extracting archive
-  - Installing sebastian/code-unit (3.0.3): Extracting archive
-  - Installing sebastian/cli-parser (3.0.2): Extracting archive
-  - Installing phpunit/php-timer (7.0.1): Extracting archive
-  - Installing phpunit/php-text-template (4.0.1): Extracting archive
-  - Installing phpunit/php-invoker (5.0.1): Extracting archive
-  - Installing phpunit/php-file-iterator (5.1.1): Extracting archive
-  - Installing theseer/tokenizer (1.3.1): Extracting archive
-  - Installing sebastian/lines-of-code (3.0.1): Extracting archive
-  - Installing sebastian/complexity (4.0.1): Extracting archive
-  - Installing sebastian/code-unit-reverse-lookup (4.0.1): Extracting archive
-  - Installing phpunit/php-code-coverage (11.0.12): Extracting archive
-  - Installing phar-io/version (3.2.1): Extracting archive
-  - Installing phar-io/manifest (2.0.4): Extracting archive
-  - Installing myclabs/deep-copy (1.14.0): Extracting archive
-  - Installing phpunit/phpunit (11.5.57): Extracting archive
-  - Installing spatie/image-optimizer (1.10.0): Extracting archive
-  - Installing spatie/temporary-directory (2.4.0): Extracting archive
-  - Installing spatie/laravel-signal-aware-command (2.1.2): Extracting archive
-  - Installing spatie/db-dumper (3.8.3): Extracting archive
-  - Installing spatie/laravel-backup (9.4.1): Extracting archive
-  - Installing spatie/image (3.9.7): Extracting archive
-  - Installing maennchen/zipstream-php (3.2.2): Extracting archive
-  - Installing composer/semver (3.5.1): Extracting archive
-  - Installing spatie/laravel-medialibrary (11.23.9): Extracting archive
-Generating optimized autoload files
-> Illuminate\Foundation\ComposerScripts::postAutoloadDump
-> @php artisan package:discover --ansi
-
-   INFO  Discovering packages.  
-
-  anourvalar/eloquent-serialize ......................................... DONE
-  blade-ui-kit/blade-heroicons .......................................... DONE
-  blade-ui-kit/blade-icons .............................................. DONE
-  filament/actions ...................................................... DONE
-  filament/filament ..................................................... DONE
-  filament/forms ........................................................ DONE
-  filament/infolists .................................................... DONE
-  filament/notifications ................................................ DONE
-  filament/query-builder ................................................ DONE
-  filament/schemas ...................................................... DONE
-  filament/support ...................................................... DONE
-  filament/tables ....................................................... DONE
-  filament/widgets ...................................................... DONE
-  kirschbaum-development/eloquent-power-joins ........................... DONE
-  laravel/horizon ....................................................... DONE
-  laravel/pail .......................................................... DONE
-  laravel/sail .......................................................... DONE
-  laravel/sanctum ....................................................... DONE
-  laravel/sentinel ...................................................... DONE
-  laravel/tinker ........................................................ DONE
-  livewire/livewire ..................................................... DONE
-  nesbot/carbon ......................................................... DONE
-  nunomaduro/collision .................................................. DONE
-  nunomaduro/termwind ................................................... DONE
-  ryangjchandler/blade-capture-directive ................................ DONE
-  spatie/laravel-backup ................................................. DONE
-  spatie/laravel-medialibrary ........................................... DONE
-  spatie/laravel-signal-aware-command ................................... DONE
-
-> @php artisan filament:upgrade
-  ⇂ public/js/filament/forms/components/builder.js  
-  ⇂ public/js/filament/forms/components/checkbox-list.js  
-  ⇂ public/js/filament/forms/components/code-editor.js  
-  ⇂ public/js/filament/forms/components/color-picker.js  
-  ⇂ public/js/filament/forms/components/date-time-picker.js  
-  ⇂ public/js/filament/forms/components/file-upload.js  
-  ⇂ public/js/filament/forms/components/key-value.js  
-  ⇂ public/js/filament/forms/components/markdown-editor.js  
-  ⇂ public/js/filament/forms/components/repeater.js  
-  ⇂ public/js/filament/forms/components/rich-editor.js  
-  ⇂ public/js/filament/forms/components/select.js  
-  ⇂ public/js/filament/forms/components/slider.js  
-  ⇂ public/js/filament/forms/components/tags-input.js  
-  ⇂ public/js/filament/forms/components/textarea.js  
-  ⇂ public/js/filament/forms/components/text-input/password-reveal.js  
-  ⇂ public/js/filament/forms/components/toggle-buttons.js  
-  ⇂ public/js/filament/schemas/components/actions.js  
-  ⇂ public/js/filament/schemas/components/tabs.js  
-  ⇂ public/js/filament/schemas/components/wizard.js  
-  ⇂ public/js/filament/tables/components/columns/checkbox.js  
-  ⇂ public/js/filament/tables/components/columns/select.js  
-  ⇂ public/js/filament/tables/components/columns/text-input.js  
-  ⇂ public/js/filament/tables/components/columns/toggle.js  
-  ⇂ public/js/filament/widgets/components/chart.js  
-  ⇂ public/js/filament/widgets/components/stats-overview/stat/chart.js  
-  ⇂ public/fonts/filament/filament/inter/index.css  
-  ⇂ public/fonts/filament/filament/inter/inter-cyrillic-ext-wght-normal-SP7Z6XGK.woff2  
-  ⇂ public/fonts/filament/filament/inter/inter-cyrillic-wght-normal-DR6K5BQD.woff2  
-  ⇂ public/fonts/filament/filament/inter/inter-greek-ext-wght-normal-A2J6H3EX.woff2  
-  ⇂ public/fonts/filament/filament/inter/inter-greek-wght-normal-ZABHMKQG.woff2  
-  ⇂ public/fonts/filament/filament/inter/inter-latin-ext-wght-normal-ZIT2UBIY.woff2  
-  ⇂ public/fonts/filament/filament/inter/inter-latin-wght-normal-DIHYUR35.woff2  
-  ⇂ public/fonts/filament/filament/inter/inter-vietnamese-wght-normal-VWEHJHBA.woff2  
-  ⇂ public/js/filament/actions/actions.js  
-  ⇂ public/js/filament/filament/app.js  
-  ⇂ public/js/filament/filament/echo.js  
-  ⇂ public/js/filament/notifications/notifications.js  
-  ⇂ public/js/filament/schemas/schemas.js  
-  ⇂ public/js/filament/support/support.js  
-  ⇂ public/js/filament/tables/tables.js  
-  ⇂ public/css/filament/filament/app.css  
-
-   INFO  Successfully published assets!  
-
-   INFO  Configuration cache cleared successfully.  
-
-   INFO  Route cache cleared successfully.  
-
-   INFO  Compiled views cleared successfully.  
-
-   INFO  Successfully upgraded!  
-
-108 packages you are using are looking for funding.
-Use the `composer fund` command to find out more!
-./composer.json has been updated
-Running composer update filament/spatie-laravel-media-library-plugin --with-all-dependencies
-Loading composer repositories with package information
-Updating dependencies
-Lock file operations: 1 install, 0 updates, 0 removals
-  - Locking filament/spatie-laravel-media-library-plugin (v4.15.2)
-Writing lock file
-Installing dependencies from lock file (including require-dev)
-Package operations: 1 install, 0 updates, 0 removals
-  - Downloading filament/spatie-laravel-media-library-plugin (v4.15.2)
-  - Installing filament/spatie-laravel-media-library-plugin (v4.15.2): Extracting archive
-Generating optimized autoload files
-> Illuminate\Foundation\ComposerScripts::postAutoloadDump
-> @php artisan package:discover --ansi
-
-   INFO  Discovering packages.  
-
-  anourvalar/eloquent-serialize ......................................... DONE
-  blade-ui-kit/blade-heroicons .......................................... DONE
-  blade-ui-kit/blade-icons .............................................. DONE
-  filament/actions ...................................................... DONE
-  filament/filament ..................................................... DONE
-  filament/forms ........................................................ DONE
-  filament/infolists .................................................... DONE
-  filament/notifications ................................................ DONE
-  filament/query-builder ................................................ DONE
-  filament/schemas ...................................................... DONE
-  filament/support ...................................................... DONE
-  filament/tables ....................................................... DONE
-  filament/widgets ...................................................... DONE
-  kirschbaum-development/eloquent-power-joins ........................... DONE
-  laravel/horizon ....................................................... DONE
-  laravel/pail .......................................................... DONE
-  laravel/sail .......................................................... DONE
-  laravel/sanctum ....................................................... DONE
-  laravel/sentinel ...................................................... DONE
-  laravel/tinker ........................................................ DONE
-  livewire/livewire ..................................................... DONE
-  nesbot/carbon ......................................................... DONE
-  nunomaduro/collision .................................................. DONE
-  nunomaduro/termwind ................................................... DONE
-  ryangjchandler/blade-capture-directive ................................ DONE
-  spatie/laravel-backup ................................................. DONE
-  spatie/laravel-medialibrary ........................................... DONE
-  spatie/laravel-signal-aware-command ................................... DONE
-
-> @php artisan filament:upgrade
-  ⇂ public/js/filament/forms/components/builder.js  
-  ⇂ public/js/filament/forms/components/checkbox-list.js  
-  ⇂ public/js/filament/forms/components/code-editor.js  
-  ⇂ public/js/filament/forms/components/color-picker.js  
-  ⇂ public/js/filament/forms/components/date-time-picker.js  
-  ⇂ public/js/filament/forms/components/file-upload.js  
-  ⇂ public/js/filament/forms/components/key-value.js  
-  ⇂ public/js/filament/forms/components/markdown-editor.js  
-  ⇂ public/js/filament/forms/components/repeater.js  
-  ⇂ public/js/filament/forms/components/rich-editor.js  
-  ⇂ public/js/filament/forms/components/select.js  
-  ⇂ public/js/filament/forms/components/slider.js  
-  ⇂ public/js/filament/forms/components/tags-input.js  
-  ⇂ public/js/filament/forms/components/textarea.js  
-  ⇂ public/js/filament/forms/components/text-input/password-reveal.js  
-  ⇂ public/js/filament/forms/components/toggle-buttons.js  
-  ⇂ public/js/filament/schemas/components/actions.js  
-  ⇂ public/js/filament/schemas/components/tabs.js  
-  ⇂ public/js/filament/schemas/components/wizard.js  
-  ⇂ public/js/filament/tables/components/columns/checkbox.js  
-  ⇂ public/js/filament/tables/components/columns/select.js  
-  ⇂ public/js/filament/tables/components/columns/text-input.js  
-  ⇂ public/js/filament/tables/components/columns/toggle.js  
-  ⇂ public/js/filament/widgets/components/chart.js  
-  ⇂ public/js/filament/widgets/components/stats-overview/stat/chart.js  
-  ⇂ public/fonts/filament/filament/inter/index.css  
-  ⇂ public/fonts/filament/filament/inter/inter-cyrillic-ext-wght-normal-SP7Z6XGK.woff2  
-  ⇂ public/fonts/filament/filament/inter/inter-cyrillic-wght-normal-DR6K5BQD.woff2  
-  ⇂ public/fonts/filament/filament/inter/inter-greek-ext-wght-normal-A2J6H3EX.woff2  
-  ⇂ public/fonts/filament/filament/inter/inter-greek-wght-normal-ZABHMKQG.woff2  
-  ⇂ public/fonts/filament/filament/inter/inter-latin-ext-wght-normal-ZIT2UBIY.woff2  
-  ⇂ public/fonts/filament/filament/inter/inter-latin-wght-normal-DIHYUR35.woff2  
-  ⇂ public/fonts/filament/filament/inter/inter-vietnamese-wght-normal-VWEHJHBA.woff2  
-  ⇂ public/js/filament/actions/actions.js  
-  ⇂ public/js/filament/filament/app.js  
-  ⇂ public/js/filament/filament/echo.js  
-  ⇂ public/js/filament/notifications/notifications.js  
-  ⇂ public/js/filament/schemas/schemas.js  
-  ⇂ public/js/filament/support/support.js  
-  ⇂ public/js/filament/tables/tables.js  
-  ⇂ public/css/filament/filament/app.css  
-
-   INFO  Successfully published assets!  
-
-   INFO  Configuration cache cleared successfully.  
-
-   INFO  Route cache cleared successfully.  
-
-   INFO  Compiled views cleared successfully.  
-
-   INFO  Successfully upgraded!  
-
-108 packages you are using are looking for funding.
-Use the `composer fund` command to find out more!
-> @php artisan vendor:publish --tag=laravel-assets --ansi --force
-
-   INFO  No publishable resources for tag [laravel-assets].  
-
-### versions
-filament/actions                             4.15.2 Easily add beautiful ac...
-filament/filament                            4.15.2 A collection of full-st...
-filament/forms                               4.15.2 Easily add beautiful fo...
-filament/infolists                           4.15.2 Easily add beautiful re...
-filament/notifications                       4.15.2 Easily add beautiful no...
-filament/query-builder                       4.15.2 A powerful query builde...
-filament/schemas                             4.15.2 Easily add beautiful UI...
-filament/spatie-laravel-media-library-plugin 4.15.2 Filament support for `s...
-filament/support                             4.15.2 Core helper methods and...
-filament/tables                              4.15.2 Easily add beautiful ta...
-filament/widgets                             4.15.2 Easily add beautiful da...
-### Color.php
-413:    public static function convertToOklch(string $color): string
-467:    public static function convertToRgb(string $color): string
-527:    public static function convertToHex(string $color): string
-540:    public static function calculateContrastRatio(string $color1, string $color2): float
-562:    public static function isTextContrastRatioAccessible(string $color1, string $color2): bool
-567:    public static function isNonTextContrastRatioAccessible(string $color1, string $color2): bool
-580:    public static function findShade(
-610:    public static function generateV3Palette(string $color): array
-651:    public static function hex(string $color): array
-659:    public static function rgb(string $color): array
-667:    public static function generatePalette(string $color): array
-696:    public static function all(): array
-728:    public static function isLight(string $color): bool
+### theme mode
+vendor/filament/filament/src/Panel/Concerns/HasTheme.php:78:    public function defaultThemeMode(ThemeMode $mode): static
+vendor/filament/filament/src/Panel/Concerns/HasBrandLogo.php:30:    public function darkModeBrandLogo(string | Htmlable | Closure | null $logo): static
+vendor/filament/filament/src/Panel/Concerns/HasDarkMode.php:15:    public function darkMode(bool | Closure $condition = true, bool | Closure $isForced = false): static
 ### font
-BunnyFontProvider.php
-Contracts
-GoogleFontProvider.php
-LocalFontProvider.php
-exit=2
+vendor/filament/filament/src/Panel/Concerns/HasFont.php:50:    public function font(string | Closure | null $family, string | Closure | null $url = null, string | Closure | null $provider = null, array | Closure | null $preload = null): static
+### color.php 580-700
+     * `$shouldStartFromDarkest` is `true`. Shades outside `[$minShade, $maxShade]` are skipped. Returns `null`
+     * if no shade satisfies the constraints.
+     *
+     * @param  array<int, string>  $palette
+     */
+    public static function findShade(
+        array $palette,
+        string $surface,
+        float $minRatio = self::WCAG_AA_TEXT,
+        ?int $maxShade = null,
+        ?int $minShade = null,
+        bool $shouldStartFromDarkest = false,
+    ): ?int {
+        $shouldStartFromDarkest ? krsort($palette) : ksort($palette);
+
+        foreach ($palette as $shade => $value) {
+            if (($maxShade !== null) && ($shade > $maxShade)) {
+                continue;
+            }
+
+            if (($minShade !== null) && ($shade < $minShade)) {
+                continue;
+            }
+
+            if (static::calculateContrastRatio($surface, $value) >= $minRatio) {
+                return $shade;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public static function generateV3Palette(string $color): array
+    {
+        $color = str_replace(' ', '', static::convertToRgb($color));
+        [$baseRed, $baseGreen, $baseBlue] = sscanf($color, 'rgb(%d,%d,%d)');
+
+        $colors = [];
+
+        $intensityMap = [
+            50 => 0.95,
+            100 => 0.9,
+            200 => 0.75,
+            300 => 0.6,
+            400 => 0.3,
+            500 => 1.0,
+            600 => 0.9,
+            700 => 0.75,
+            800 => 0.6,
+            900 => 0.49,
+            950 => 0.3,
+        ];
+
+        foreach ($intensityMap as $shade => $intensity) {
+            if ($shade < 500) {
+                $red = ((255 - $baseRed) * $intensity) + $baseRed;
+                $green = ((255 - $baseGreen) * $intensity) + $baseGreen;
+                $blue = ((255 - $baseBlue) * $intensity) + $baseBlue;
+            } else {
+                $red = $baseRed * $intensity;
+                $green = $baseGreen * $intensity;
+                $blue = $baseBlue * $intensity;
+            }
+
+            $colors[$shade] = static::convertToOklch(sprintf('%s, %s, %s', round($red), round($green), round($blue)));
+        }
+
+        return $colors;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public static function hex(string $color): array
+    {
+        return static::generatePalette($color);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public static function rgb(string $color): array
+    {
+        return static::generatePalette($color);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public static function generatePalette(string $color): array
+    {
+        $color = static::convertToOklch($color);
+
+        [, $chroma, $hue] = sscanf($color, 'oklch(%f %f %f)');
+
+        $isAchromatic = $chroma < 0.03;
+
+        return array_map(
+            fn (array $constants): string => "oklch({$constants[0]} " . ($isAchromatic ? '0' : $constants[1]) . " {$hue})",
+            [
+                50 => [0.97717647058824, 0.01395454545455],
+                100 => [0.95035294117647, 0.03272727272727],
+                200 => [0.90547058823529, 0.06318181818182],
+                300 => [0.84047058823529, 0.10604545454546],
+                400 => [0.75352941176471, 0.15027272727273],
+                500 => [0.68270588235294, 0.17009090909091],
+                600 => [0.59782352941176, 0.16913636363636],
+                700 => [0.51494117647059, 0.14940909090909],
+                800 => [0.44611764705882, 0.12331818181818],
+                900 => [0.39458823529412, 0.09963636363636],
+                950 => [0.27788235294118, 0.07136363636364],
+            ],
+        );
+    }
+
+    /**
+     * @return array<string, array<int, string>>
+     */
+    public static function all(): array
+    {
+        return [
+            'slate' => static::Slate,
+            'gray' => static::Gray,
+### css
+vendor/filament/support/resources/css:
+base.css
+components
+index.css
+sortable.css
+utilities.css
+
+vendor/filament/support/resources/css/components:
+avatar.css
+badge.css
+breadcrumbs.css
+button.css
+callout.css
+dropdown
+empty-state.css
+fieldset.css
+grid.css
+icon-button.css
+icon.css
+input
+link.css
+loading-indicator.css
+loading-section.css
+modal.css
+pagination.css
+section.css
+tabs.css
+toggle.css
+tooltip.css
+vendor/filament/filament/resources/css/components/page.css
+vendor/filament/forms/resources/css/components/file-upload.css
+vendor/filament/forms/resources/css/components/toggle-buttons.css
+vendor/filament/support/resources/css/components/section.css
+vendor/filament/support/resources/css/components/input/wrapper.css
+vendor/filament/support/resources/css/components/button.css
+vendor/filament/support/resources/css/components/icon-button.css
+vendor/filament/tables/resources/css/container.css
+vendor/filament/tables/resources/css/actions.css
+### Resource fns
+vendor/filament/filament/src/Resources/Resource.php:58:    public static function form(Schema $schema): Schema
+vendor/filament/filament/src/Resources/Resource.php:68:    public static function table(Table $table): Table
+vendor/filament/filament/src/Resources/Resource.php:88:    public static function getEloquentQuery(): Builder
+vendor/filament/filament/src/Resources/Concerns/InteractsWithRelationshipTable.php:83:    public function form(Schema $schema): Schema
+vendor/filament/filament/src/Resources/Concerns/InteractsWithRelationshipTable.php:354:    protected function canCreate(): bool
+### createrecord
+59:    public function getBreadcrumb(): string
+64:    public function mount(): void
+73:    protected function authorizeAccess(): void
+78:    public function hydrate(): void
+83:    protected function fillForm(): void
+92:    public function create(bool $another = false): void
+179:    protected function preserveFormDataWhenCreatingAnother(array $data): array
+184:    protected function getCreatedNotification(): ?Notification
+197:    protected function getCreatedNotificationTitle(): ?string
+205:    protected function getCreatedNotificationMessage(): ?string
+210:    public function createAnother(): void
+219:    protected function handleRecordCreation(array $data): Model
+232:    protected function associateRecordWithParent(Model $record, Model $parent): Model
+241:    protected function mutateFormDataBeforeCreate(array $data): array
+249:    protected function getFormActions(): array
+258:    protected function getCreateFormAction(): Action
+269:    protected function getSubmitFormAction(): Action
+274:    protected function getSubmitFormLivewireMethodName(): string
+279:    protected function getCreateAnotherFormAction(): Action
+288:    protected function getCancelFormAction(): Action
+302:    public function getTitle(): string | Htmlable
+313:    public function defaultForm(Schema $schema): Schema
+326:    public function form(Schema $schema): Schema
+331:    protected function getRedirectUrl(): string
+360:    protected function getRedirectUrlParameters(): array
+368:    protected function getMountedActionSchemaModel(): Model | string | null
+373:    public function canCreateAnother(): bool
+378:    public static function disableCreateAnother(): void
+386:    public function getRecord(): ?Model
+391:    public function content(Schema $schema): Schema
+399:    public function getFormContentComponent(): Component
+416:    public function getFormActionsContentComponent(): Component
+425:    public function hasFormWrapper(): bool
+433:    public function getPageClasses(): array
+441:    protected function hasFullWidthFormActions(): bool
+### edit
+61:    public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
+68:    public function getBreadcrumb(): string
+73:    public static function getNavigationLabel(): string | Htmlable
+82:    public function getContentTabLabel(): ?string
+87:    public function mount(int | string $record): void
+98:    protected function authorizeAccess(): void
+103:    public function hydrate(): void
+108:    protected function fillForm(): void
+119:    protected function fillFormWithDataAndCallHooks(Model $record, array $extraData = []): void
+136:    public function refreshFormData(array $statePaths): void
+148:    protected function mutateFormDataBeforeFill(array $data): array
+159:    public function save(bool $shouldRedirect = true, bool $shouldSendSavedNotification = true): void
+168:            $data = $this->form->getState(afterValidate: function (): void {
+206:    public function saveFormComponentOnly(Component $component): void
+252:    protected function getSavedNotification(): ?Notification
+265:    protected function getSavedNotificationTitle(): ?string
+273:    protected function getSavedNotificationMessage(): ?string
+281:    protected function handleRecordUpdate(Model $record, array $data): Model
+292:    protected function mutateFormDataBeforeSave(array $data): array
+297:    public function getDefaultActionSchemaResolver(Action $action): ?Closure
+307:    public function getTitle(): string | Htmlable
+321:    protected function getFormActions(): array
+329:    protected function getSaveFormAction(): Action
+340:    protected function getSubmitFormAction(): Action
+345:    protected function getSubmitFormLivewireMethodName(): string
+350:    protected function getCancelFormAction(): Action
+364:    public function defaultForm(Schema $schema): Schema
+377:    public function form(Schema $schema): Schema
+382:    public function getContentTabComponent(): Tab
+390:    protected function getRedirectUrl(): ?string
+420:    protected function getRedirectUrlParameters(): array
+425:    public static function shouldRegisterNavigation(array $parameters = []): bool
+430:    public function content(Schema $schema): Schema
+446:    public function getFormContentComponent(): Component
+463:    public function getFormActionsContentComponent(): Component
+472:    public function hasFormWrapper(): bool
+480:    public function getPageClasses(): array
+489:    protected function hasFullWidthFormActions(): bool
+497:    public function getRecord(): Model
+### list
+57:    public function mount(): void
+64:    protected function authorizeAccess(): void {}
+66:    public function getBreadcrumb(): ?string
+71:    public function table(Table $table): Table
+76:    public function getTitle(): string | Htmlable
+81:    public function form(Schema $schema): Schema
+86:    public function infolist(Schema $schema): Schema
+91:    public function getDefaultActionSchemaResolver(Action $action): ?Closure
+103:    protected function getMountedActionSchemaModel(): Model | string | null
+111:    public function getPluralModelLabel(): ?string
+116:    protected function makeTable(): Table
+129:            ->recordAction(function (Model $record, Table $table): ?string {
+162:            $table->recordUrl(function (Model $record, Table $table): ?string {
+221:    protected function getTableQuery(): Builder | Relation | null
+229:    public function getSubNavigation(): array
+238:    public function content(Schema $schema): Schema
+252:    public function getPageClasses(): array
+### spatie upload
+<?php
+
+namespace Filament\Forms\Components;
+
+use Closure;
+use Filament\Support\Concerns\HasMediaFilter;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use League\Flysystem\UnableToCheckFileExistence;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\MediaCollections\FileAdder;
+use Spatie\MediaLibrary\MediaCollections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Throwable;
+
+class SpatieMediaLibraryFileUpload extends FileUpload
+{
+    use HasMediaFilter;
+
+    protected string | Closure | null $collection = null;
+
+    protected string | Closure | null $conversion = null;
+
+    protected string | Closure | null $conversionsDisk = null;
+
+    protected bool | Closure $hasResponsiveImages = false;
+
+    protected string | Closure | null $mediaName = null;
+
+    /**
+     * @var array<string, mixed> | Closure | null
+     */
+    protected array | Closure | null $customHeaders = null;
+
+    /**
+     * @var array<string, mixed> | Closure | null
+     */
+    protected array | Closure | null $customProperties = null;
+
+    /**
+     * @var array<string, array<string, string>> | Closure | null
+     */
+    protected array | Closure | null $manipulations = null;
+
+    /**
+     * @var array<string, mixed> | Closure | null
+     */
+    protected array | Closure | null $properties = null;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->preventFilePathTampering(false);
+
+        $this->loadStateFromRelationshipsUsing(static function (SpatieMediaLibraryFileUpload $component, HasMedia $record): void {
+            /** @var Model&HasMedia $record */
+            $media = $record->load('media')->getMedia($component->getCollection() ?? 'default')
+                ->when(
+                    $component->hasMediaFilter(),
+                    fn (Collection $media) => $component->filterMedia($media)
+                )
+                ->when(
+                    ! $component->isMultiple(),
+                    fn (Collection $media): Collection => $media->take(1),
+                )
+                ->mapWithKeys(function (Media $media): array {
+                    $uuid = $media->getAttributeValue('uuid');
+
+                    return [$uuid => $uuid];
+                })
+                ->toArray();
+
+            $component->rawState($media);
+        });
+
+        $this->afterStateHydrated(null);
+
+        $this->beforeStateDehydrated(null);
+
+        $this->dehydrated(false);
+
+        $this->getUploadedFileUsing(static function (SpatieMediaLibraryFileUpload $component, string $file): ?array {
+            if (! $component->getRecord()) {
+                return null;
+            }
+
+            /** @var ?Media $media */
+### navitem
+56:    final public function __construct(string | Htmlable | Closure | null $label = null)
+63:    public static function make(string | Htmlable | Closure | null $label = null): static
+71:    public function key(string | Closure | null $key): static
+81:    public function badge(string | Closure | null $badge, string | array | Closure | null $color = null): static
+89:    public function group(string | UnitEnum | Closure | null $group): static
+96:    public function parentItem(string | Closure | null $group): static
+103:    public function icon(string | BackedEnum | Htmlable | Closure | null $icon): static
+110:    public function visible(bool | Closure $condition = true): static
+117:    public function hidden(bool | Closure $condition = true): static
+124:    public function activeIcon(string | BackedEnum | Htmlable | Closure | null $activeIcon): static
+131:    public function isActiveWhen(?Closure $callback): static
+138:    public function label(string | Htmlable | Closure $label): static
+145:    public function openUrlInNewTab(bool | Closure $condition = true): static
+152:    public function sort(int | Closure | null $sort): static
+159:    public function url(string | Closure | null $url, bool | Closure | null $shouldOpenInNewTab = null): static
+174:    public function getKey(): string
+181:    public function getBadge(): ?string
+189:    public function getBadgeColor(?string $badge = null): string | array | null
+196:    public function getGroup(): string | UnitEnum | null
+201:    public function getParentItem(): ?string
+206:    public function getIcon(): string | BackedEnum | Htmlable | null
+220:    public function isVisible(): bool
+225:    public function isHidden(): bool
+234:    public function getActiveIcon(): string | BackedEnum | Htmlable | null
+239:    public function getLabel(): string | Htmlable
+244:    public function getSort(): int
+249:    public function getUrl(): ?string
+254:    public function isActive(): bool
+263:    public function isChildItemsActive(): bool
+274:    public function shouldOpenUrlInNewTab(): bool
+282:    public function childItems(array | Arrayable $items): static
+292:    public function getChildItems(): array | Arrayable
+exit=0
