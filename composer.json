@@ -10,7 +10,7 @@
     "require": {
         "php": "^8.2",
         "filament/filament": "^4.0",
-        "gllhub/contracts": "*@dev",
+        "gllhub/contracts": "^1.0@dev",
         "laravel/framework": "^12.0",
         "laravel/horizon": "^5.0",
         "laravel/sanctum": "^4.0",
@@ -106,7 +106,10 @@
             "type": "path",
             "url": "contracts",
             "options": {
-                "symlink": true
+                "symlink": true,
+                "versions": {
+                    "gllhub/contracts": "1.0.x-dev"
+                }
             }
         }
     ]
