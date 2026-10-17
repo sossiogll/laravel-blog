@@ -13,6 +13,7 @@ use App\Content\WriteOutcome;
 use App\Models\SourceInstance;
 use App\Packages\PackageRegistry;
 use Gll\Hub\Contracts\Content\EntryRules;
+use Gll\Hub\Contracts\Content\FieldType;
 use Gll\Hub\Contracts\Source\BodyFormat;
 use Gll\Hub\Contracts\Source\ExternalEntry;
 use Gll\Hub\Contracts\Source\SourceDefinition;
@@ -62,10 +63,27 @@ final class EntryUpserter
             return;
         }
 
-        $this->references->replace($id, $entry->references);
+        $this->references->replace($id, $entry->references, $this->referenceFieldsOwnedBySource($entry->type));
         foreach ($entry->media as $media) {
             ImportRemoteMedia::dispatch($id, $media);
         }
+    }
+
+    /**
+     * A person may curate a Reference field too; a sync that replaced every reference of the entry would erase it.
+     *
+     * @return list<string>
+     */
+    private function referenceFieldsOwnedBySource(string $type): array
+    {
+        $owned = [];
+        foreach ($this->registry->contentType($type)?->fields ?? [] as $field) {
+            if ($field->type === FieldType::Reference && ! $field->curated) {
+                $owned[] = $field->key;
+            }
+        }
+
+        return $owned;
     }
 
     /** @return array<string, mixed> only what the source owns: never `curated`, never the slug */
