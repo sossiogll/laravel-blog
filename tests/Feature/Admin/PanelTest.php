@@ -54,21 +54,21 @@ final class PanelTest extends AdminTestCase
     public function test_package_wide_settings_get_their_defaults_and_keep_a_secret_left_blank(): void
     {
         Livewire::test(PackageSettingsForm::class, ['package' => 'acme/library'])
-            ->fillForm(['credentials' => ['key' => 'abc']])
+            ->fillForm(['credentials' => ['key' => 'abc', 'secret' => 'hook']])
             ->call('save')
             ->assertHasNoErrors();
 
         $stored = PackageSetting::find('acme/library');
         $this->assertSame(['region' => 'eu'], $stored->settings);
-        $this->assertSame(['key' => 'abc'], $stored->credentials);
+        $this->assertSame(['key' => 'abc', 'secret' => 'hook'], $stored->credentials);
 
         Livewire::test(PackageSettingsForm::class, ['package' => 'acme/library'])
             ->assertDontSee('abc')
-            ->fillForm(['settings' => ['region' => 'us'], 'credentials' => ['key' => '']])
+            ->fillForm(['settings' => ['region' => 'us'], 'credentials' => ['key' => '', 'secret' => '']])
             ->call('save');
 
         $stored = PackageSetting::find('acme/library');
         $this->assertSame(['region' => 'us'], $stored->settings);
-        $this->assertSame(['key' => 'abc'], $stored->credentials);
+        $this->assertSame(['key' => 'abc', 'secret' => 'hook'], $stored->credentials);
     }
 }
