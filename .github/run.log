@@ -7,4 +7,168 @@ Changes not staged for commit:
 	modified:   .github/run.log
 
 no changes added to commit (use "git add" and/or "git commit -a")
-exit=1
+
+   INFO  Application key set successfully.  
+
+  ✓ removing a source instance keeps its content                         0.04s  
+  ✓ media has a collection for each media field and the thumbnail        0.04s  
+  ✓ an entry of an unknown type still has its thumbnail                  0.03s  
+  ✓ credentials are encrypted at rest and never serialized               0.04s  
+  ✓ a new instance is enabled and pending                                0.04s  
+
+   PASS  Tests\Feature\Content\EntryUpsertTest
+  ✓ a new entry is created from what the source returned                 0.06s  
+  ✓ dates are stored in utc                                              0.05s  
+  ✓ a changed entry is updated and keeps its slug and id                 0.06s  
+  ✓ an entry with the same fingerprint is not written                    0.05s  
+  ✓ an entry without a fingerprint is always written                     0.05s  
+  ✓ curated values survive every sync                                    0.06s  
+  ✓ the author of an entry is not touched by a sync                      0.07s  
+  ✓ slugs are unique per type and language                               0.05s  
+  ✓ the same external id in two instances makes two entries              0.05s  
+  ✓ a slug claimed after it was chosen is chosen again                   0.05s  
+  ✓ losing the race to create the same entry updates it instead of fail… 0.06s  
+  ✓ html bodies are sanitized once before they are stored                0.05s  
+  ✓ markdown is stored as given                                          0.05s  
+  ✓ an invalid entry is skipped and reported without failing the run     0.06s  
+  ✓ an entry the source stopped listing comes back when it is listed ag… 0.07s  
+  ✓ references are stored and resolved after the run                     0.06s  
+  ✓ an unresolved reference is resolved by a later run even from anothe… 0.06s  
+  ✓ a reference by slug prefers the language of the entry that refers    0.06s  
+  ✓ references are replaced when the entry changes                       0.06s  
+  ✓ the synchronizer moves data and leaves the status to the job         0.05s  
+
+   PASS  Tests\Feature\Content\RemoteMediaTest
+  ✓ a sync queues one download per file and only when the entry is writ… 0.08s  
+  ✓ the job travels encrypted because its headers may hold a token       0.03s  
+  ✓ the file lands in the media library collection of its field          0.07s  
+  ✓ the same source url is downloaded once                               0.05s  
+  ✓ a single file field is replaced when the source url changes and a m… 0.07s  
+  ✓ the thumbnail is a collection of every type                          0.05s  
+  ✓ request headers are sent with the download                           0.04s  
+  ✓ a missing or oversized file is skipped without failing               0.04s  
+  ✓ an entry deleted in the meantime is ignored                          0.04s  
+  ✓ rate limiting releases the job for as long as asked                  0.04s  
+  ✓ an unavailable service is left to the queue to retry with its backo… 0.04s  
+  ✓ refused credentials skip the file                                    0.04s  
+
+   PASS  Tests\Feature\ExampleTest
+  ✓ the application returns a successful response                        0.08s  
+
+   PASS  Tests\Feature\Packages\PackageRegistryTest
+  ✓ a conforming package is accepted and exposes what it provides        0.04s  
+  ✓ a package built for another contract major is rejected with the rea… 0.03s  
+  ✓ a package built on a newer minor is rejected                         0.03s  
+  ✓ a package that fails conformance is rejected with every violation    0.03s  
+  ✓ a package that throws is rejected and never crashes the app          0.03s  
+  ✓ a content type key belongs to one package                            0.03s  
+  ✓ a package registered twice is rejected the second time               0.03s  
+  ✓ a bad package does not stop the good ones                            0.03s  
+  ✓ discovery reads the entry points composer recorded                   0.04s  
+  ✓ discovery without composer data finds nothing                        0.03s  
+  ✓ the registry is built once per process                               0.03s  
+  ✓ the packages command lists accepted and rejected packages            0.05s  
+  ✓ the packages command says when nothing is installed                  0.04s  
+
+   PASS  Tests\Feature\Runtime\ContextTest
+  ✓ the instance settings win over the package settings                  0.05s  
+  ✓ credentials are decrypted and the instance wins                      0.04s  
+  ✓ an instance without package settings works on its own                0.04s  
+  ✓ a package context has the package values only                        0.04s  
+  ✓ credentials are read only when a package asks for one                0.04s  
+  ✓ the clock is utc and follows the application clock                   0.04s  
+  ✓ the public url comes from the application url without a trailing sl… 0.04s  
+  ✓ the http client is the cores                                         0.04s  
+  ✓ the logger tags every line with the package and the instance         0.04s  
+
+   PASS  Tests\Feature\Runtime\LaravelHttpClientTest
+  ✓ the core gives packages its laravel client                           0.04s  
+  ✓ a success is returned with lowercase headers                         0.03s  
+  ✓ a status the package may want to read is returned not thrown         0.04s  
+  ✓ server errors are unavailable                                        0.04s  
+  ✓ a connection error or timeout is unavailable and does not leak the…  0.04s  
+  ✓ 401 and 403 are invalid credentials                                  0.04s  
+  ✓ 429 is rate limited for as long as retry after says                  0.04s  
+  ✓ retry after may be a date and falls back to the default              0.04s  
+  ✓ the user agent and the request are sent as configured                0.03s  
+  ✓ a get sends the given headers and no body                            0.03s  
+
+   PASS  Tests\Feature\Sync\IncrementalSyncTest
+  ✓ batches are pulled while there is more and the last cursor is kept   0.07s  
+  ✓ the next run resumes from the stored cursor                          0.05s  
+  ✓ a batch without a cursor leaves the stored one                       0.05s  
+  ✓ the cursor of finished batches survives a failure later in the run   0.05s  
+  ✓ a source that says more without moving its cursor is stopped         0.04s  
+  ✓ the batch limit stops a source that keeps moving forever             0.04s  
+
+   PASS  Tests\Feature\Sync\RemovalTest
+  ✓ a source that lists everything removes what it stops listing         0.07s  
+  ✓ a source that lists only the latest never removes on absence         0.07s  
+  ✓ a listing that fails midway removes nothing                          0.05s  
+  ✓ an entry that became invalid is not taken for a removed one          0.05s  
+  ✓ removal is limited to the instance that was synced                   0.07s  
+  ✓ an incremental source removes what the batch names and nothing else  0.06s  
+  ✓ a single fetch that returns null removes that entry only             0.06s  
+  ✓ a single fetch updates the named entry and removes nothing by absen… 0.06s  
+  ✓ named entries fall back to a full sync when the source cannot fetch… 0.05s  
+
+   PASS  Tests\Feature\Sync\SchedulingTest
+  ✓ an instance that never ran is due                                    0.05s  
+  ✓ an instance is due once the default interval of its source has elap… 0.04s  
+  ✓ the interval of the instance wins over the default                   0.04s  
+  ✓ an interval of zero means on demand only                             0.04s  
+  ✓ disabled and unknown instances are never due                         0.04s  
+  ✓ an instance waits for its retry time                                 0.04s  
+  ✓ a failing instance is left for the admin                             0.04s  
+  ✓ the due command queues a sync for each due instance                  0.05s  
+  ✓ the due command is scheduled every minute                            0.04s  
+  ✓ the sync command runs one instance now and reports the result        0.07s  
+  ✓ the sync command fails with the reason when the run fails            0.05s  
+  ✓ the sync command with all runs every enabled instance                0.07s  
+  ✓ the sync command needs an instance that exists                       0.04s  
+
+   PASS  Tests\Feature\Sync\SyncJobTest
+  ✓ a good run records its success                                       0.07s  
+  ✓ a disabled or missing instance is left alone                         0.05s  
+  ✓ unavailable is retried after a backoff                               0.05s  
+  ✓ the backoff doubles up to a ceiling and then gives up                0.04s  
+  ✓ rate limited is released for as long as the service asked            0.05s  
+  ✓ invalid credentials stop the instance without a retry                0.05s  
+  ✓ invalid configuration names the setting and does not retry           0.05s  
+  ✓ anything else is a bug that is reported and not retried              0.05s  
+  ✓ contract failures are not reported as bugs                           0.04s  
+  ✓ a failure keeps the time of the last success                         0.06s  
+  ✓ an instance whose package is gone fails for the admin to see         0.04s  
+  ✓ when the queue gives up the status does not stay retrying            0.04s  
+  ✓ the same sync is queued once and syncs of one instance do not overl… 0.03s  
+  ✓ the job runs through the queue end to end                            0.06s  
+
+   PASS  Tests\Feature\Webhooks\WebhookTest
+  ✓ a verified call queues the sync of the instances it names            0.07s  
+  ✓ without ids the whole instance is synced                             0.05s  
+  ✓ without an instance filter every enabled instance of the source is…  0.06s  
+  ✓ the values of the request are compared as text                       0.06s  
+  ✓ an unmatched request queues nothing but is still accepted            0.05s  
+  ✓ a source the webhook does not refresh is ignored                     0.05s  
+  ✓ a call the package does not verify is refused                        0.06s  
+  ✓ a webhook without a configured secret verifies nothing               0.05s  
+  ✓ an unknown webhook is not found                                      0.06s  
+  ✓ only post is served                                                  0.29s  
+  ✓ the route has no web middleware so no session and no csrf            0.04s  
+  ✓ calls are rate limited per caller and endpoint                       0.06s  
+
+  Tests:    149 passed (438 assertions)
+  Duration: 6.80s
+
+PHPUnit 11.5.57 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.4.26
+Configuration: /home/runner/work/laravel-blog/laravel-blog/contracts/phpunit.xml
+
+............                                                      12 / 12 (100%)
+
+Time: 00:00.013, Memory: 8.00 MB
+
+OK (12 tests, 56 assertions)
+core=0
+exit=0
