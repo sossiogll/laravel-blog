@@ -7,6 +7,7 @@ namespace Gll\Hub\Contracts\Testing;
 use Gll\Hub\Contracts\Auth\AuthProvider;
 use Gll\Hub\Contracts\Content\ContentType;
 use Gll\Hub\Contracts\Content\ContentTypeDefinition;
+use Gll\Hub\Contracts\Content\EntryRules;
 use Gll\Hub\Contracts\Content\Field;
 use Gll\Hub\Contracts\Content\FieldType;
 use Gll\Hub\Contracts\Contracts;
@@ -112,7 +113,8 @@ final class Conformance
     }
 
     /**
-     * Checks sample entries a source produced against the content types they claim.
+     * Checks sample entries a source produced against the content types they claim,
+     * with the rules the core applies to every entry at sync time (Content\EntryRules).
      *
      * @param list<ContentTypeDefinition> $types
      * @param iterable<ExternalEntry> $entries
@@ -120,62 +122,8 @@ final class Conformance
     public static function checkEntries(SourceDefinition $source, array $types, iterable $entries): void
     {
         $v = [];
-        $byKey = [];
-        foreach ($types as $type) {
-            $byKey[$type->key] = $type;
-        }
-
         foreach ($entries as $entry) {
-            $at = "entry {$entry->externalId}";
-            if ($entry->externalId === '') {
-                $v[] = 'an entry has an empty externalId';
-            }
-            if (! in_array($entry->type, $source->produces, true)) {
-                $v[] = "{$at}: type \"{$entry->type}\" is not in the source's produces";
-                continue;
-            }
-            $type = $byKey[$entry->type] ?? null;
-            if ($type === null) {
-                $v[] = "{$at}: no definition given for type \"{$entry->type}\"";
-                continue;
-            }
-            if (trim($entry->title) === '') {
-                $v[] = "{$at}: empty title";
-            }
-
-            foreach ($entry->fields as $key => $value) {
-                $field = $type->field((string) $key);
-                if ($field === null) {
-                    $v[] = "{$at}: field \"{$key}\" is not in type {$type->key}";
-                } elseif ($field->curated) {
-                    $v[] = "{$at}: field \"{$key}\" is curated, a source never sends it";
-                } elseif ($field->type === FieldType::Enum && $value !== null && ! in_array($value, $field->options, true)) {
-                    $v[] = "{$at}: field \"{$key}\" has \"{$value}\", not one of its options";
-                }
-            }
-            foreach ($type->fields as $field) {
-                if ($field->required && ! $field->curated && ! array_key_exists($field->key, $entry->fields)) {
-                    $v[] = "{$at}: required field \"{$field->key}\" is missing";
-                }
-            }
-            foreach ($entry->media as $media) {
-                $field = $type->field($media->field);
-                if ($media->field !== 'thumbnail' && ($field === null || $field->type !== FieldType::Media)) {
-                    $v[] = "{$at}: media for \"{$media->field}\", which is not a Media field";
-                }
-                if (! str_starts_with($media->url, 'https://')) {
-                    $v[] = "{$at}: media url must be https";
-                }
-            }
-            foreach ($entry->references as $ref) {
-                $field = $type->field($ref->field);
-                if ($field === null || $field->type !== FieldType::Reference) {
-                    $v[] = "{$at}: reference for \"{$ref->field}\", which is not a Reference field";
-                }
-                if ($ref->externalId === null && ($ref->type === null || $ref->slug === null)) {
-                    $v[] = "{$at}: a reference needs an externalId or a type and a slug";
-                }
-            }
+            array_push($v, ...EntryRules::violations($source, $types, $entry));
         }
 
         self::fail($v);
