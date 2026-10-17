@@ -78,10 +78,7 @@ final class EntryRules
                 }
             }
         }
-        $owned = array_values(array_filter(
-            $type->fields,
-            static fn (Field $f): bool => ! $f->curated && $f->type !== FieldType::Media && $f->type !== FieldType::Reference,
-        ));
+        $owned = array_values(array_filter($type->fields, static fn (Field $f): bool => ! $f->curated));
         foreach (FieldRules::missing($owned, $entry->fields) as $problem) {
             $v[] = "{$at}: {$problem}";
         }
