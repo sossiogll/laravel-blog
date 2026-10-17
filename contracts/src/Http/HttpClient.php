@@ -1,0 +1,24 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Gll\Hub\Contracts\Http;
+
+/**
+ * The HTTP client a package uses to reach its outside service, given by the core
+ * through the Context. The core owns timeouts, the user agent, logging and the
+ * classification of failures, in ONE place:
+ *
+ * - network error, timeout, 5xx → throws Exceptions\Unavailable
+ * - 429                          → throws Exceptions\RateLimited (Retry-After honoured)
+ * - 401, 403                     → throws Exceptions\InvalidCredentials
+ * - anything else (2xx, 3xx after redirects, 404, other 4xx) → returned; the package decides
+ */
+interface HttpClient
+{
+    /** @param array<string, string> $headers */
+    public function get(string $url, array $headers = []): HttpResponse;
+
+    /** @param array<string, string> $headers */
+    public function request(string $method, string $url, array $headers = [], ?string $body = null): HttpResponse;
+}

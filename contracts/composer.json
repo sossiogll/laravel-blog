@@ -1,0 +1,25 @@
+{
+    "name": "gllhub/contracts",
+    "description": "The only thing a gllHub package depends on: the interfaces and value objects between the gllHub core and its packages.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "psr/log": "^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gll\\Hub\\Contracts\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Gll\\Hub\\Contracts\\Tests\\": "tests/"
+        },
+        "classmap": ["tests/Fixtures"]
+    },
+    "minimum-stability": "stable"
+}
