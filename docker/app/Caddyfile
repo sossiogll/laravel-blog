@@ -1,0 +1,13 @@
+{
+	admin off
+	# TLS is terminated by the reverse proxy in front of the container.
+	auto_https off
+	frankenphp
+}
+
+:8080 {
+	root * /app/public
+	encode zstd gzip
+	log
+	php_server
+}

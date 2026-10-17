@@ -1,0 +1,99 @@
+# Production stack: runs the published image, builds nothing. Development is docker-compose.dev.yml.
+#   cp .env.production.example .env   (fill it in)
+#   docker compose up -d
+# Upgrade: set GLLHUB_VERSION and run `docker compose up -d` again; `init` migrates before anything restarts.
+
+x-app: &app
+  image: ${GLLHUB_IMAGES:-ghcr.io/sossiogll}/gllhub:${GLLHUB_VERSION:-latest}
+  restart: unless-stopped
+  env_file: .env
+  environment:
+    APP_ENV: production
+    APP_DEBUG: "false"
+    APP_KEY: ${APP_KEY:?Set APP_KEY in .env (docker run --rm ghcr.io/sossiogll/gllhub php artisan key:generate --show)}
+    APP_URL: ${APP_URL:?Set APP_URL in .env}
+    DB_CONNECTION: mariadb
+    DB_HOST: db
+    DB_DATABASE: ${DB_DATABASE:-gllhub}
+    DB_USERNAME: ${DB_USERNAME:-gllhub}
+    DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+    REDIS_HOST: redis
+    CACHE_STORE: redis
+    SESSION_DRIVER: redis
+    QUEUE_CONNECTION: redis
+  volumes:
+    - storage:/app/storage
+  depends_on: &ready
+    init:
+      condition: service_completed_successfully
+    db:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+
+services:
+  init:
+    <<: *app
+    restart: "no"
+    command: ["sh", "-c", "php artisan migrate --force && php artisan view:cache"]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  app:
+    <<: *app
+    ports:
+      - "${GLLHUB_PORT:-8080}:8080"
+    depends_on: *ready
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/up"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  queue:
+    <<: *app
+    command: ["php", "artisan", "horizon"]
+    depends_on: *ready
+    stop_grace_period: 60s
+
+  scheduler:
+    <<: *app
+    command: ["php", "artisan", "schedule:work"]
+    depends_on: *ready
+
+  db:
+    image: mariadb:11
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${DB_DATABASE:-gllhub}
+      MARIADB_USER: ${DB_USERNAME:-gllhub}
+      MARIADB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Set DB_ROOT_PASSWORD in .env}
+    volumes:
+      - db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  storage:
+  db:
+  redis:

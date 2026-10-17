@@ -20,7 +20,8 @@ return Application::configure(basePath: dirname(__DIR__))
         __DIR__.'/../app/Sync/Console',
     ])
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $proxies = env('TRUSTED_PROXIES');
+        $middleware->trustProxies(at: $proxies === '*' ? '*' : ($proxies ? explode(',', $proxies) : null));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
