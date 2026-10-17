@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Packages;
 
+use Gll\Hub\Contracts\Auth\AuthDefinition;
 use Gll\Hub\Contracts\Content\ContentTypeDefinition;
 use Gll\Hub\Contracts\Source\SourceDefinition;
 use Gll\Hub\Contracts\Webhook\WebhookDefinition;
@@ -18,7 +19,7 @@ final readonly class Provided
         public string $package,
         /** @var class-string */
         public string $class,
-        public ContentTypeDefinition|SourceDefinition|WebhookDefinition $definition,
+        public ContentTypeDefinition|SourceDefinition|WebhookDefinition|AuthDefinition $definition,
     ) {
     }
 

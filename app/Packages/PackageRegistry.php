@@ -60,6 +60,7 @@ final class PackageRegistry
         $types = $this->provided($manifest->name, $manifest->classesFor(Role::ContentType));
         $sources = $this->provided($manifest->name, $manifest->classesFor(Role::Source));
         $webhooks = $this->provided($manifest->name, $manifest->classesFor(Role::Webhook));
+        $logins = $this->provided($manifest->name, $manifest->classesFor(Role::Auth));
 
         $taken = [];
         foreach ($types as $type) {
@@ -71,7 +72,7 @@ final class PackageRegistry
             return $this->reject($name, $taken);
         }
 
-        $this->packages[$manifest->name] = new AcceptedPackage($manifest, $types, $sources, $webhooks);
+        $this->packages[$manifest->name] = new AcceptedPackage($manifest, $types, $sources, $webhooks, $logins);
         foreach ($types as $type) {
             $this->types[$type->key()] = $type;
         }
