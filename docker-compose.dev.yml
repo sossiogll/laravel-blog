@@ -47,6 +47,12 @@ services:
   queue:
     <<: *app
     command: ["watch-restart", "php", "artisan", "horizon"]
+    healthcheck:
+      test: ["CMD-SHELL", "php artisan horizon:status | grep -q running"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
     depends_on:
       app:
         condition: service_healthy
@@ -54,6 +60,13 @@ services:
   scheduler:
     <<: *app
     command: ["watch-restart", "php", "artisan", "schedule:work"]
+    healthcheck:
+      # [w]: keeps the shell running this check from matching itself.
+      test: ["CMD-SHELL", "grep -qs 'schedule:[w]ork' /proc/[0-9]*/cmdline"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     depends_on:
       app:
         condition: service_healthy

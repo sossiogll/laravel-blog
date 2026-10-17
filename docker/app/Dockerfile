@@ -16,7 +16,7 @@ RUN apt-get update \
     && install-php-extensions pdo_mysql intl zip gd bcmath exif pcntl redis opcache
 COPY docker/app/php/common.ini $PHP_INI_DIR/conf.d/zz-common.ini
 ENV COMPOSER_MEMORY_LIMIT=-1
-# The base image probes Caddy's admin API, which only the web server has (and prod turns off): compose decides.
+# The base image probes Caddy's admin API, which only the web server has (and prod turns off): compose defines the checks.
 HEALTHCHECK NONE
 WORKDIR /app
 
