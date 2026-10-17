@@ -34,15 +34,16 @@ jobs:
           git config user.name "Sossio Giallaurito"
           git config user.email "sossiogll@gmail.com"
           set +e
-          bash .github/run.sh > .github/run.log 2>&1
-          echo "exit=$?" >> .github/run.log
+          NO_COLOR=1 COMPOSER_NO_INTERACTION=1 bash .github/run.sh 2>&1 | sed -E 's/\x1b\[[0-9;]*[A-Za-z]//g' > .github/run.log
+          status=${PIPESTATUS[0]}
+          echo "exit=${status}" >> .github/run.log
           # The log is also an annotation: readable where the Actions logs are not.
           tail -c 3500 .github/run.log | python3 -c 'import sys,urllib.parse; t=sys.stdin.read(); print("::notice title=run.log::" + t.replace("%","%25").replace("\r","%0D").replace("\n","%0A"))'
           exit 0
 
       - name: Commit the log and push
         run: |
-          git add .github/run.log
+          git add -f .github/run.log
           git commit -q -m "run: log of $(git rev-parse --short HEAD)" || true
           if ! out=$(git push origin "HEAD:${GITHUB_REF_NAME}" 2>&1); then
             echo "::error title=push::$(echo "$out" | tail -c 1500 | sed ':a;N;$!ba;s/\n/%0A/g')"

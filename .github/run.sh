@@ -1,6 +1,6 @@
 set -euo pipefail
 
-composer create-project laravel/laravel:^12.0 /tmp/app --prefer-dist --no-interaction --no-progress
+composer create-project laravel/laravel:^12.0 /tmp/app --prefer-dist --no-interaction --no-progress --no-ansi
 php /tmp/app/artisan --version
 rm -rf /tmp/app/vendor /tmp/app/node_modules /tmp/app/.env /tmp/app/database/database.sqlite
 
@@ -8,7 +8,7 @@ rm -rf /tmp/app/vendor /tmp/app/node_modules /tmp/app/.env /tmp/app/database/dat
 # files stay: the workflows, the guide, the contract, the licence.
 git ls-files | grep -Ev '^(\.github/|CLAUDE\.md$|contracts/|LICENSE$)' | xargs -r git rm -q
 cp -a /tmp/app/. ./
-git add -A -- . ':!.github/run.log'
+git add -A
 git commit -q -F - <<'MSG'
 Replace the laravel-blog app with a Laravel 12 skeleton
 
