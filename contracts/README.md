@@ -74,6 +74,14 @@ Conformance::checkEntries(FeedSource::definition(), [Article::definition()], $sa
 Both throw one `ConformanceError` listing every violation. A new generic rule goes in `Testing\Conformance`, with a
 good and a bad sample in `tests/Fixtures`.
 
+**One set of rules for entries.** `Content\EntryRules::violations($source, $types, $entry)` decides whether an
+`ExternalEntry` is acceptable for its content type: identity and size limits (the core's columns), title, language,
+field values (`Content\FieldRules`), required fields, media and references. `checkEntries()` is that function over
+your samples, and the core calls the very same one on every entry a source returns: an entry that passes your tests
+is never refused at sync time. `FieldRules` is also what the core uses to check the values a person curates.
+Media and Reference fields hold ids of the core's own records, so a source never sends them in `$fields`: it sends
+`$media` and `$references`.
+
 Packages test against `Testing\StaticContext` (fixed settings, credentials, clock) and `Testing\FakeHttpClient`
 (each URL answers a response or a contract exception), never against the core.
 
