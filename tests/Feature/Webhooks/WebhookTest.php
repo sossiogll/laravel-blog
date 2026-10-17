@@ -28,9 +28,9 @@ final class WebhookTest extends HubTestCase
 
         Queue::fake();
         PackageSetting::create(['package' => 'acme/library', 'settings' => [], 'credentials' => ['secret' => 's3cret']]);
-        $this->shelfA = $this->instance();
-        $this->shelfB = $this->instance(attributes: ['settings' => ['shelf' => 'b']]);
-        $this->disabled = $this->instance(attributes: ['enabled' => false]);
+        $this->shelfA = $this->makeInstance();
+        $this->shelfB = $this->makeInstance(attributes: ['settings' => ['shelf' => 'b']]);
+        $this->disabled = $this->makeInstance(attributes: ['enabled' => false]);
     }
 
     /** @param array<string, mixed> $request */
@@ -64,7 +64,7 @@ final class WebhookTest extends HubTestCase
 
     public function test_without_an_instance_filter_every_enabled_instance_of_the_source_is_synced(): void
     {
-        $this->instance('latest');
+        $this->makeInstance('latest');
 
         $this->push(['source' => 'catalog'])->assertStatus(202)->assertExactJson(['queued' => 2]);
 
@@ -73,7 +73,7 @@ final class WebhookTest extends HubTestCase
 
     public function test_the_values_of_the_request_are_compared_as_text(): void
     {
-        $numbered = $this->instance(attributes: ['settings' => ['shelf' => 5]]);
+        $numbered = $this->makeInstance(attributes: ['settings' => ['shelf' => 5]]);
 
         $this->push(['source' => 'catalog', 'instance' => ['shelf' => '5']])->assertStatus(202);
 

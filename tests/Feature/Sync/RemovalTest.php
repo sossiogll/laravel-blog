@@ -27,7 +27,7 @@ final class RemovalTest extends HubTestCase
 
     public function test_a_source_that_lists_everything_removes_what_it_stops_listing(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->lists('catalog', ['1', '2', '3']);
         $this->sync($instance);
 
@@ -41,7 +41,7 @@ final class RemovalTest extends HubTestCase
 
     public function test_a_source_that_lists_only_the_latest_never_removes_on_absence(): void
     {
-        $instance = $this->instance('latest');
+        $instance = $this->makeInstance('latest');
         $this->lists('latest', ['1', '2', '3']);
         $this->sync($instance);
 
@@ -54,7 +54,7 @@ final class RemovalTest extends HubTestCase
 
     public function test_a_listing_that_fails_midway_removes_nothing(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->lists('catalog', ['1', '2']);
         $this->sync($instance);
 
@@ -71,7 +71,7 @@ final class RemovalTest extends HubTestCase
 
     public function test_an_entry_that_became_invalid_is_not_taken_for_a_removed_one(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->lists('catalog', ['1']);
         $this->sync($instance);
 
@@ -85,8 +85,8 @@ final class RemovalTest extends HubTestCase
 
     public function test_removal_is_limited_to_the_instance_that_was_synced(): void
     {
-        $first = $this->instance();
-        $second = $this->instance('catalog', ['label' => 'Second']);
+        $first = $this->makeInstance();
+        $second = $this->makeInstance('catalog', ['label' => 'Second']);
         $this->lists('catalog', ['1', '2']);
         $this->sync($first);
         $this->sync($second);
@@ -100,7 +100,7 @@ final class RemovalTest extends HubTestCase
 
     public function test_an_incremental_source_removes_what_the_batch_names_and_nothing_else(): void
     {
-        $instance = $this->instance('changes');
+        $instance = $this->makeInstance('changes');
         $this->script->useBatches([new SyncBatch([Entries::book('1'), Entries::book('2'), Entries::book('3')], cursor: new Cursor('c1'))]);
         $this->sync($instance);
 
@@ -114,7 +114,7 @@ final class RemovalTest extends HubTestCase
 
     public function test_a_single_fetch_that_returns_null_removes_that_entry_only(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->lists('catalog', ['1', '2']);
         $this->sync($instance);
         $this->script->calls = [];
@@ -129,7 +129,7 @@ final class RemovalTest extends HubTestCase
 
     public function test_a_single_fetch_updates_the_named_entry_and_removes_nothing_by_absence(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->lists('catalog', ['1', '2']);
         $this->sync($instance);
         $this->script->fetchable = ['1' => Entries::book('1', 'Fresh title')];
@@ -143,7 +143,7 @@ final class RemovalTest extends HubTestCase
 
     public function test_named_entries_fall_back_to_a_full_sync_when_the_source_cannot_fetch_one(): void
     {
-        $instance = $this->instance('latest');
+        $instance = $this->makeInstance('latest');
         $this->lists('latest', ['1']);
 
         $report = $this->sync($instance, ['1']);

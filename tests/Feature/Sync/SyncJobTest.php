@@ -37,13 +37,13 @@ final class SyncJobTest extends HubTestCase
     {
         $this->script->failures['catalog'] = $e;
 
-        return $this->instance();
+        return $this->makeInstance();
     }
 
     public function test_a_good_run_records_its_success(): void
     {
         $this->travelTo('2026-05-05 10:00:00');
-        $instance = $this->instance(attributes: ['status' => SyncStatus::Failed, 'last_error' => 'old', 'retry_after' => now()->addHour()]);
+        $instance = $this->makeInstance(attributes: ['status' => SyncStatus::Failed, 'last_error' => 'old', 'retry_after' => now()->addHour()]);
         $this->script->entries['catalog'] = [Entries::book('1')];
 
         $job = $this->runJob($instance);
@@ -60,7 +60,7 @@ final class SyncJobTest extends HubTestCase
 
     public function test_a_disabled_or_missing_instance_is_left_alone(): void
     {
-        $disabled = $this->instance(attributes: ['enabled' => false]);
+        $disabled = $this->makeInstance(attributes: ['enabled' => false]);
 
         $this->runJob($disabled);
         (new SyncSourceInstance(999))->handle($this->app->make(SourceSynchronizer::class), $this->app->make(InstanceHealth::class), $this->app->make(LoggerInterface::class));
@@ -164,7 +164,7 @@ final class SyncJobTest extends HubTestCase
     public function test_a_failure_keeps_the_time_of_the_last_success(): void
     {
         $this->travelTo('2026-05-05 10:00:00');
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->runJob($instance);
 
         $this->travelTo('2026-05-05 11:00:00');
@@ -178,7 +178,7 @@ final class SyncJobTest extends HubTestCase
 
     public function test_an_instance_whose_package_is_gone_fails_for_the_admin_to_see(): void
     {
-        $instance = $this->instance(attributes: ['package' => 'gone/package']);
+        $instance = $this->makeInstance(attributes: ['package' => 'gone/package']);
 
         $job = $this->runJob($instance);
 
@@ -189,7 +189,7 @@ final class SyncJobTest extends HubTestCase
 
     public function test_when_the_queue_gives_up_the_status_does_not_stay_retrying(): void
     {
-        $instance = $this->instance(attributes: ['status' => SyncStatus::Retrying]);
+        $instance = $this->makeInstance(attributes: ['status' => SyncStatus::Retrying]);
 
         (new SyncSourceInstance($instance->id))->failed(new RuntimeException('too many attempts'));
 
@@ -210,7 +210,7 @@ final class SyncJobTest extends HubTestCase
 
     public function test_the_job_runs_through_the_queue_end_to_end(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->script->entries['catalog'] = [Entries::book('1'), Entries::book('2')];
 
         SyncSourceInstance::dispatchSync($instance->id);

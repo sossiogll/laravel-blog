@@ -38,7 +38,7 @@ final class ContextTest extends HubTestCase
     public function test_the_instance_settings_win_over_the_package_settings(): void
     {
         PackageSetting::create(['package' => 'acme/library', 'settings' => ['a' => 'package', 'b' => 'package']]);
-        $instance = $this->instance(attributes: ['settings' => ['b' => 'instance', 'c' => 'instance']]);
+        $instance = $this->makeInstance(attributes: ['settings' => ['b' => 'instance', 'c' => 'instance']]);
 
         $context = $this->factory->forInstance($instance);
 
@@ -52,7 +52,7 @@ final class ContextTest extends HubTestCase
     public function test_credentials_are_decrypted_and_the_instance_wins(): void
     {
         PackageSetting::create(['package' => 'acme/library', 'settings' => [], 'credentials' => ['shared' => 'pkg', 'token' => 'pkg']]);
-        $instance = $this->instance(attributes: ['credentials' => ['token' => 'instance']]);
+        $instance = $this->makeInstance(attributes: ['credentials' => ['token' => 'instance']]);
 
         $context = $this->factory->forInstance($instance);
 
@@ -63,7 +63,7 @@ final class ContextTest extends HubTestCase
 
     public function test_an_instance_without_package_settings_works_on_its_own(): void
     {
-        $context = $this->factory->forInstance($this->instance());
+        $context = $this->factory->forInstance($this->makeInstance());
 
         $this->assertSame('a', $context->setting('shelf'));
         $this->assertNull($context->credential('token'));
@@ -72,7 +72,7 @@ final class ContextTest extends HubTestCase
     public function test_a_package_context_has_the_package_values_only(): void
     {
         PackageSetting::create(['package' => 'acme/library', 'settings' => ['a' => 'package'], 'credentials' => ['secret' => 'shh']]);
-        $this->instance(attributes: ['settings' => ['a' => 'instance'], 'credentials' => ['secret' => 'other']]);
+        $this->makeInstance(attributes: ['settings' => ['a' => 'instance'], 'credentials' => ['secret' => 'other']]);
 
         $context = $this->factory->forPackage('acme/library');
 
@@ -121,7 +121,7 @@ final class ContextTest extends HubTestCase
 
     public function test_the_logger_tags_every_line_with_the_package_and_the_instance(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
 
         $this->factory->forInstance($instance)->logger()->info('Fetched', ['count' => 3]);
         $this->factory->forPackage('acme/library')->logger()->warning('Hooked');

@@ -34,7 +34,7 @@ abstract class HubTestCase extends TestCase
     }
 
     /** @param array<string, mixed> $attributes */
-    protected function instance(string $source = 'catalog', array $attributes = []): SourceInstance
+    protected function makeInstance(string $source = 'catalog', array $attributes = []): SourceInstance
     {
         // forceFill: status, cursor and the like are the core's to write, not mass-assignable.
         $instance = (new SourceInstance())->forceFill($attributes + [

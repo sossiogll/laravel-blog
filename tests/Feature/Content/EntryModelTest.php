@@ -46,7 +46,7 @@ final class EntryModelTest extends HubTestCase
 
     public function test_an_entry_of_a_source_is_unique_by_instance_and_external_id(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->entry(['slug' => 'a'])->forceFill(['source_instance_id' => $instance->id, 'external_id' => '1'])->save();
         // Entries written by hand have no instance and no external id, and any number of them is fine.
         $this->entry(['slug' => 'b']);
@@ -58,7 +58,7 @@ final class EntryModelTest extends HubTestCase
 
     public function test_removing_a_source_instance_keeps_its_content(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->entry()->forceFill(['source_instance_id' => $instance->id, 'external_id' => '1'])->save();
 
         $instance->delete();
@@ -86,7 +86,7 @@ final class EntryModelTest extends HubTestCase
 
     public function test_credentials_are_encrypted_at_rest_and_never_serialized(): void
     {
-        $instance = $this->instance(attributes: ['credentials' => ['token' => 'abc-secret-token']]);
+        $instance = $this->makeInstance(attributes: ['credentials' => ['token' => 'abc-secret-token']]);
         $package = PackageSetting::create(['package' => 'acme/library', 'settings' => ['a' => 1], 'credentials' => ['secret' => 'xyz-secret-value']]);
 
         foreach ([$instance, $package] as $model) {

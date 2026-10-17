@@ -37,7 +37,7 @@ final class RemoteMediaTest extends HubTestCase
     public function test_a_sync_queues_one_download_per_file_and_only_when_the_entry_is_written(): void
     {
         Queue::fake();
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->script->entries['catalog'] = [Entries::book('1', 'Dune', ['media' => [
             new RemoteMedia('cover', 'https://img.test/cover.png', alt: 'Cover'),
             new RemoteMedia('thumbnail', 'https://img.test/thumb.png', headers: ['Authorization' => 'token x']),

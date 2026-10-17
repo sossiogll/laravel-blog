@@ -20,7 +20,7 @@ final class EntryUpsertTest extends HubTestCase
 {
     public function test_a_new_entry_is_created_from_what_the_source_returned(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->script->entries['catalog'] = [Entries::book('1', 'Dune', [
             'summary' => 'Sand.',
             'body' => '# Spice',
@@ -60,7 +60,7 @@ final class EntryUpsertTest extends HubTestCase
             'publishedAt' => new DateTimeImmutable('2026-03-01T12:00:00+02:00'),
         ])];
 
-        $this->sync($this->instance());
+        $this->sync($this->makeInstance());
 
         $this->assertSame('2026-03-01 10:00:00', DB::table('entries')->value('published_at'));
         $this->assertSame('UTC', Entry::sole()->published_at->getTimezone()->getName());
@@ -68,7 +68,7 @@ final class EntryUpsertTest extends HubTestCase
 
     public function test_a_changed_entry_is_updated_and_keeps_its_slug_and_id(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->script->entries['catalog'] = [Entries::book('1', 'Dune')];
         $this->sync($instance);
         $id = Entry::sole()->id;
@@ -86,7 +86,7 @@ final class EntryUpsertTest extends HubTestCase
 
     public function test_an_entry_with_the_same_fingerprint_is_not_written(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->script->entries['catalog'] = [Entries::book('1', 'Dune')];
         $this->sync($instance);
         $before = Entry::sole();
@@ -101,7 +101,7 @@ final class EntryUpsertTest extends HubTestCase
 
     public function test_an_entry_without_a_fingerprint_is_always_written(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->script->entries['catalog'] = [Entries::book('1', 'Dune', ['fingerprint' => null])];
         $this->sync($instance);
         $this->script->entries['catalog'] = [Entries::book('1', 'Dune', ['fingerprint' => null])];
@@ -112,7 +112,7 @@ final class EntryUpsertTest extends HubTestCase
 
     public function test_curated_values_survive_every_sync(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->script->entries['catalog'] = [Entries::book('1', 'Dune')];
         $this->sync($instance);
         Entry::sole()->update(['curated' => ['featured' => true, 'position' => 3, 'blurb' => 'Read it']]);
@@ -128,7 +128,7 @@ final class EntryUpsertTest extends HubTestCase
 
     public function test_the_author_of_an_entry_is_not_touched_by_a_sync(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->script->entries['catalog'] = [Entries::book('1', 'Dune')];
         $this->sync($instance);
         $author = User::factory()->create();
@@ -149,7 +149,7 @@ final class EntryUpsertTest extends HubTestCase
             Entries::book('4', 'Same title', ['language' => 'it']),
         ];
 
-        $this->sync($this->instance());
+        $this->sync($this->makeInstance());
 
         $this->assertSame(
             ['1' => 'same-title', '2' => 'same-title-2', '3' => 'same-title-3', '4' => 'same-title'],
@@ -161,15 +161,15 @@ final class EntryUpsertTest extends HubTestCase
     {
         $this->script->entries['catalog'] = [Entries::book('1', 'Dune')];
 
-        $this->sync($this->instance());
-        $this->sync($this->instance('catalog', ['label' => 'Second']));
+        $this->sync($this->makeInstance());
+        $this->sync($this->makeInstance('catalog', ['label' => 'Second']));
 
         $this->assertSame(['dune', 'dune-2'], Entry::orderBy('id')->pluck('slug')->all());
     }
 
     public function test_a_slug_claimed_after_it_was_chosen_is_chosen_again(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         // A writer that wins the slug between our choice and our insert.
         $this->app->bind(SlugAllocator::class, fn () => new class () extends SlugAllocator {
             private int $calls = 0;
@@ -195,7 +195,7 @@ final class EntryUpsertTest extends HubTestCase
 
     public function test_losing_the_race_to_create_the_same_entry_updates_it_instead_of_failing(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->app->bind(SlugAllocator::class, fn () => new class ($instance->id) extends SlugAllocator {
             private bool $raced = false;
 
@@ -233,7 +233,7 @@ final class EntryUpsertTest extends HubTestCase
                 . '<a href="https://ok.test/page">ok</a><img src="https://img.test/a.png" onerror="steal()"><iframe src="https://evil.test"></iframe></p>',
         ])];
 
-        $this->sync($this->instance());
+        $this->sync($this->makeInstance());
 
         $entry = Entry::sole();
         $this->assertSame(BodyFormat::Html, $entry->body_format);
@@ -251,14 +251,14 @@ final class EntryUpsertTest extends HubTestCase
         $markdown = "# Title\n\nSome <b>inline</b> html and a [link](https://a.test).";
         $this->script->entries['catalog'] = [Entries::book('1', 'Dune', ['body' => $markdown])];
 
-        $this->sync($this->instance());
+        $this->sync($this->makeInstance());
 
         $this->assertSame($markdown, Entry::sole()->body);
     }
 
     public function test_an_invalid_entry_is_skipped_and_reported_without_failing_the_run(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->script->entries['catalog'] = [
             Entries::book('bad', 'No isbn', ['fields' => []]),
             Entries::book('worse', 'Wrong type', ['type' => 'film']),
@@ -277,7 +277,7 @@ final class EntryUpsertTest extends HubTestCase
 
     public function test_an_entry_the_source_stopped_listing_comes_back_when_it_is_listed_again(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->script->entries['catalog'] = [Entries::book('1', 'Dune')];
         $this->sync($instance);
         $this->script->entries['catalog'] = [];
@@ -303,7 +303,7 @@ final class EntryUpsertTest extends HubTestCase
             Entries::book('2', 'Second'),
         ];
 
-        $this->sync($this->instance());
+        $this->sync($this->makeInstance());
 
         $first = Entry::where('external_id', '1')->sole();
         $second = Entry::where('external_id', '2')->sole();
@@ -319,11 +319,11 @@ final class EntryUpsertTest extends HubTestCase
         $this->script->entries['catalog'] = [
             Entries::book('1', 'First', ['references' => [new ExternalRef('related', type: 'book', slug: 'later-book')]]),
         ];
-        $this->sync($this->instance());
+        $this->sync($this->makeInstance());
         $this->assertNull(EntryReference::sole()->target_entry_id);
 
         $this->script->entries['latest'] = [Entries::book('9', 'Later book')];
-        $this->sync($this->instance('latest'));
+        $this->sync($this->makeInstance('latest'));
 
         $this->assertSame(Entry::where('external_id', '9')->sole()->id, EntryReference::sole()->target_entry_id);
     }
@@ -336,14 +336,14 @@ final class EntryUpsertTest extends HubTestCase
             Entries::book('from-it', 'Source', ['language' => 'it', 'references' => [new ExternalRef('related', type: 'book', slug: 'target')]]),
         ];
 
-        $this->sync($this->instance());
+        $this->sync($this->makeInstance());
 
         $this->assertSame(Entry::where('external_id', 'it')->sole()->id, EntryReference::sole()->target_entry_id);
     }
 
     public function test_references_are_replaced_when_the_entry_changes(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->script->entries['catalog'] = [Entries::book('1', 'First', ['references' => [
             new ExternalRef('related', type: 'book', slug: 'a'),
             new ExternalRef('related', type: 'book', slug: 'b'),
@@ -358,7 +358,7 @@ final class EntryUpsertTest extends HubTestCase
 
     public function test_the_synchronizer_moves_data_and_leaves_the_status_to_the_job(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->script->entries['catalog'] = [Entries::book('1')];
 
         $this->sync($instance);

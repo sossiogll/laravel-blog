@@ -35,7 +35,7 @@ final class SchedulingTest extends HubTestCase
 
     public function test_an_instance_that_never_ran_is_due(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
 
         $this->assertSame([$instance->id], $this->dueIds());
     }
@@ -43,8 +43,8 @@ final class SchedulingTest extends HubTestCase
     public function test_an_instance_is_due_once_the_default_interval_of_its_source_has_elapsed(): void
     {
         // catalog declares 30 minutes.
-        $recent = $this->instance(attributes: ['last_run_at' => $this->now->copy()->subMinutes(29)]);
-        $elapsed = $this->instance(attributes: ['last_run_at' => $this->now->copy()->subMinutes(30)]);
+        $recent = $this->makeInstance(attributes: ['last_run_at' => $this->now->copy()->subMinutes(29)]);
+        $elapsed = $this->makeInstance(attributes: ['last_run_at' => $this->now->copy()->subMinutes(30)]);
 
         $this->assertSame([$elapsed->id], $this->dueIds());
         $this->assertNotSame($recent->id, $elapsed->id);
@@ -52,31 +52,31 @@ final class SchedulingTest extends HubTestCase
 
     public function test_the_interval_of_the_instance_wins_over_the_default(): void
     {
-        $short = $this->instance(attributes: ['interval_minutes' => 5, 'last_run_at' => $this->now->copy()->subMinutes(6)]);
-        $this->instance(attributes: ['interval_minutes' => 120, 'last_run_at' => $this->now->copy()->subMinutes(60)]);
+        $short = $this->makeInstance(attributes: ['interval_minutes' => 5, 'last_run_at' => $this->now->copy()->subMinutes(6)]);
+        $this->makeInstance(attributes: ['interval_minutes' => 120, 'last_run_at' => $this->now->copy()->subMinutes(60)]);
 
         $this->assertSame([$short->id], $this->dueIds());
     }
 
     public function test_an_interval_of_zero_means_on_demand_only(): void
     {
-        $this->instance(attributes: ['interval_minutes' => 0]);
+        $this->makeInstance(attributes: ['interval_minutes' => 0]);
 
         $this->assertSame([], $this->dueIds());
     }
 
     public function test_disabled_and_unknown_instances_are_never_due(): void
     {
-        $this->instance(attributes: ['enabled' => false]);
-        $this->instance(attributes: ['package' => 'gone/package']);
+        $this->makeInstance(attributes: ['enabled' => false]);
+        $this->makeInstance(attributes: ['package' => 'gone/package']);
 
         $this->assertSame([], $this->dueIds());
     }
 
     public function test_an_instance_waits_for_its_retry_time(): void
     {
-        $waiting = $this->instance(attributes: ['status' => SyncStatus::Retrying, 'retry_after' => $this->now->copy()->addMinute()]);
-        $ready = $this->instance(attributes: ['status' => SyncStatus::Retrying, 'retry_after' => $this->now->copy()->subMinute()]);
+        $waiting = $this->makeInstance(attributes: ['status' => SyncStatus::Retrying, 'retry_after' => $this->now->copy()->addMinute()]);
+        $ready = $this->makeInstance(attributes: ['status' => SyncStatus::Retrying, 'retry_after' => $this->now->copy()->subMinute()]);
 
         $this->assertSame([$ready->id], $this->dueIds());
         $this->assertNotSame($waiting->id, $ready->id);
@@ -84,8 +84,8 @@ final class SchedulingTest extends HubTestCase
 
     public function test_a_failing_instance_is_left_for_the_admin(): void
     {
-        $this->instance(attributes: ['status' => SyncStatus::Failing]);
-        $failed = $this->instance(attributes: ['status' => SyncStatus::Failed]);
+        $this->makeInstance(attributes: ['status' => SyncStatus::Failing]);
+        $failed = $this->makeInstance(attributes: ['status' => SyncStatus::Failed]);
 
         $this->assertSame([$failed->id], $this->dueIds());
     }
@@ -93,8 +93,8 @@ final class SchedulingTest extends HubTestCase
     public function test_the_due_command_queues_a_sync_for_each_due_instance(): void
     {
         Queue::fake();
-        $due = $this->instance();
-        $this->instance(attributes: ['interval_minutes' => 0]);
+        $due = $this->makeInstance();
+        $this->makeInstance(attributes: ['interval_minutes' => 0]);
 
         $this->artisan('gllhub:sync-due')->expectsOutputToContain('Queued 1 sync(s).')->assertSuccessful();
 
@@ -113,7 +113,7 @@ final class SchedulingTest extends HubTestCase
 
     public function test_the_sync_command_runs_one_instance_now_and_reports_the_result(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->script->entries['catalog'] = [Entries::book('1')];
 
         $this->artisan('gllhub:sync', ['instance' => $instance->id])
@@ -125,7 +125,7 @@ final class SchedulingTest extends HubTestCase
 
     public function test_the_sync_command_fails_with_the_reason_when_the_run_fails(): void
     {
-        $instance = $this->instance();
+        $instance = $this->makeInstance();
         $this->script->failures['catalog'] = new InvalidCredentials('the token was refused');
 
         $this->artisan('gllhub:sync', ['instance' => $instance->id])
@@ -135,9 +135,9 @@ final class SchedulingTest extends HubTestCase
 
     public function test_the_sync_command_with_all_runs_every_enabled_instance(): void
     {
-        $this->instance();
-        $this->instance('latest');
-        $this->instance(attributes: ['enabled' => false]);
+        $this->makeInstance();
+        $this->makeInstance('latest');
+        $this->makeInstance(attributes: ['enabled' => false]);
         $this->script->entries['catalog'] = [Entries::book('1')];
         $this->script->entries['latest'] = [Entries::book('2')];
 
