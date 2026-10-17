@@ -74,7 +74,7 @@ return [
              *       ],
              * ],
              *
-             * For a complete list of available customization options, see https://github.com/spatie/db-dumper
+             * For a complete list of available customization options, see the documentation of spatie/db-dumper
              */
             'databases' => [
                 env('DB_CONNECTION', 'mysql'),
@@ -88,7 +88,7 @@ return [
          * Spatie\DbDumper\Compressors\GzipCompressor::class.
          *
          * You can also create custom compressor. More info on that here:
-         * https://github.com/spatie/db-dumper#using-compression
+         * the documentation of spatie/db-dumper (compression)
          *
          * If you do not want any compressor at all, set it to null.
          */
