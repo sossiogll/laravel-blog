@@ -3,19 +3,17 @@ set -euo pipefail
 exec </dev/null
 cp .env.example .env
 composer install --no-interaction --prefer-dist --no-progress >/dev/null 2>&1
+php artisan key:generate >/dev/null
 set +e
+php artisan test 2>&1 | tail -60
+(cd contracts && composer install -q --no-interaction >/dev/null 2>&1 && vendor/bin/phpunit 2>&1 | tail -8)
 V=vendor/filament
-echo "### ButtonComponentColorMap"; cat $V/support/src/View/Components/ColorMaps/ButtonComponentColorMap.php | head -120
-echo "### ComponentColorMap"; sed -n 1,140p $V/support/src/View/Components/ColorMaps/ComponentColorMap.php
-echo "### list makeTable rest"; sed -n 135,215p $V/filament/src/Resources/Pages/ListRecords.php
-echo "### tab"; find $V -name Tab.php | head; find $V -name ThemeMode.php | head; find $V -name Heroicon.php | head -2
-echo "### list tabs"; grep -n "activeTab\|function getTabs\|function getDefaultActiveTab\|Url" $V/filament/src/Resources/Pages/ListRecords/Concerns/HasTabs.php
-echo "### make user"; grep -n "signature\|--" $V/filament/src/Commands/MakeUserCommand.php | head
-echo "### Panel navgroups"; grep -n "function navigationGroups" -B3 -A20 $V/filament/src/Panel/Concerns/HasNavigation.php | head -50
-echo "### Resource HasNavigation getNavigationItems"; sed -n 55,100p $V/filament/src/Resources/Resource/Concerns/HasNavigation.php
-echo "### table filters url"; grep -rn "Url(" $V/tables/src/Concerns/*.php | head
-echo "### trashedfilter"; sed -n 1,80p $V/tables/src/Filters/TrashedFilter.php
-echo "### Resource getUrl"; sed -n 90,150p $V/filament/src/Resources/Resource/Concerns/HasPages.php 2>/dev/null; ls $V/filament/src/Resources/Resource/Concerns
-echo "### repeater simple"; grep -n "function simple\|function itemLabel\|function addable\|function reorderable" $V/forms/src/Components/Repeater.php
-echo "### Authenticate"; cat $V/filament/src/Http/Middleware/Authenticate.php | sed -n 1,80p
-echo "### sticky stats"; grep -n "function " $V/widgets/src/StatsOverviewWidget.php | head -30
+echo "### Page content"; grep -n "function content\|string \$view" $V/filament/src/Pages/Page.php
+echo "### markAsRequired"; grep -rn "function markAsRequired" $V/*/src | head -3
+echo "### select"; grep -n "public function \(getOptionLabel\|getOptionLabels\|getSearchResultsUsing\)" $V/forms/src/Components/Select.php
+echo "### tabs"; grep -rn "activeTab" $V/filament/src/Resources/Pages/ListRecords/Concerns/*.php | head -8
+echo "### Heroicon"; grep -c "OutlinedDocumentText\|OutlinedCircleStack\|OutlinedPuzzlePiece\|OutlinedArrowPath\|OutlinedPencilSquare" $V/support/src/Icons/Heroicon.php
+echo "### makeuser"; grep -n "name\|email\|password" $V/filament/src/Commands/MakeUserCommand.php | head -20
+echo "### testing"; grep -rhn "function \(assert\|fill\|call\)[A-Za-z]*" $V/schemas/src/Testing $V/forms/src/Testing $V/tables/src/Testing $V/actions/src/Testing 2>/dev/null | sed 's/^\s*//' | cut -c1-120 | head -70
+echo "### Livewire comp"; grep -n "function make\|function key" $V/schemas/src/Components/Livewire.php
+echo "### color"; php -r 'require "vendor/autoload.php"; $p=Filament\Support\Colors\Color::generateV3Palette("#d4ff3a"); print_r($p); $m=Filament\Support\View\Components\ColorMaps\ButtonComponentColorMap::make($p)->lightBackground(600,500)->darkBackground(500,400)->get(); print_r($m); foreach(["text","dark:text"] as $k){} '
