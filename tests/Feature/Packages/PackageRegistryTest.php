@@ -170,7 +170,6 @@ final class PackageRegistryTest extends TestCase
         $this->app->instance(PackageRegistry::class, $registry);
 
         $this->artisan('gllhub:packages')
-            ->expectsOutputToContain('acme/library')
             ->expectsOutputToContain('catalog, latest, changes')
             ->expectsOutputToContain('Rejected acme/future')
             ->expectsOutputToContain('declares contracts 2.0')

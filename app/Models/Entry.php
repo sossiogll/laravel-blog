@@ -78,7 +78,8 @@ class Entry extends Model implements HasMedia
     {
         $this->addMediaCollection(self::THUMBNAIL)->singleFile();
 
-        $type = app(PackageRegistry::class)->contentType($this->type);
+        // The media library also asks a blank model for its collections.
+        $type = $this->type === null ? null : app(PackageRegistry::class)->contentType($this->type);
         foreach ($type?->fields ?? [] as $field) {
             if ($field->type === FieldType::Media) {
                 $collection = $this->addMediaCollection($field->key);
