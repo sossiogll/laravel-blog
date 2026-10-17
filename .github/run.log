@@ -1,209 +1,154 @@
-  ✓ the due command queues a sync for each due instance                  0.04s  
-  ✓ the due command is scheduled every minute                            0.03s  
-  ✓ the sync command runs one instance now and reports the result        0.06s  
-  ✓ the sync command fails with the reason when the run fails            0.05s  
-  ✓ the sync command with all runs every enabled instance                0.08s  
-  ✓ the sync command needs an instance that exists                       0.04s  
+
+   PASS  Tests\Unit\BodySanitizerTest
+
+   PASS  Tests\Unit\ConfigurationTest
+
+   PASS  Tests\Unit\EntryValidatorTest
+
+   PASS  Tests\Unit\ExampleTest
+
+   PASS  Tests\Unit\SlugTest
+
+   FAIL  Tests\Feature\Admin\EntryTest
+  ⨯ a hand written entry can be edited entirely                          0.16s  
+
+   FAIL  Tests\Feature\Admin\PanelTest
+  ⨯ the panel loads for a signed in user                                 1.82s  
+  ⨯ package wide settings get their defaults and keep a secret left bla… 0.06s  
+
+   PASS  Tests\Feature\Admin\SourceInstanceTest
+
+   PASS  Tests\Feature\Architecture\GoldenRuleTest
+
+   PASS  Tests\Feature\Architecture\LayeringTest
+
+   PASS  Tests\Feature\Content\EntryEditorTest
+
+   PASS  Tests\Feature\Content\EntryModelTest
+
+   PASS  Tests\Feature\Content\EntryUpsertTest
+
+   PASS  Tests\Feature\Content\RemoteMediaTest
+
+   PASS  Tests\Feature\ExampleTest
+
+   PASS  Tests\Feature\Packages\PackageRegistryTest
+
+   PASS  Tests\Feature\Runtime\ContextTest
+
+   PASS  Tests\Feature\Runtime\LaravelHttpClientTest
+
+   PASS  Tests\Feature\Sync\IncrementalSyncTest
+
+   PASS  Tests\Feature\Sync\RemovalTest
+
+   PASS  Tests\Feature\Sync\SchedulingTest
 
    PASS  Tests\Feature\Sync\SyncJobTest
-  ✓ a good run records its success                                       0.06s  
-  ✓ a disabled or missing instance is left alone                         0.05s  
-  ✓ unavailable is retried after a backoff                               0.04s  
-  ✓ the backoff doubles up to a ceiling and then gives up                0.03s  
-  ✓ rate limited is released for as long as the service asked            0.05s  
-  ✓ invalid credentials stop the instance without a retry                0.04s  
-  ✓ invalid configuration names the setting and does not retry           0.05s  
-  ✓ anything else is a bug that is reported and not retried              0.05s  
-  ✓ contract failures are not reported as bugs                           0.04s  
-  ✓ a failure keeps the time of the last success                         0.06s  
-  ✓ an instance whose package is gone fails for the admin to see         0.04s  
-  ✓ when the queue gives up the status does not stay retrying            0.04s  
-  ✓ the same sync is queued once and syncs of one instance do not overl… 0.03s  
-  ✓ the job runs through the queue end to end                            0.06s  
 
    PASS  Tests\Feature\Webhooks\WebhookTest
-  ✓ a verified call queues the sync of the instances it names            0.07s  
-  ✓ without ids the whole instance is synced                             0.05s  
-  ✓ without an instance filter every enabled instance of the source is…  0.05s  
-  ✓ the values of the request are compared as text                       0.05s  
-  ✓ an unmatched request queues nothing but is still accepted            0.05s  
-  ✓ a source the webhook does not refresh is ignored                     0.05s  
-  ✓ a call the package does not verify is refused                        0.05s  
-  ✓ a webhook without a configured secret verifies nothing               0.05s  
-  ✓ an unknown webhook is not found                                      0.05s  
-  ✓ only post is served                                                  0.28s  
-  ✓ the route has no web middleware so no session and no csrf            0.04s  
-  ✓ calls are rate limited per caller and endpoint                       0.06s  
   ────────────────────────────────────────────────────────────────────────────  
-   FAILED  Tests\Feature\Content\EntryEditorTest > two entries with the same…   
-  Failed asserting that two strings are identical.
-  -'chosen'
-  +'a-chosen'
+   FAILED  Tests\Feature\Admin\EntryTest > a hand written entry can be edite…   
+  Failed asserting that two arrays are identical.
+   Array &0 [
+  +    'featured' => false,
+       'position' => 3,
+   ]
   
 
-  at tests/Feature/Content/EntryEditorTest.php:82
-     78▕     public function test_two_entries_with_the_same_title_get_different_slugs(): void
-     79▕     {
-     80▕         $this->assertSame('dune', $this->editor->create('book', $this->input(), null)->slug);
-     81▕         $this->assertSame('dune-2', $this->editor->create('book', $this->input(), null)->slug);
-  ➜  82▕         $this->assertSame('chosen', $this->editor->create('book', $this->input(['slug' => 'A Chosen!']), null)->slug);
-     83▕     }
-     84▕ 
-     85▕     public function test_the_rules_sources_are_held_to_apply_to_what_is_written_by_hand(): void
-     86▕     {
+  at tests/Feature/Admin/EntryTest.php:64
+     60▕         $fresh = $entry->fresh();
+     61▕         $this->assertSame('Dune Messiah', $fresh->title);
+     62▕         $this->assertSame('dune', $fresh->slug);
+     63▕         $this->assertSame(['isbn' => '2'], $fresh->fields);
+  ➜  64▕         $this->assertSame(['position' => 3], $fresh->curated);
+     65▕     }
+     66▕ 
+     67▕     public function test_a_synced_entry_shows_what_the_source_owns_but_only_takes_curated_values(): void
+     68▕     {
 
-  1   tests/Feature/Content/EntryEditorTest.php:82
+  1   tests/Feature/Admin/EntryTest.php:64
 
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Admin\PanelTest > the panel loads for a signed in u…   
+  Expected response status code [200] but received 500.
+Failed asserting that 500 is identical to 200.
 
-  Tests:    1 failed, 162 passed (488 assertions)
-  Duration: 6.93s
+The following exception occurred during the last request:
 
-Runtime:       PHP 8.4.26
-Configuration: /home/runner/work/laravel-blog/laravel-blog/contracts/phpunit.xml
-
-.............                                                     13 / 13 (100%)
-
-Time: 00:00.012, Memory: 8.00 MB
-
-OK (13 tests, 67 assertions)
-### Page content
-84:    protected string $view = 'filament-panels::pages.page';
-567:    public function content(Schema $schema): Schema
-### markAsRequired
-vendor/filament/forms/src/Components/Concerns/CanBeMarkedAsRequired.php:11:    public function markAsRequired(bool | Closure | null $condition = true): static
-vendor/filament/forms/src/Components/Repeater/TableColumn.php:54:    public function markAsRequired(bool | Closure $condition = true): static
-### select
-472:    public function getOptionLabelUsing(?Closure $callback): static
-486:    public function getOptionLabelsUsing(?Closure $callback): static
-493:    public function getSearchResultsUsing(?Closure $callback): static
-570:    public function getOptionLabel(bool $withDefault = true): ?string
-630:    public function getOptionLabels(bool $withDefaults = true, ?array $options = null): array
-760:    public function getOptionLabelsForJs(): array
-1479:    public function getOptionLabelFromRecordUsing(?Closure $callback): static
-1491:    public function getOptionLabelFromRecord(Model $record): string
-### tabs
-grep: vendor/filament/filament/src/Resources/Pages/ListRecords/Concerns/*.php: No such file or directory
-### Heroicon
-6
-### makeuser
-3:namespace Filament\Commands;
-17:use function Laravel\Prompts\password;
-20:#[AsCommand(name: 'make:filament-user', aliases: [
-30:    protected $name = 'make:filament-user';
-47:                name: 'name',
-50:                description: 'The name of the user',
-53:                name: 'email',
-56:                description: 'A valid and unique email address',
-59:                name: 'password',
-62:                description: 'The password for the user (min. 8 characters)',
-65:                name: 'panel',
-74:     * @var array{'name': string | null, 'email': string | null, 'password': string | null}
-101:     * @return array{'name': string, 'email': string, 'password': string}
-106:            'name' => $this->options['name'] ?? text(
-111:            'email' => $this->options['email'] ?? text(
-114:                validate: fn (string $email): ?string => match (true) {
-115:                    ! filter_var($email, FILTER_VALIDATE_EMAIL) => 'The email address must be valid.',
-116:                    static::getUserModel()::query()->where('email', $email)->exists() => 'A user with this email address already exists',
-121:            'password' => Hash::make($this->options['password'] ?? password(
-140:        $this->components->info('Success! ' . ($user->getAttribute('email') ?? $user->getAttribute('username') ?? 'You') . " may now log in at {$loginUrl}");
-### testing
-23:    public function assertSchemaComponentExists(): Closure
-59:    public function assertSchemaComponentDoesNotExist(): Closure
-87:    public function assertSchemaComponentVisible(): Closure
-116:    public function assertSchemaComponentHidden(): Closure
-145:    public function assertSchemaExists(): Closure
-163:    public function assertSchemaStateSet(): Closure
-206:    public function assertSchemaComponentStateSet(): Closure
-235:    public function assertSchemaComponentStateNotSet(): Closure
-264:    public function assertWizardStepExists(): Closure
-291:    public function assertWizardCurrentStep(): Closure
-23:    public function fillForm(): Closure
-75:    public function assertFormSet(): Closure
-84:    public function assertHasFormErrors(): Closure
-119:    public function assertHasNoFormErrors(): Closure
-154:    public function assertFormExists(): Closure
-163:    public function assertFormComponentExists(): Closure
-177:    public function assertFormComponentDoesNotExist(): Closure
-186:    public function assertFormFieldExists(): Closure
-228:    public function assertFormFieldDoesNotExist(): Closure
-257:    public function assertFormFieldDisabled(): Closure
-294:    public function assertFormFieldIsDisabled(): Closure
-299:    public function assertFormFieldEnabled(): Closure
-336:    public function assertFormFieldIsEnabled(): Closure
-341:    public function assertFormFieldReadOnly(): Closure
-373:    public function assertFormFieldIsReadOnly(): Closure
-378:    public function assertFormFieldHidden(): Closure
-410:    public function assertFormFieldIsHidden(): Closure
-415:    public function assertFormFieldVisible(): Closure
-447:    public function assertFormFieldIsVisible(): Closure
-50:    public function assertFormComponentActionDataSet(): Closure
-59:    public function callFormComponentAction(): Closure
-72:    public function callMountedFormComponentAction(): Closure
-81:    public function assertFormComponentActionExists(): Closure
-94:    public function assertFormComponentActionDoesNotExist(): Closure
-107:    public function assertFormComponentActionVisible(): Closure
-120:    public function assertFormComponentActionHidden(): Closure
-133:    public function assertFormComponentActionEnabled(): Closure
-146:    public function assertFormComponentActionDisabled(): Closure
-159:    public function assertFormComponentActionHasIcon(): Closure
-172:    public function assertFormComponentActionDoesNotHaveIcon(): Closure
-185:    public function assertFormComponentActionHasLabel(): Closure
-198:    public function assertFormComponentActionDoesNotHaveLabel(): Closure
-211:    public function assertFormComponentActionHasColor(): Closure
-224:    public function assertFormComponentActionDoesNotHaveColor(): Closure
-237:    public function assertFormComponentActionHasUrl(): Closure
-250:    public function assertFormComponentActionDoesNotHaveUrl(): Closure
-263:    public function assertFormComponentActionShouldOpenUrlInNewTab(): Closure
-276:    public function assertFormComponentActionShouldNotOpenUrlInNewTab(): Closure
-289:    public function assertFormComponentActionMounted(): Closure
-302:    public function assertFormComponentActionNotMounted(): Closure
-315:    public function assertFormComponentActionHalted(): Closure
-320:    public function assertHasFormComponentActionErrors(): Closure
-329:    public function assertHasNoFormComponentActionErrors(): Closure
-23:    public function assertCanRenderTableColumn(): Closure
-45:    public function assertCanNotRenderTableColumn(): Closure
-67:    protected function assertTableRecordKeyExists(): Closure
-83:    public function assertTableColumnExists(): Closure
-121:    public function assertTableColumnDoesNotExist(): Closure
-165:    public function assertTableColumnVisible(): Closure
-184:    public function assertTableColumnHidden(): Closure
-203:    public function assertTableColumnStateSet(): Closure
-252:    public function assertTableColumnStateNotSet(): Closure
-301:    public function assertTableColumnFormattedStateSet(): Closure
-342:    public function assertTableColumnFormattedStateNotSet(): Closure
-383:    public function assertTableColumnHasExtraAttributes(): Closure
-420:    public function assertTableColumnDoesNotHaveExtraAttributes(): Closure
-457:    public function assertTableColumnHasDescription(): Closure
-495:    public function assertTableColumnDoesNotHaveDescription(): Closure
-533:    public function assertTableSelectColumnHasOptions(): Closure
-571:    public function assertTableSelectColumnDoesNotHaveOptions(): Closure
-cut: write error: Broken pipe
-### Livewire comp
-35:    public static function make(string | Closure $component, array | Closure $data = []): static
-### color
-Array
-(
-    [50] => oklch(0.996 0.013 115.823)
-    [100] => oklch(0.992 0.026 116.068)
-    [200] => oklch(0.98 0.064 117.879)
-    [300] => oklch(0.969 0.102 118.218)
-    [400] => oklch(0.951 0.167 119.898)
-    [500] => oklch(0.938 0.211 121.801)
-    [600] => oklch(0.867 0.195 121.815)
-    [700] => oklch(0.755 0.168 121.628)
-    [800] => oklch(0.641 0.142 121.661)
-    [900] => oklch(0.554 0.121 121.392)
-    [950] => oklch(0.396 0.084 121.057)
-)
-Array
-(
-    [bg] => 600
-    [hover:bg] => 500
-    [dark:bg] => 500
-    [dark:hover:bg] => 400
-    [text] => 950
-    [hover:text] => 950
-    [dark:text] => 950
-    [dark:hover:text] => 950
-)
+Error: Call to undefined function App\Filament\Resources\Entries\original_request() in /home/runner/work/laravel-blog/laravel-blog/app/Filament/Resources/Entries/EntryResource.php:67
+Stack trace:
+#0 /home/runner/work/laravel-blog/laravel-blog/vendor/filament/support/src/Concerns/EvaluatesClosures.php(36): App\Filament\Resources\Entries\EntryResource::{closure:App\Filament\Resources\Entries\EntryResource::getNavigationItems():67}()
+#1 /home/runner/work/laravel-blog/laravel-blog/vendor/filament/filament/src/Navigation/NavigationItem.php(257): Filament\Support\Components\Component->evaluate()
+#2 /home/runner/work/laravel-blog/laravel-blog/vendor/filament/filament/src/Navigation/NavigationGroup.php(119): Filament\Navigation\NavigationItem->isActive()
+#3 /home/runner/work/laravel-blog/laravel-blog/storage/framework/views/6b5759bca2511635a32b699ac73660fc.php(241): Filament\Navigation\NavigationGroup->isActive()
+#4 /home/runner/work/laravel-blog/laravel-blog/vendor/livewire/livewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(37): include('...')
+#5 /home/runner/work/laravel-blog/laravel-blog/vendor/livewire/livewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(38): Filament\Livewire\Sidebar->{closure:Livewire\Mechanisms\ExtendBlade\ExtendedCompilerEngine::evaluatePath():35}()
+#6 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(76): Livewire\Mechanisms\ExtendBlade\ExtendedCompilerEngine->evaluatePath()
+#7 /home/runner/work/laravel-blog/laravel-blog/vendor/livewire/livewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(16): Illuminate\View\Engines\CompilerEngine->get()
+#8 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/View/View.php(208): Livewire\Mechanisms\ExtendBlade\ExtendedCompilerEngine->get()
+#9 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\View\View->getContents()
+#10 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\View\View->renderContents()
+#11 /home/runner/work/laravel-blog/laravel-blog/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(288): Illuminate\View\View->render()
+#12 /home/runner/work/laravel-blog/laravel-blog/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(332): Livewire\Mechanisms\HandleComponents\HandleComponents->{closure:Livewire\Mechanisms\HandleComponents\HandleComponents::render():280}()
+#13 /home/runner/work/laravel-blog/laravel-blog/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(280): Livewire\Mechanisms\HandleComponents\HandleComponents->trackInRenderStack()
+#14 /home/runner/work/laravel-blog/laravel-blog/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(54): Livewire\Mechanisms\HandleComponents\HandleComponents->render()
+#15 /home/runner/work/laravel-blog/laravel-blog/vendor/livewire/livewire/src/LivewireManager.php(73): Livewire\Mechanisms\HandleComponents\HandleComponents->mount()
+#16 /home/runner/work/laravel-blog/laravel-blog/storage/framework/views/6024ab9ebe68f9e89b414d249a0e935d.php(136): Livewire\LivewireManager->mount()
+#17 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('...')
+#18 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\Filesystem\Filesystem::{closure:Illuminate\Filesystem\Filesystem::getRequire():120}()
+#19 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(57): Illuminate\Filesystem\Filesystem->getRequire()
+#20 /home/runner/work/laravel-blog/laravel-blog/vendor/livewire/livewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(22): Illuminate\View\Engines\PhpEngine->evaluatePath()
+#21 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(76): Livewire\Mechanisms\ExtendBlade\ExtendedCompilerEngine->evaluatePath()
+#22 /home/runner/work/laravel-blog/laravel-blog/vendor/livewire/livewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(10): Illuminate\View\Engines\CompilerEngine->get()
+#23 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/View/View.php(208): Livewire\Mechanisms\ExtendBlade\ExtendedCompilerEngine->get()
+#24 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\View\View->getContents()
+#25 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\View\View->renderContents()
+#26 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/View/Concerns/ManagesComponents.php(103): Illuminate\View\View->render()
+#27 /home/runner/work/laravel-blog/laravel-blog/storage/framework/views/f6bfd59f0a7af9af57c9fb01cae285aa.php(17): Illuminate\View\Factory->renderComponent()
+#28 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('...')
+#29 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\Filesystem\Filesystem::{closure:Illuminate\Filesystem\Filesystem::getRequire():120}()
+#30 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(57): Illuminate\Filesystem\Filesystem->getRequire()
+#31 /home/runner/work/laravel-blog/laravel-blog/vendor/livewire/livewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(22): Illuminate\View\Engines\PhpEngine->evaluatePath()
+#32 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(76): Livewire\Mechanisms\ExtendBlade\ExtendedCompilerEngine->evaluatePath()
+#33 /home/runner/work/laravel-blog/laravel-blog/vendor/livewire/livewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(10): Illuminate\View\Engines\CompilerEngine->get()
+#34 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/View/View.php(208): Livewire\Mechanisms\ExtendBlade\ExtendedCompilerEngine->get()
+#35 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\View\View->getContents()
+#36 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\View\View->renderContents()
+#37 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/View/Compilers/BladeCompiler.php(355): Illuminate\View\View->render()
+#38 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php(363): Illuminate\View\Compilers\BladeCompiler::render()
+#39 /home/runner/work/laravel-blog/laravel-blog/vendor/livewire/livewire/src/Features/SupportPageComponents/SupportPageComponents.php(153): Illuminate\Support\Facades\Facade::__callStatic()
+#40 /home/runner/work/laravel-blog/laravel-blog/vendor/livewire/livewire/src/Features/SupportPageComponents/HandlesPageComponents.php(24): Livewire\Features\SupportPageComponents\SupportPageComponents::renderContentsIntoLayout()
+#41 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): Livewire\Component->__invoke()
+#42 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Routing/Route.php(265): Illuminate\Routing\ControllerDispatcher->dispatch()
+#43 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Routing/Route.php(211): Illuminate\Routing\Route->runController()
+#44 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate\Routing\Route->run()
+#45 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\Routing\Router->{closure:Illuminate\Routing\Router::runRouteWithinStack():821}()
+#46 /home/runner/work/laravel-blog/laravel-blog/vendor/filament/filament/src/Http/Middleware/DispatchServingFilamentEvent.php(15): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():178}()
+#47 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Filament\Http\Middleware\DispatchServingFilamentEvent->handle()
+#48 /home/runner/work/laravel-blog/laravel-blog/vendor/filament/filament/src/Http/Middleware/DisableBladeIconComponents.php(14): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}()
+#49 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Filament\Http\Middleware\DisableBladeIconComponents->handle()
+#50 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}()
+#51 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Routing\Middleware\SubstituteBindings->handle()
+#52 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(87): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}()
+#53 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\VerifyCsrfToken->handle()
+#54 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Session/Middleware/AuthenticateSession.php(70): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}()
+#55 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Session\Middleware\AuthenticateSession->handle()
+#56 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(63): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}()
+#57 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Auth\Middleware\Authenticate->handle()
+#58 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(48): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}()
+#59 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\View\Middleware\ShareErrorsFromSession->handle()
+#60 /home/runner/work/laravel-blog/laravel-blog/vendor/filament/notifications/src/Http/Middleware/InitializeNotificationMailbox.php(18): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}()
+#61 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Filament\Notifications\Http\Middleware\InitializeNotificationMailbox->handle()
+#62 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(120): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}()
+#63 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(63): Illuminate\Session\Middleware\StartSession->handleStatefulRequest()
+#64 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Session\Middleware\StartSession->handle()
+#65 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(36): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}()
+#66 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse->handle()
+#67 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(74): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}()
+#68 /home/runner/work/laravel-blog/laravel-blog/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Cookie\Middleware\EncryptCookies->handle()
+#69 /home/runner/work/laravel-blog/laravel-blog/vendor/filament/filament/src/Http/Middleware/SetUpPanel.php(19): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}()
+grep: write error: Broken pipe
+vendor/filament/filament/src/Resources/Pages/ManageRelatedRecords.php:76:    public ?string $activeTab = null;
+vendor/filament/filament/src/Resources/Pages/ListRecords.php:55:    public ?string $activeTab = null;
 exit=0
