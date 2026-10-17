@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Fixtures;
 
+use Gll\Hub\Contracts\Package\Credential;
 use Gll\Hub\Contracts\Package\Manifest;
 use Gll\Hub\Contracts\Package\Package;
+use Gll\Hub\Contracts\Package\Setting;
+use Gll\Hub\Contracts\Package\SettingType;
 
 /** An invented package with every role the sync touches. Core tests use it and never a real one. */
 final class LibraryPackage implements Package
@@ -22,6 +25,8 @@ final class LibraryPackage implements Package
                 'source' => [CatalogSource::class, LatestSource::class, ChangesSource::class],
                 'webhook' => [PushWebhook::class],
             ],
+            settings: [new Setting('region', 'Region', SettingType::String, default: 'eu')],
+            credentials: [new Credential('key', 'Library key', required: false)],
         );
     }
 }

@@ -6,6 +6,7 @@ namespace Tests\Fixtures;
 
 use Gll\Hub\Contracts\Package\Capability;
 use Gll\Hub\Contracts\Package\Context;
+use Gll\Hub\Contracts\Package\Credential;
 use Gll\Hub\Contracts\Package\Setting;
 use Gll\Hub\Contracts\Package\SettingType;
 use Gll\Hub\Contracts\Source\ExternalEntry;
@@ -27,7 +28,13 @@ final class CatalogSource implements FetchesSingleEntry, Source
             label: 'Catalog',
             produces: ['book'],
             capabilities: [Capability::SingleFetch],
-            instanceSettings: [new Setting('shelf', 'Shelf', SettingType::String)],
+            instanceSettings: [
+                new Setting('shelf', 'Shelf', SettingType::String, required: true),
+                new Setting('format', 'Format', SettingType::Enum, default: 'paper', options: ['paper', 'audio']),
+                new Setting('copies', 'Copies', SettingType::Integer, default: 1),
+                new Setting('narrator', 'Narrator', SettingType::String, visibleWhen: ['format' => 'audio']),
+            ],
+            instanceCredentials: [new Credential('token', 'API token', required: false)],
             defaultIntervalMinutes: 30,
         );
     }

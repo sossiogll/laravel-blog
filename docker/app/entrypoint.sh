@@ -8,6 +8,8 @@ if [ "${BOOTSTRAP:-0}" = "1" ]; then
     composer install --no-interaction --prefer-dist
     grep -qE '^APP_KEY=.+' .env || php artisan key:generate --ansi
     php artisan migrate --force --ansi
+    # Uploaded images are served from public/storage.
+    [ -e public/storage ] || php artisan storage:link --ansi
 fi
 
 exec "$@"
