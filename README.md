@@ -39,6 +39,8 @@ are empty and System > Packages says so. Syncs run on the `queue` service (Horiz
 | Vite | <http://localhost:5173> |
 | Mailpit (outgoing mail) | <http://localhost:8025> |
 
+A port already in use on your machine? Set `APP_PORT`, `VITE_PORT` or `MAILPIT_PORT` in `.env` (and `APP_URL` to match `APP_PORT`), then `docker compose -f docker-compose.dev.yml up -d` again.
+
 On Linux, build with your own ids so the files the containers create belong to you:
 `HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.dev.yml up --build`.
 

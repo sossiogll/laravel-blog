@@ -30,7 +30,7 @@ services:
       BOOTSTRAP: "1"
       XDEBUG_MODE: ${XDEBUG_MODE:-off}
     ports:
-      - "8000:8000"
+      - "${APP_PORT:-8000}:8000"
     depends_on:
       db:
         condition: service_healthy
@@ -78,10 +78,12 @@ services:
     environment:
       # The container user has no home directory.
       npm_config_cache: /tmp/.npm
+      # The host port, so the hot file and HMR point the browser at the right place.
+      VITE_PORT: ${VITE_PORT:-5173}
     volumes:
       - .:/app
     ports:
-      - "5173:5173"
+      - "${VITE_PORT:-5173}:5173"
     command: ["sh", "-c", "npm install && npm run dev"]
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://localhost:5173/@vite/client').then(r => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
@@ -116,7 +118,7 @@ services:
   mailpit:
     image: axllent/mailpit
     ports:
-      - "8025:8025"
+      - "${MAILPIT_PORT:-8025}:8025"
 
 volumes:
   db:
